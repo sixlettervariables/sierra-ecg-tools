@@ -1,0 +1,35 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!--Conforms to w3c http://www.w3.org/2001/XMLSchema-->
+<xsd:schema xmlns:xsd = "http://www.w3.org/2001/XMLSchema"
+	    xmlns = "http://www3.medical.philips.com" 
+	    targetNamespace = "http://www3.medical.philips.com"
+	    elementFormDefault = "qualified">
+
+<xsd:annotation>
+  	<xsd:documentation xml:lang="en">
+	The following section allows user to provide valid values for custom data; if the
+user decides to use custom data values for certain fields, a "custom" data value is assigned
+to that corresponding field; then the user need to provide the custom data value for the
+corresponding field; the current schema allows basic data validation for the new data values; 
+customer can edit this schema data and provide a more rigorous validation.
+
+ 	Allowable customization:
+	1. Measurement version
+	2. Interpretation criteria version
+   
+  	</xsd:documentation>
+</xsd:annotation>
+
+	<xsd:simpleType name = "TYPEcustommeasurementversion">
+		<xsd:restriction base = "xsd:string">
+			<xsd:length value = "32"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name = "TYPEcustomcriteriaversion">
+		<xsd:restriction base = "xsd:string">
+			<xsd:length value = "32"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+</xsd:schema>

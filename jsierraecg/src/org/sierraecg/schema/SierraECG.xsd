@@ -1,0 +1,2315 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!--Conforms to w3c http://www.w3.org/2001/XMLSchema-->
+<xsd:schema xmlns:xsd = "http://www.w3.org/2001/XMLSchema"
+	    xmlns = "http://www3.medical.philips.com" 
+	    targetNamespace = "http://www3.medical.philips.com"
+	    elementFormDefault = "qualified">
+
+<xsd:annotation>
+  	<xsd:documentation xml:lang="en">
+
+	revision history:
+
+	rev. 1.03		July 29th. 2003
+		- allow float values for amplitude gain and time gain
+                   eg. allow 2.5mm/mv setting for amplitude gain		
+		July 21st. 2003
+		- add valid lead names: X, Y, and Z
+		- allow no groupmeasurement(usually when Renaissance given defective data)
+		- add new type TYPEinteger to allow vector meas. to have invalid values(blank, Failed etc...)
+	           this is the case if Renaissance encounter bad data
+		- add optional reviewingclinician element under acquirer
+		- add optional @printtruncationflag in reportformat to indicate
+		   printing of truncated fields is requested
+		- change the ncolumn max from 5 to 12 to accomodate 1x12(PAN12) report
+		- add optional @machineid to the machine element(=Sierra/Viper deviceid)
+		- make @crc optional; if not there, don't enforce crc checking
+		- add drgcategory the same level as symptom, history etc...
+		- add optional global meas. qrs transversed vector
+		- add optional defaultage attribute to the age element
+		- add optional acsetting element under signalcharacteristics
+		- change STATflag attribute in orderinfo to priority
+		- correct an error in the userdefine minimum req.(from 1 to 0)
+		- add drgcategories element as parent of drgcategory element
+		- add code attribute to the drgcategory element
+		- make the id attribute of race, symptom, history, medication and diagnosis
+		   required
+		- make the code attribute of race, symptom, history, medication and diagnosis
+	           optional
+		- add attribute timesequence to waveformformat element
+		   the possible value for timesequence is Continous or Simultaneous
+		- make previousecg element optional
+		- add date and time attribute to the previousecg element
+		- add crc attribute to root element restingecgdata
+		   will compute crc from documentinfo to the end of the file
+		- add new values to TYPEstatementsource
+		- change previousecgs to previousecg
+		- add status attribute to previousecg element
+		- add element severity to previousecg element
+		- add subtype attribute to codedstatement
+		- add subtype attribute to qualitystatement
+		- add new type TYPEstatementsubtype
+		- rename compareinfostatement to mdsignatureline
+		- delete elements under interpretationdatastructure except statementcomponents 
+		- add/modify machine element possible values
+		- add attribute detaildescription for machine element; will be used to store
+		   machine information such as software rev. etc...
+		   the current convention is :
+			MFG:MODEL:SW_REV(: separated values)
+
+	rev. 1.02		Nov. 25th. 2002
+		- add Unknown value to gender element
+		- allow multiple words for race element
+		- add pacestatus element to indicate the patient pace state
+		- modify serial comparison tags per recommendation from Leigh Wells
+		- for age only allows 1 type of entry: dob or years or months or weeks etc...
+		- add fiducial attributes for the rep beat waveforms
+		- add more possible values to the pace status, pace misc. and pace modes
+		- add optional extended measurement flag in the report info
+		- add optional unique database id for Viper database
+		- add optional filterflag to the parsedwaveform
+		- add optional lead names with active pace detections
+		- add optional pace amplitude value attributes
+	
+	rev. 1.01		June 10th. 2002
+		- add new element compareinfostatement
+		- add new attrib criteriaversionforpatientdata
+		- patientid element cannot be null; has to contain between 1 and 40 chars inclusive
+		- add optional id attrib to race, severity, ecg_severity, symptom, history, 
+		   diagnosis and medication
+		- simplify the elements in interpretationdatastructure; also add code and id attrib
+		   to the elements
+		- add new enum values to TYPEcriteriaversion: V8, None and Unknown
+		- remove 1 enum value from TYPEcriteriaversion: P1
+
+	rev. 1.00		May 23rd. 2002
+		- Draft to Release status
+
+   
+  	</xsd:documentation>
+</xsd:annotation>
+
+
+	<xsd:include schemaLocation = "SierraECGExtendedType.xsd"/>
+
+	<xsd:group name = "leadmeasurement.elements">
+		<xsd:sequence>
+			<xsd:element ref = "leadqualitystates"/>
+			<xsd:element ref = "pamp"/>
+			<xsd:element ref = "pdur"/>
+			<xsd:element ref = "parea"/>
+			<xsd:element ref = "ppamp"/>
+			<xsd:element ref = "ppdur"/>
+			<xsd:element ref = "ppppdur"/>
+			<xsd:element ref = "pparea"/>
+			<xsd:element ref = "pppparea"/>
+			<xsd:element ref = "qamp"/>
+			<xsd:element ref = "qdur"/>
+			<xsd:element ref = "ramp"/>
+			<xsd:element ref = "rdur"/>
+			<xsd:element ref = "samp"/>
+			<xsd:element ref = "sdur"/>
+			<xsd:element ref = "rpamp"/>
+			<xsd:element ref = "rpdur"/>
+			<xsd:element ref = "spamp"/>
+			<xsd:element ref = "spdur"/>
+			<xsd:element ref = "vat"/>
+			<xsd:element ref = "qrsppk"/>
+			<xsd:element ref = "qrsdur"/>
+			<xsd:element ref = "qrsarea"/>
+			<xsd:element ref = "ston"/>
+			<xsd:element ref = "stmid"/>
+			<xsd:element ref = "st80"/>
+			<xsd:element ref = "stend"/>
+			<xsd:element ref = "stdur"/>
+			<xsd:element ref = "stslope"/>
+			<xsd:element ref = "stshape"/>
+			<xsd:element ref = "tamp"/>
+			<xsd:element ref = "tdur"/>
+			<xsd:element ref = "tarea"/>
+			<xsd:element ref = "tpamp"/>
+			<xsd:element ref = "tptpdur"/>
+			<xsd:element ref = "tpdur"/>
+			<xsd:element ref = "tparea"/>
+			<xsd:element ref = "tptparea"/>
+			<xsd:element ref = "print"/>
+			<xsd:element ref = "prseg"/>
+			<xsd:element ref = "qtint"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name = "groupmeasurement.elements">
+		<xsd:sequence>
+			<xsd:element ref = "membercount"/>
+			<xsd:element ref = "memberpercent"/>
+			<xsd:element ref = "longestrun"/>
+			<xsd:element ref = "meanqrsdur"/>
+			<xsd:element ref = "lowventrate"/>
+			<xsd:element ref = "meanventrate"/>
+			<xsd:element ref = "highventrate"/>
+			<xsd:element ref = "ventratestddev"/>
+			<xsd:element ref = "meanrrint"/>
+			<xsd:element ref = "atrialrate"/>
+			<xsd:element ref = "atrialratestddev"/>
+			<xsd:element ref = "avgpcount"/>
+			<xsd:element ref = "notavgpbeats"/>
+			<xsd:element ref = "lowprint"/>
+			<xsd:element ref = "meanprint"/>
+			<xsd:element ref = "highprint"/>
+			<xsd:element ref = "printstddev"/>
+			<xsd:element ref = "meanprseg"/>
+			<xsd:element ref = "meanqtint"/>
+			<xsd:element ref = "meanqtseg"/>
+			<xsd:element ref = "comppausecount"/>
+			<xsd:element ref = "groupreserved"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name = "globalmeasurements.elements">
+		<xsd:sequence>
+			<xsd:element ref = "pacedetectleads" minOccurs = "0"/>
+			<xsd:element ref = "pacepulses"/>
+			<xsd:element ref = "pacemodes"/>
+			<xsd:element ref = "pacemalf"/>
+			<xsd:element ref = "pacemisc"/>
+			<xsd:element ref = "ectopicrhythm"/>
+			<xsd:element ref = "qtintdispersion"/>
+			<xsd:element ref = "numberofcomplexes"/>
+			<xsd:element ref = "numberofgroups"/>
+			<xsd:element ref = "beatclassification"/>
+			<xsd:element ref = "qamessagecodes"/>
+			<xsd:element ref = "qaactioncode"/>
+			<xsd:element ref = "pon"/>
+			<xsd:element ref = "qrson"/>
+			<xsd:element ref = "qrsoff"/>
+			<xsd:element ref = "ton"/>
+			<xsd:element ref = "toff"/>
+			<xsd:element ref = "pfrontaxis"/>
+			<xsd:element ref = "phorizaxis"/>
+			<xsd:element ref = "i40frontaxis"/>
+			<xsd:element ref = "i40horizaxis"/>
+			<xsd:element ref = "qrsfrontaxis"/>
+			<xsd:element ref = "qrshorizaxis"/>
+			<xsd:element ref = "t40frontaxis"/>
+			<xsd:element ref = "t40horizaxis"/>
+			<xsd:element ref = "stfrontaxis"/>
+			<xsd:element ref = "sthorizaxis"/>
+			<xsd:element ref = "tfrontaxis"/>
+			<xsd:element ref = "thorizaxis"/>
+			<xsd:element ref = "atrialrate"/>
+			<xsd:element ref = "lowventrate"/>
+			<xsd:element ref = "meanventrate"/>
+			<xsd:element ref = "highventrate"/>
+			<xsd:element ref = "meanprint"/>
+			<xsd:element ref = "meanprseg"/>
+			<xsd:element ref = "meanqrsdur"/>
+			<xsd:element ref = "meanqtint"/>
+			<xsd:element ref = "meanqtc"/>
+			<xsd:element ref = "deltawavecount"/>
+			<xsd:element ref = "deltawavepercent"/>
+			<xsd:element ref = "bigeminycount"/>
+			<xsd:element ref = "bigeminystring"/>
+			<xsd:element ref = "trigeminycount"/>
+			<xsd:element ref = "trigeminystring"/>
+			<xsd:element ref = "wenckcount"/>
+			<xsd:element ref = "wenckstring"/>
+			<xsd:element ref = "flutterfibcount"/>
+			<xsd:element ref = "qrsinitangle" minOccurs = "0"/>
+			<xsd:element ref = "qrsinitmag"   minOccurs = "0"/>
+			<xsd:element ref = "qrsmaxangle"  minOccurs = "0"/>
+			<xsd:element ref = "qrsmaxmag"    minOccurs = "0"/>
+			<xsd:element ref = "qrstermangle" minOccurs = "0"/>
+			<xsd:element ref = "qrstermmag"   minOccurs = "0"/>
+			<xsd:element ref = "qrsrotation"  minOccurs = "0"/>
+			<xsd:element ref = "globalreserved"/>
+		</xsd:sequence>
+	</xsd:group>
+		
+	<!--Conforms to w3c http://www.w3.org/2001/XMLSchema-->
+	
+	<xsd:element name = "restingecgdata">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "documentinfo"/>
+				<xsd:element ref = "userdefines" minOccurs = "0"/>
+				<xsd:element ref = "orderinfo" minOccurs = "0"/>
+				<xsd:element ref = "reportinfo"/>
+				<xsd:element ref = "dataacquisition"/>
+				<xsd:element ref = "patient"/>
+				<xsd:element ref = "measurements" minOccurs = "0"/>
+				<xsd:element ref = "interpretations" minOccurs = "0"/>
+				<xsd:element ref = "waveforms" minOccurs = "0"/>
+			</xsd:sequence>
+			<xsd:attribute name = "crc" use = "optional" type = "xsd:string"/>
+			<xsd:attribute name = "status" use = "required" type = "TYPErestingecgstatus"/>
+			<xsd:attribute name = "lang" use = "required" type = "xsd:language"/>
+			<xsd:attribute name = "locale" use = "optional" type = "xsd:language"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "documentinfo">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "documentname"/>
+				<xsd:element ref = "documenttype"/>
+				<xsd:element ref = "documentversion"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "documentname">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:length value = "40"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "documenttype" type = "TYPEschemaname"/>
+	<xsd:element name = "documentversion" type = "TYPEschemaversion"/>
+	<xsd:element name = "userdefines">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "userdefine" minOccurs = "0" maxOccurs = "8"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "userdefine">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "label"/>
+				<xsd:element ref = "value"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "label">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "value">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "dataacquisition">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name = "emsdatabaseid" minOccurs = "0" type = "xsd:string"/>
+				<xsd:element ref  = "machine"/>
+				<xsd:element ref  = "acquirer"/>
+				<xsd:element ref  = "signalcharacteristics"/>
+			</xsd:sequence>
+			<xsd:attribute name = "date" use = "required" type = "xsd:date"/>
+			<xsd:attribute name = "time" use = "required" type = "xsd:time"/>
+			<xsd:attribute name = "statflag" use = "required" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "machine">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "TYPEmachine">
+					<xsd:attribute name = "machineid" use = "optional" type = "xsd:string"/>
+					<xsd:attribute name = "detaildescription" use = "required" type = "xsd:string"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "acquirer">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "encounterid" minOccurs = "0"/>
+				<xsd:element ref = "operatorid"/>
+				<xsd:element ref = "editingoperatorid" minOccurs = "0"/>
+				<xsd:element ref = "room" minOccurs = "0"/>
+				<xsd:element ref = "departmentid" minOccurs = "0"/>
+				<xsd:element ref = "departmentname" minOccurs = "0"/>
+				<xsd:element ref = "institutionid" minOccurs = "0"/>
+				<xsd:element ref = "institutionname" minOccurs = "0"/>
+				<xsd:element ref = "institutionlocationid" minOccurs = "0"/>
+				<xsd:element ref = "institutionlocationname" minOccurs = "0"/>
+				<xsd:element ref = "orderingclinicianname" minOccurs = "0"/>
+				<xsd:element ref = "orderingclinicianUPIN" minOccurs = "0"/>
+				<xsd:element ref = "reviewingclinician" minOccurs = "0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "signalcharacteristics">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "samplingrate"/>
+				<xsd:element ref = "signalresolution"/>
+				<xsd:element ref = "signalbandwidth"/>
+				<xsd:element ref = "acsetting" minOccurs = "0"/>
+				<xsd:element ref = "acquisitiontype"/>
+				<xsd:element ref = "bitspersample"/>
+				<xsd:element ref = "signaloffset"/>
+				<xsd:element ref = "signalsigned"/>
+				<xsd:element ref = "numberchannelsallocated"/>
+				<xsd:element ref = "numberchannelsvalid"/>
+				<xsd:element ref = "leadset"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "patient">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "generalpatientdata"/>
+				<xsd:element ref = "patientmedicaldata" minOccurs = "0"/>
+			</xsd:sequence>
+			<xsd:attribute name = "criteriaversionforpatientdata" use = "required" type = "TYPEcriteriaversion"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "generalpatientdata">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "patientid"/>
+				<xsd:element ref = "viperuniquepatientid" minOccurs = "0"/>
+				<xsd:element ref = "name"/>
+				<xsd:element ref = "age"/>
+				<xsd:element name = "pacestatus" type = "TYPEpacestatus" minOccurs = "1" maxOccurs = "1"/>
+				<xsd:element ref = "sex"/>
+				<xsd:element ref = "race" minOccurs = "0"/>
+				<xsd:element ref = "height" minOccurs = "0"/>
+				<xsd:element ref = "weight" minOccurs = "0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "patientmedicaldata">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "bloodpressure" minOccurs = "0"/>
+				<xsd:element ref = "symptom" minOccurs = "0" maxOccurs = "4"/>
+				<xsd:element ref = "history" minOccurs = "0" maxOccurs = "4"/>
+				<xsd:element ref = "diagnosis" minOccurs = "0" maxOccurs = "4"/>
+				<xsd:element ref = "medication" minOccurs = "0" maxOccurs = "4"/>
+				<xsd:element ref = "drgcategory" minOccurs = "0" maxOccurs = "4"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "measurements">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "globalmeasurements"/>
+				<xsd:element ref = "groupmeasurements"/>
+				<xsd:element ref = "leadmeasurements"/>
+			</xsd:sequence>
+			<xsd:attribute name = "date" use = "required" type = "xsd:date"/>
+			<xsd:attribute name = "time" use = "required" type = "xsd:time"/>
+			<xsd:attribute name = "measurementversion" use = "required" type = "TYPEmeasurementversion"/>
+			<xsd:attribute name = "custommeasurementversion" use = "optional" type = "TYPEcustommeasurementversion"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "globalmeasurements">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:group ref = "globalmeasurements.elements"/>
+			</xsd:sequence>
+			<xsd:attribute name = "fixedmultpflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "multptestvalidflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "qrslikeartfflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "pacebeatmeasflag" use = "required" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "groupmeasurements">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "groupmeasurement" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "groupmeasurement">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:group ref = "groupmeasurement.elements"/>
+			</xsd:sequence>
+			<xsd:attribute name = "groupnumber" use = "required">
+				<xsd:simpleType>
+					<xsd:restriction base = "xsd:nonNegativeInteger">
+						<xsd:maxInclusive value = "20"/>
+						<xsd:minInclusive value = "0"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name = "interpflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "sinusflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "prprogflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "wenckflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "bigflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "trigflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "aberrantflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "multptestflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "qrsmeasflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "atrialpaceflag" use = "required" type = "TYPEflag3"/>
+			<xsd:attribute name = "ventdualpaceflag" use = "required" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "leadmeasurements">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "leadmeasurement" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "leadmeasurement">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "pacepulses" minOccurs = "0"/>
+				<xsd:group ref = "leadmeasurement.elements"/>
+			</xsd:sequence>
+			<xsd:attribute name = "leadname" use = "required" type = "TYPEleadname"/>
+			<xsd:attribute name = "pexistflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "pmeasflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "pnotchflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "qrsexistflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "qrsspikeflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "qrsmeasflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "qrsnotchflag" use = "required" type = "TYPEflag2"/>
+			<xsd:attribute name = "qrsdeltaflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "stexistflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "stmeasflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "texistflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "tmeasflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "tnotchflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "atrialpaceflag" use = "required" type = "TYPEflag3"/>
+			<xsd:attribute name = "ventpaceflag" use = "required" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "interpretations">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "interpretation" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "interpretation">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "serialcomparison" minOccurs = "0"/>
+				<xsd:element ref = "interpretationdatastructure"/>
+				<xsd:element ref = "interpretationmeasurements"/>
+				<xsd:element ref = "mdsignatureline"/>
+				<xsd:element ref = "severity"/>
+				<xsd:element ref = "statement" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name = "date" use = "required" type = "xsd:date"/>
+			<xsd:attribute name = "time" use = "required" type = "xsd:time"/>
+			<xsd:attribute name = "criteriaversion" use = "required" type = "TYPEcriteriaversion"/>
+			<xsd:attribute name = "criteriaversiondate" use = "required" type = "xsd:date"/>
+			<xsd:attribute name = "customcriteriaversion" type = "TYPEcustomcriteriaversion"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "waveforms">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "parsedwaveforms" minOccurs = "0"/>
+				<xsd:element ref = "unparsedwaveforms" minOccurs = "0"/>
+				<xsd:element ref = "leadwaveforms" minOccurs = "0"/>
+				<xsd:element ref = "vcgs" minOccurs = "0"/>
+				<xsd:element ref = "repbeats" minOccurs = "0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "parsedwaveforms">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "compressflag" use = "required" type = "TYPEflag"/>
+					<xsd:attribute name = "compressmethod" use = "required" type = "TYPEcompress"/>
+					<xsd:attribute name = "filterflag" default = "False" type = "TYPEflag"/>
+					<xsd:attribute name = "dataencoding" use = "required" type = "TYPEdataencoding"/>
+					<xsd:attribute name = "durationperchannel" use = "required" type = "TYPEduration"/>
+					<xsd:attribute name = "nbitspersample" use = "required" type = "TYPEnbitspersample"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "unparsedwaveforms">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "href" use = "required" type = "xsd:string"/>
+					<xsd:attribute name = "compressflag" use = "required" type = "TYPEflag"/>
+					<xsd:attribute name = "compressmethod" use = "required" type = "TYPEcompress"/>
+					<xsd:attribute name = "durationperchannel" use = "required" type = "TYPEduration"/>
+					<xsd:attribute name = "nbitspersample" use = "required" type = "TYPEnbitspersample"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "leadwaveforms">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "leadwaveform" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name = "dataencoding" use = "required" type = "TYPEdataencoding"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "leadwaveform">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "leadname" use = "required" type = "TYPEleadname"/>
+					<xsd:attribute name = "starttime" use = "required" type = "TYPEstarttime"/>
+					<xsd:attribute name = "duration" use = "required" type = "TYPEduration"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "repbeats">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "repbeat" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name = "dataencoding" use = "required" type = "TYPEdataencoding"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "repbeat">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "leadname" use = "required" type = "TYPEleadname"/>
+					<xsd:attribute name = "duration" use = "required" type = "TYPEduration"/>
+					<xsd:attribute name = "ponset"   use = "required" type = "TYPEfiducial"/>
+					<xsd:attribute name = "pend"     use = "required" type = "TYPEfiducial"/>
+					<xsd:attribute name = "qonset"   use = "required" type = "TYPEfiducial"/>
+					<xsd:attribute name = "qend"     use = "required" type = "TYPEfiducial"/>
+					<xsd:attribute name = "tonset"   use = "required" type = "TYPEfiducial"/>
+					<xsd:attribute name = "tend"     use = "required" type = "TYPEfiducial"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "vcgs">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "vcg" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name = "dataencoding" use = "required" type = "TYPEdataencoding"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "vcg">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "vcgname" use = "required" type = "TYPEvcgname"/>
+					<xsd:attribute name = "duration" use = "required" type = "TYPEduration"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "samplingrate" type = "TYPEsamplingrate"/>
+	<xsd:element name = "signalresolution" type = "TYPEsignalresolution"/>
+	<xsd:element name = "signalbandwidth" type = "TYPEsignalbandwidth"/>
+	<xsd:element name = "acsetting" type = "TYPEacsetting"/>
+	<xsd:element name = "acquisitiontype" type = "TYPEacquisitiontype"/>
+	<xsd:element name = "bitspersample" type = "TYPEnbitspersample"/>
+	<xsd:element name = "signaloffset" type = "xsd:string"/>
+	<xsd:element name = "signalsigned" type = "TYPEflag"/>
+	<xsd:element name = "numberchannelsallocated" type = "xsd:string"/>
+	<xsd:element name = "numberchannelsvalid" type = "xsd:string"/>
+	<xsd:element name = "leadset" type = "TYPEleadset"/>
+	<xsd:element name = "patientid">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:minLength value = "1"/>
+				<xsd:maxLength value = "40"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "viperuniquepatientid" type = "xsd:string"/>
+	<xsd:element name = "name">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "lastname" minOccurs = "0"/>
+				<xsd:element ref = "firstname" minOccurs = "0"/>
+				<xsd:element ref = "middlename" minOccurs = "0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "lastname">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "40"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "firstname">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "40"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "middlename">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "40"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "age">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:choice>
+					<xsd:element ref = "dateofbirth" minOccurs = "0"/>
+					<xsd:element ref = "years"       minOccurs = "0"/>
+					<xsd:element ref = "months"      minOccurs = "0"/>
+					<xsd:element ref = "weeks"       minOccurs = "0"/>
+					<xsd:element ref = "days"        minOccurs = "0"/>
+					<xsd:element ref = "hours"       minOccurs = "0"/>
+					<xsd:element ref = "minutes"     minOccurs = "0"/>
+				</xsd:choice>
+			</xsd:sequence>
+			<xsd:attribute name = "defaultage" use = "optional" type = "TYPEageyears"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "dateofbirth" type = "TYPEdate"/>
+	<xsd:element name = "years"       type = "TYPEageyears"/>
+	<xsd:element name = "months"      type = "xsd:positiveInteger"/>
+	<xsd:element name = "weeks"       type = "xsd:positiveInteger"/>
+	<xsd:element name = "days"        type = "xsd:positiveInteger"/>
+	<xsd:element name = "hours"       type = "xsd:positiveInteger"/>
+	<xsd:element name = "minutes"     type = "xsd:positiveInteger"/>
+	<xsd:element name = "sex"         type = "TYPEsex"/>
+	<xsd:element name = "race">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "optional" type = "xsd:NMTOKENS"/>
+					<xsd:attribute name = "id"   use = "required" type = "xsd:NMTOKENS"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "height">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:choice>
+					<xsd:element name = "cm"   type = "TYPEheight"/>
+					<xsd:element name = "inch" type = "TYPEheight"/>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "weight">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:choice>
+					<xsd:element name = "kg" type = "TYPEweight"/>
+					<xsd:element name = "lb" type = "TYPEweight"/>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "bloodpressure">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "systolic"/>
+				<xsd:element ref = "diastolic"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "systolic">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name = "mmHg" type = "TYPEbp"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "diastolic">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name = "mmHg" type = "TYPEbp"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "symptom">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "optional" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "id"   use = "required" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "value" type = "xsd:string"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "history">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "optional" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "id"   use = "required" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "value" type = "xsd:string"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "diagnosis">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "optional" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "id"   use = "required" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "value" type = "xsd:string"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "medication">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "optional" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "id"   use = "required" type = "xsd:NMTOKEN"/>	
+					<xsd:attribute name = "value" type = "xsd:string"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "operatorid">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "editingoperatorid">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "room">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "departmentid">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "departmentname">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "institutionid">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "institutionname">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "institutionlocationid">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "institutionlocationname">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "serialcomparison">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name = "previousecg" minOccurs="0">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element ref = "documentname"/>
+							<xsd:element ref = "severity"/>
+							<xsd:element name = "mdsignatureline" type = "xsd:string"/>
+						</xsd:sequence>
+						<xsd:attribute name = "date"   use = "required" type = "xsd:date"/>
+						<xsd:attribute name = "time"   use = "required" type = "xsd:time"/>
+						<xsd:attribute name = "status" use = "required" type = "TYPErestingecgstatus"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name = "date"                use = "required" type = "xsd:date"/>
+			<xsd:attribute name = "time"                use = "required" type = "xsd:time"/>
+			<xsd:attribute name = "scalgversion"        use = "required" type = "xsd:string"/>
+			<xsd:attribute name = "scalgversiondate"       type = "xsd:date"/>
+			<xsd:attribute name = "scstatementversion"     type = "xsd:string"/>
+			<xsd:attribute name = "scstatementversiondate" type = "xsd:date"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "pt_race">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "optional" type = "xsd:NMTOKENS"/>
+					<xsd:attribute name = "id"   use = "required" type = "xsd:NMTOKENS"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "dx">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "required" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "id"   use = "optional" type = "xsd:NMTOKEN"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "rx">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "required" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "id"   use = "optional" type = "xsd:NMTOKEN"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "ecg_severity">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "required" type = "xsd:NMTOKEN"/>
+					<xsd:attribute name = "id"   use = "optional" type = "xsd:NMTOKEN"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "interpretationdatastructure">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "statementcomponents" minOccurs = "0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "modifiers">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name = "modifier" minOccurs = "0" maxOccurs = "3">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "xsd:string">
+								<xsd:attribute name = "numericcode"  use = "required" type = "xsd:nonNegativeInteger"/>
+								<xsd:attribute name = "modifiercode" use = "required" type = "xsd:string"/>
+								<xsd:attribute name = "added"   type = "TYPEflag"/>
+								<xsd:attribute name = "deleted" type = "TYPEflag"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name = "changed" default = "False" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "scmodifiers">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name = "scmodifier" minOccurs = "0">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "xsd:string">
+								<xsd:attribute name = "scnumericcode"  use = "required" type = "xsd:nonNegativeInteger"/>	
+								<xsd:attribute name = "scmodifiercode" use = "required" type = "xsd:string"/>
+								<xsd:attribute name = "added"   type = "TYPEflag"/>
+								<xsd:attribute name = "deleted" type = "TYPEflag"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name = "changed" default = "False" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "numericvalue">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "changed" default = "False" type = "TYPEflag"/>
+					<xsd:attribute name = "ndigits"    use = "required" type = "xsd:nonNegativeInteger"/>
+					<xsd:attribute name = "nprecision" use = "required" type = "xsd:nonNegativeInteger"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "listofECGlead">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "TYPElistofleadname">
+					<xsd:attribute name = "changed" default = "False" type = "TYPEflag"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "groupofECGlead">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "TYPElistofleadname">
+					<xsd:attribute name = "changed" default = "False" type = "TYPEflag"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "variables">
+		<xsd:complexType>
+			<xsd:sequence minOccurs = "0" maxOccurs = "4">
+				<xsd:choice>
+					<xsd:element ref = "numericvalue"/>
+					<xsd:element ref = "listofECGlead"/>
+					<xsd:element ref = "groupofECGlead"/>
+				</xsd:choice>
+			</xsd:sequence>
+			<xsd:attribute name = "changed" default = "False" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "unparsedstatement">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name = "lhsstatement" type = "xsd:string"/>
+				<xsd:element name = "rhsstatement" type = "xsd:string"/>
+			</xsd:sequence>
+			<xsd:attribute name = "statementnumber" use = "required" type = "xsd:nonNegativeInteger"/>
+			<xsd:attribute name = "code" use = "required" type = "xsd:string"/>
+			<xsd:attribute name = "format" use = "required" type = "TYPEformat"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "codedstatement">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "modifiers"/>
+				<xsd:element ref = "scmodifiers"/>
+				<xsd:element ref = "variables"/>
+				<xsd:element ref = "unparsedstatement"/>
+			</xsd:sequence>
+			<xsd:attribute name = "source" use = "required" type = "TYPEcodedstatementsource"/>
+			<xsd:attribute name = "subtype" use = "required" type = "TYPEstatementsubtype"/>
+			<xsd:attribute name = "deleted" default = "False" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "uncodedstatement">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "source" use = "required" type = "TYPEuncodedstatementsource"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "qualitystatement">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "modifiers"/>
+				<xsd:element ref = "variables"/>
+				<xsd:element ref = "unparsedstatement"/>
+			</xsd:sequence>
+			<xsd:attribute name = "source" use = "required" type = "TYPEqualitystatementsource"/>
+			<xsd:attribute name = "subtype" use = "required" type = "TYPEstatementsubtype"/>
+			<xsd:attribute name = "deleted" default = "False" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "remarkstatement">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "source" use = "required" type = "TYPEremarkstatementsource"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "statementcomponents">
+		<xsd:complexType>
+			<xsd:sequence minOccurs = "0" maxOccurs = "unbounded">
+				<xsd:choice>
+					<xsd:element ref = "codedstatement"/>
+					<xsd:element ref = "uncodedstatement"/>
+					<xsd:element ref = "qualitystatement"/>
+					<xsd:element ref = "remarkstatement"/>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "mdsignatureline" type = "xsd:string"/>
+	<xsd:element name = "severity">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "code" use = "required" type = "xsd:string"/>
+					<xsd:attribute name = "id"   use = "optional" type = "xsd:nonNegativeInteger"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "interpretationmeasurements">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name = "heartrate">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPErate">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "meanprint">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEduration">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "meanqrsdur">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEduration">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "meanqtint">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEduration">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "meanqtc">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEduration">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "pfrontaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "i40frontaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "t40frontaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "qrsfrontaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "stfrontaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "tfrontaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "phorizaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "i40horizaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "t40horizaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "qrshorizaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "sthorizaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name = "thorizaxis">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base = "TYPEaxis">
+								<xsd:attribute name = "editedflag" type = "TYPEflag" default = "False"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name = "arrhyflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "editedflag" use = "required" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "statement">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "statementcode"/>
+				<xsd:element ref = "leftstatement"/>
+				<xsd:element ref = "rightstatement"/>
+			</xsd:sequence>
+			<xsd:attribute name = "editedflag" default = "False" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "statementcode" type = "xsd:string"/>
+	<xsd:element name = "leftstatement" type = "xsd:string"/>
+	<xsd:element name = "rightstatement" type = "xsd:string"/>
+	<xsd:element name = "leadqualitystates">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "inops" minOccurs = "0" maxOccurs = "unbounded"/>
+				<xsd:element ref = "saturations" minOccurs = "0" maxOccurs = "unbounded"/>
+				<xsd:element ref = "baseartifacts" minOccurs = "0" maxOccurs = "unbounded"/>
+				<xsd:element ref = "acartifacts" minOccurs = "0" maxOccurs = "unbounded"/>
+				<xsd:element ref = "muscleartifacts" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name = "qrsclippingflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "overrangeflag" use = "required" type = "TYPEflag"/>
+			<xsd:attribute name = "measuredflag" use = "required" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "inops">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "inop" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "saturations">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "saturation" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "baseartifacts">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "baseartifact" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name = "level" use = "required" type = "TYPEnoiselevel"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "acartifacts">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "acartifact" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name = "level" use = "required" type = "TYPEnoiselevel"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "muscleartifacts">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "muscleartifact" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name = "level" use = "required" type = "TYPEnoiselevel"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "inop">
+		<xsd:complexType>
+			<xsd:attribute name = "starttime" use = "required" type = "TYPEstarttime"/>
+			<xsd:attribute name = "duration" use = "required" type = "TYPEduration"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "saturation">
+		<xsd:complexType>
+			<xsd:attribute name = "starttime" use = "required" type = "TYPEstarttime"/>
+			<xsd:attribute name = "duration" use = "required" type = "TYPEduration"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "baseartifact">
+		<xsd:complexType>
+			<xsd:attribute name = "starttime" use = "required" type = "TYPEstarttime"/>
+			<xsd:attribute name = "duration" use = "required" type = "TYPEduration"/>
+			<xsd:attribute name = "level" use = "required" type = "TYPEnoiselevel"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "acartifact">
+		<xsd:complexType>
+			<xsd:attribute name = "starttime" use = "required" type = "TYPEstarttime"/>
+			<xsd:attribute name = "duration" use = "required" type = "TYPEduration"/>
+			<xsd:attribute name = "level" use = "required" type = "TYPEnoiselevel"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "muscleartifact">
+		<xsd:complexType>
+			<xsd:attribute name = "starttime" use = "required" type = "TYPEstarttime"/>
+			<xsd:attribute name = "duration" use = "required" type = "TYPEduration"/>
+			<xsd:attribute name = "level" use = "required" type = "TYPEnoiselevel"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "pamp" type = "TYPEamplitude"/>
+	<xsd:element name = "pdur" type = "TYPEduration"/>
+	<xsd:element name = "parea" type = "TYPEarea"/>
+	<xsd:element name = "ppamp" type = "TYPEamplitude"/>
+	<xsd:element name = "ppdur" type = "TYPEduration"/>
+	<xsd:element name = "ppppdur" type = "TYPEduration"/>
+	<xsd:element name = "pparea" type = "TYPEarea"/>
+	<xsd:element name = "pppparea" type = "TYPEarea"/>
+	<xsd:element name = "qamp" type = "TYPEamplitude"/>
+	<xsd:element name = "qdur" type = "TYPEduration"/>
+	<xsd:element name = "ramp" type = "TYPEamplitude"/>
+	<xsd:element name = "rdur" type = "TYPEduration"/>
+	<xsd:element name = "samp" type = "TYPEamplitude"/>
+	<xsd:element name = "sdur" type = "TYPEduration"/>
+	<xsd:element name = "rpamp" type = "TYPEamplitude"/>
+	<xsd:element name = "rpdur" type = "TYPEduration"/>
+	<xsd:element name = "spamp" type = "TYPEamplitude"/>
+	<xsd:element name = "spdur" type = "TYPEduration"/>
+	<xsd:element name = "vat" type = "TYPEstarttime"/>
+	<xsd:element name = "qrsppk" type = "TYPEpeaktopeak"/>
+	<xsd:element name = "qrsdur" type = "TYPEduration"/>
+	<xsd:element name = "qrsarea" type = "TYPEarea"/>
+	<xsd:element name = "ston" type = "TYPEamplitude"/>
+	<xsd:element name = "stmid" type = "TYPEamplitude"/>
+	<xsd:element name = "st80" type = "TYPEamplitude"/>
+	<xsd:element name = "stend" type = "TYPEamplitude"/>
+	<xsd:element name = "stdur" type = "TYPEduration"/>
+	<xsd:element name = "stslope" type = "TYPEstslope"/>
+	<xsd:element name = "stshape" type = "TYPEstshape"/>
+	<xsd:element name = "tamp" type = "TYPEamplitude"/>
+	<xsd:element name = "tdur" type = "TYPEduration"/>
+	<xsd:element name = "tarea" type = "TYPEarea"/>
+	<xsd:element name = "tpamp" type = "TYPEamplitude"/>
+	<xsd:element name = "tptpdur" type = "TYPEduration"/>
+	<xsd:element name = "tpdur" type = "TYPEduration"/>
+	<xsd:element name = "tparea" type = "TYPEarea"/>
+	<xsd:element name = "tptparea" type = "TYPEarea"/>
+	<xsd:element name = "print" type = "TYPEduration"/>
+	<xsd:element name = "prseg" type = "TYPEduration"/>
+	<xsd:element name = "qtint" type = "TYPEduration"/>
+	<xsd:element name = "pacedetectleads" type = "TYPElistofrhythmlead"/>
+	<xsd:element name = "pacepulses">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "pacepulse" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "pacepulse">
+		<xsd:complexType>
+			<xsd:attribute name = "starttime" use = "required" type = "TYPEstarttime"/>
+			<xsd:attribute name = "duration"  use = "optional" type = "TYPEduration"/>
+			<xsd:attribute name = "upswingamp"   use = "optional" type = "xsd:nonNegativeInteger"/>
+			<xsd:attribute name = "downswingamp" use = "optional" type = "xsd:nonNegativeInteger"/>
+			<xsd:attribute name = "paceamptype"  use = "optional" type = "TYPEpaceamptype"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "pacemodes">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "pacemode" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "pacemode" type = "TYPEpacemode"/>
+	<xsd:element name = "pacemalf" type = "TYPEpacemalf"/>
+	<xsd:element name = "pacemisc" type = "TYPEpacemisc"/>
+	<xsd:element name = "ectopicrhythm" type = "TYPEectopicrhythm"/>
+	<xsd:element name = "qtintdispersion" type = "TYPEduration"/>
+	<xsd:element name = "numberofcomplexes" type = "TYPEcount"/>
+	<xsd:element name = "numberofgroups" type = "TYPEcount"/>
+	<xsd:element name = "beatclassification" type = "TYPElistofgroupnumber"/>
+	<xsd:element name = "qamessagecodes">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "qamessagecode" minOccurs = "0" maxOccurs = "4"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "qamessagecode" type = "TYPEmessagecode"/>
+	<xsd:element name = "qaactioncode" type = "TYPEactioncode"/>
+	<xsd:element name = "pon" type = "TYPEstarttime"/>
+	<xsd:element name = "qrson" type = "TYPEstarttime"/>
+	<xsd:element name = "qrsoff" type = "TYPEstarttime"/>
+	<xsd:element name = "ton" type = "TYPEstarttime"/>
+	<xsd:element name = "toff" type = "TYPEstarttime"/>
+	<xsd:element name = "pfrontaxis" type = "TYPEaxis"/>
+	<xsd:element name = "phorizaxis" type = "TYPEaxis"/>
+	<xsd:element name = "i40frontaxis" type = "TYPEaxis"/>
+	<xsd:element name = "i40horizaxis" type = "TYPEaxis"/>
+	<xsd:element name = "qrsfrontaxis" type = "TYPEaxis"/>
+	<xsd:element name = "qrshorizaxis" type = "TYPEaxis"/>
+	<xsd:element name = "t40frontaxis" type = "TYPEaxis"/>
+	<xsd:element name = "t40horizaxis" type = "TYPEaxis"/>
+	<xsd:element name = "stfrontaxis" type = "TYPEaxis"/>
+	<xsd:element name = "sthorizaxis" type = "TYPEaxis"/>
+	<xsd:element name = "tfrontaxis" type = "TYPEaxis"/>
+	<xsd:element name = "thorizaxis" type = "TYPEaxis"/>
+	<xsd:element name = "atrialrate" type = "TYPErate"/>
+	<xsd:element name = "heartrate" type = "TYPErate"/>
+	<xsd:element name = "lowventrate" type = "TYPErate"/>
+	<xsd:element name = "meanventrate" type = "TYPErate"/>
+	<xsd:element name = "highventrate" type = "TYPErate"/>
+	<xsd:element name = "meanprint" type = "TYPEduration"/>
+	<xsd:element name = "meanprseg" type = "TYPEduration"/>
+	<xsd:element name = "meanqrsdur" type = "TYPEduration"/>
+	<xsd:element name = "meanqtint" type = "TYPEduration"/>
+	<xsd:element name = "meanqtc" type = "TYPEduration"/>
+	<xsd:element name = "deltawavecount" type = "TYPEcount"/>
+	<xsd:element name = "deltawavepercent" type = "TYPEpercent"/>
+	<xsd:element name = "bigeminycount" type = "TYPEcount"/>
+	<xsd:element name = "bigeminystring" type = "TYPEcount"/>
+	<xsd:element name = "trigeminycount" type = "TYPEcount"/>
+	<xsd:element name = "trigeminystring" type = "TYPEcount"/>
+	<xsd:element name = "wenckcount" type = "TYPEcount"/>
+	<xsd:element name = "wenckstring" type = "TYPEcount"/>
+	<xsd:element name = "flutterfibcount" type = "TYPEcount"/>
+	<xsd:element name = "membercount" type = "TYPEcount"/>
+	<xsd:element name = "memberpercent" type = "TYPEpercent"/>
+	<xsd:element name = "longestrun" type = "TYPEcount"/>
+	<xsd:element name = "ventratestddev" type = "TYPErate"/>
+	<xsd:element name = "meanrrint" type = "TYPEduration"/>
+	<xsd:element name = "atrialratestddev" type = "TYPErate"/>
+	<xsd:element name = "avgpcount" type = "TYPEcount"/>
+	<xsd:element name = "notavgpbeats" type = "TYPEcount"/>
+	<xsd:element name = "lowprint" type = "TYPEduration"/>
+	<xsd:element name = "highprint" type = "TYPEduration"/>
+	<xsd:element name = "printstddev" type = "TYPEduration"/>
+	<xsd:element name = "meanqtseg" type = "TYPEduration"/>
+	<xsd:element name = "comppausecount" type = "TYPEcount"/>
+	<xsd:element name = "qrsinitangle" type = "TYPEinteger"/>
+	<xsd:element name = "qrsinitmag" type = "TYPEinteger"/>
+	<xsd:element name = "qrsmaxangle" type = "TYPEinteger"/>
+	<xsd:element name = "qrsmaxmag" type = "TYPEinteger"/>
+	<xsd:element name = "qrstermangle" type = "TYPEinteger"/>
+	<xsd:element name = "qrstermmag" type = "TYPEinteger"/>
+	<xsd:element name = "qrsrotation" type = "TYPEinteger"/>
+	<xsd:element name = "globalreserved" type = "xsd:string"/>
+	<xsd:element name = "groupreserved" type = "xsd:string"/>
+	<xsd:element name = "orderinfo">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "encounterid"/>
+				<xsd:element ref = "operatorid"/>
+				<xsd:element ref = "ordernumber"/>
+				<xsd:element ref = "viperuniqueorderid"/>
+				<xsd:element ref = "orderingclinicianname"/>
+				<xsd:element ref = "orderingclinicianUPIN"/>
+				<xsd:element ref = "reasonfororder"/>
+				<xsd:element ref = "drgcategories"/>
+			</xsd:sequence>
+			<xsd:attribute name = "priority" use = "required" type = "xsd:string"/>
+			<xsd:attribute name = "datesubmitted" use = "optional" type = "xsd:date"/>
+			<xsd:attribute name = "timesubmitted" use = "optional" type = "xsd:time"/>
+			<xsd:attribute name = "dateprocessed" use = "optional" type = "xsd:date"/>
+			<xsd:attribute name = "timeprocessed" use = "optional" type = "xsd:time"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "encounterid">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "40"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "ordernumber">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "viperuniqueorderid">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "orderingclinicianname">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "orderingclinicianUPIN">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "reviewingclinician">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "reasonfororder">
+		<xsd:simpleType>
+			<xsd:restriction base = "xsd:string">
+				<xsd:maxLength value = "32"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:element>
+	<xsd:element name = "drgcategories">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "drgcategory" minOccurs = "0" maxOccurs = "4"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "drgcategory">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "id" use = "required" type = "xsd:string"/>
+					<xsd:attribute name = "code" use = "optional" type = "xsd:string"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "reportinfo">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "reporttype"/>
+				<xsd:element ref = "reportdescription"/>
+				<xsd:element ref = "reportformat"/>
+				<xsd:element ref = "reportgain"/>
+				<xsd:element ref = "reportbandwidth"/>
+			</xsd:sequence>
+			<xsd:attribute name = "date" use = "required" type = "xsd:date"/>
+			<xsd:attribute name = "time" use = "required" type = "xsd:time"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "reporttype" type = "TYPEreporttype"/>
+	<xsd:element name = "reportdescription" type = "TYPEreportdescription"/>
+	<xsd:element name = "reportformat">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "interpretationformat"/>
+				<xsd:element ref = "waveformformat"/>
+			</xsd:sequence>
+			<xsd:attribute name = "extendedmeasflag" default = "False" type = "TYPEflag"/>
+			<xsd:attribute name = "printtruncationflag" use = "optional" default = "False" type = "TYPEflag"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "interpretationformat" type = "TYPEinterpretationformat"/>
+	<xsd:element name = "waveformformat">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "mainwaveformformat"/>
+				<xsd:element ref = "rhythmwaveformformat"/>
+			</xsd:sequence>
+			<xsd:attribute name = "leadsequence" use = "required" type = "TYPEleadsequence"/> 
+			<xsd:attribute name = "timesequence" use = "required" type = "TYPEtimesequence"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "mainwaveformformat">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "TYPElistofleadname">
+					<xsd:attribute name = "nrow" use = "required">
+						<xsd:simpleType>
+							<xsd:restriction base = "xsd:positiveInteger">
+								<xsd:maxInclusive value = "12"/>
+								<xsd:minInclusive value = "1"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name = "ncolumn" use = "required">
+						<xsd:simpleType>
+							<xsd:restriction base = "xsd:positiveInteger">
+								<xsd:maxInclusive value = "12"/>
+								<xsd:minInclusive value = "1"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "rhythmwaveformformat">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "TYPElistofrhythmlead">
+					<xsd:attribute name = "nrhythm" use = "required">
+						<xsd:simpleType>
+							<xsd:restriction base = "xsd:nonNegativeInteger">
+								<xsd:maxInclusive value = "3"/>
+								<xsd:minInclusive value = "0"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "reportgain">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "amplitudegain"/>
+				<xsd:element ref = "timegain"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "amplitudegain">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "overallgain"/>
+				<xsd:element ref = "groupgain" minOccurs = "0"/>
+				<xsd:element ref = "individualleadgain" minOccurs = "0"/>
+			</xsd:sequence>
+			<xsd:attribute name = "unit" use = "required">
+				<xsd:simpleType>
+					<xsd:restriction base = "xsd:string">
+						<xsd:enumeration value = "mm/mv"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "overallgain" type = "xsd:float"/>
+	<xsd:element name = "groupgain">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:float">
+					<xsd:attribute name = "leadgroupname" use = "required">
+						<xsd:simpleType>
+							<xsd:list itemType = "TYPEleadname"/>
+						</xsd:simpleType>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "individualleadgain">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:float">
+					<xsd:attribute name = "leadname" use = "required" type = "TYPEleadname"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "timegain">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:float">
+					<xsd:attribute name = "unit" use = "required">
+						<xsd:simpleType>
+							<xsd:restriction base = "xsd:string">
+								<xsd:enumeration value = "mm/s"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "reportbandwidth">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "highpassfiltersetting"/>
+				<xsd:element ref = "lowpassfiltersetting"/>
+				<xsd:element ref = "notchfiltersetting"/>
+				<xsd:element ref = "notchharmonicssetting" minOccurs = "0"/>
+				<xsd:element ref = "artifactfilterflag" minOccurs = "0"/>
+				<xsd:element ref = "hysterisisfiltersflag" minOccurs = "0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "highpassfiltersetting" type = "TYPEhighpassfiltersetting"/>
+	<xsd:element name = "lowpassfiltersetting" type = "TYPElowpassfiltersetting"/>
+	<xsd:element name = "notchfiltersetting" type = "TYPEacfiltersetting"/>
+	<xsd:element name = "notchharmonicssetting" type = "TYPEacharmonicssetting"/>
+	<xsd:element name = "artifactfilterflag" type = "TYPEflag"/>
+	<xsd:element name = "hysterisisfiltersflag" type = "TYPEflag"/>
+	<xsd:simpleType name = "TYPEnull">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = ""/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPErestingecgstatus">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Not yet determined"/>
+			<xsd:enumeration value = "New"/>
+			<xsd:enumeration value = "Await review"/>
+			<xsd:enumeration value = "Await confirm"/>
+			<xsd:enumeration value = "Confirmed"/>
+			<xsd:enumeration value = "Unconfirmed"/>
+			<xsd:enumeration value = "Archived"/>
+			<xsd:enumeration value = "Deleted"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEdate">
+		<xsd:union memberTypes = "TYPEnull xsd:date"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEinvalid">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = ""/>
+			<xsd:enumeration value = "Indeterminate"/>
+			<xsd:enumeration value = "Invalid"/>
+			<xsd:enumeration value = "Failed"/>
+			<xsd:enumeration value = "Unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEinvalid2">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Invalid"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEschemaname">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "SierraECG"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEschemaversion">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "1.03"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEflag">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "True"/>
+			<xsd:enumeration value = "False"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEflag2">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "None"/>
+			<xsd:enumeration value = "Positive"/>
+			<xsd:enumeration value = "Negative"/>
+			<xsd:enumeration value = "Both positive and negative"/>
+			<xsd:enumeration value = "Unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEflag3">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Unknown"/>
+			<xsd:enumeration value = "True"/>
+			<xsd:enumeration value = "False"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEpacestatus">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Paced"/>
+			<xsd:enumeration value = "Non paced"/>
+			<xsd:enumeration value = "Paced with magnet"/>
+			<xsd:enumeration value = "Unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEinteger">
+		<xsd:union memberTypes = "xsd:integer TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEamplitude2">
+		<xsd:restriction base = "xsd:integer">
+			<xsd:maxInclusive value = "10000"/>
+			<xsd:minInclusive value = "-10000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEamplitude">
+		<xsd:union memberTypes = "TYPEamplitude2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEpeaktopeak2">
+		<xsd:restriction base = "xsd:integer">
+			<xsd:maxInclusive value = "20000"/>
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEpeaktopeak">
+		<xsd:union memberTypes = "TYPEpeaktopeak2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEstarttime2">
+		<xsd:restriction base = "xsd:nonNegativeInteger">
+			<xsd:maxInclusive value = "11000"/>
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEstarttime">
+		<xsd:union memberTypes = "TYPEstarttime2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEduration2">
+		<xsd:restriction base = "xsd:nonNegativeInteger">
+			<xsd:maxInclusive value = "11000"/>
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEduration">
+		<xsd:union memberTypes = "TYPEduration2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEfiducial2">
+		<xsd:restriction base = "xsd:nonNegativeInteger">
+			<xsd:maxInclusive value = "11000"/>
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEfiducial">
+		<xsd:union memberTypes = "TYPEfiducial2 TYPEinvalid2"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEarea2">
+		<xsd:restriction base = "xsd:integer">
+			<xsd:maxInclusive value = "20000"/>
+			<xsd:minInclusive value = "-20000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEarea">
+		<xsd:union memberTypes = "TYPEarea2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEindex2">
+		<xsd:restriction base = "xsd:nonNegativeInteger">
+			<xsd:maxInclusive value = "100"/>
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEindex">
+		<xsd:union memberTypes = "TYPEindex2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEcount2">
+		<xsd:restriction base = "xsd:nonNegativeInteger">
+			<xsd:maxInclusive value = "500"/>
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEcount">
+		<xsd:union memberTypes = "TYPEcount2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEpercent2">
+		<xsd:restriction base = "xsd:nonNegativeInteger">
+			<xsd:maxInclusive value = "100"/>
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEpercent">
+		<xsd:union memberTypes = "TYPEpercent2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPErate2">
+		<xsd:restriction base = "xsd:nonNegativeInteger">
+			<xsd:maxInclusive value = "1200"/>
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPErate">
+		<xsd:union memberTypes = "TYPErate2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEaxis2">
+		<xsd:restriction base = "xsd:integer">
+			<xsd:maxInclusive value = "360"/>
+			<xsd:minInclusive value = "-360"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEaxis">
+		<xsd:union memberTypes = "TYPEaxis2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEstslope2">
+		<xsd:restriction base = "xsd:integer">
+			<xsd:maxInclusive value = "90"/>
+			<xsd:minInclusive value = "-90"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEstslope">
+		<xsd:union memberTypes = "TYPEstslope2 TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEbp">
+		<xsd:union memberTypes = "xsd:float TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEheight">
+		<xsd:union memberTypes = "xsd:float TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEweight">
+		<xsd:union memberTypes = "xsd:float TYPEinvalid"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEstshape">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Straight"/>
+			<xsd:enumeration value = "Convex"/>
+			<xsd:enumeration value = "Concave"/>
+			<xsd:enumeration value = "Unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEnoiselevel">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "None"/>
+			<xsd:enumeration value = "Light"/>
+			<xsd:enumeration value = "Marked"/>
+			<xsd:enumeration value = "Severe"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEnoise">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Baseline artifacts"/>
+			<xsd:enumeration value = "AC artifacts"/>
+			<xsd:enumeration value = "Muscle artifacts"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEageyears">
+		<xsd:restriction base = "xsd:nonNegativeInteger">
+			<xsd:maxInclusive value = "199"/>
+			<xsd:minInclusive value = "1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEsex">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Unknown"/>
+			<xsd:enumeration value = "Male"/>
+			<xsd:enumeration value = "Female"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEgroupnumber">
+		<xsd:restriction base = "xsd:nonNegativeInteger">
+			<xsd:maxInclusive value = "50"/>
+			<xsd:minInclusive value = "0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPElistofgroupnumber">
+		<xsd:list itemType = "TYPEgroupnumber"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEcriteriaversion">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "01"/>
+			<xsd:enumeration value = "02"/>
+			<xsd:enumeration value = "03"/>
+			<xsd:enumeration value = "04"/>
+			<xsd:enumeration value = "05"/>
+			<xsd:enumeration value = "06"/>
+			<xsd:enumeration value = "07"/>
+			<xsd:enumeration value = "08"/>
+			<xsd:enumeration value = "09"/>
+			<xsd:enumeration value = "0A"/>
+			<xsd:enumeration value = "P2"/>
+			<xsd:enumeration value = "P3"/>
+			<xsd:enumeration value = "P4"/>
+			<xsd:enumeration value = "H0"/>
+			<xsd:enumeration value = "H8"/>
+			<xsd:enumeration value = "T0"/>
+			<xsd:enumeration value = "T8"/>
+			<xsd:enumeration value = "V8"/>
+			<xsd:enumeration value = "None"/>
+			<xsd:enumeration value = "Unknown"/>
+			<xsd:enumeration value = "Custom"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEmeasurementversion">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "7"/>
+			<xsd:enumeration value = "8"/>
+			<xsd:enumeration value = "Custom"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEinterpretationformat">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "None"/>
+			<xsd:enumeration value = "Severity only"/>
+			<xsd:enumeration value = "Short measurements"/>
+			<xsd:enumeration value = "Extended measurements"/>
+			<xsd:enumeration value = "Interpretations"/>
+			<xsd:enumeration value = "Interpretations and reasons"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEleadname">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "I"/>
+			<xsd:enumeration value = "II"/>
+			<xsd:enumeration value = "III"/>
+			<xsd:enumeration value = "aVR"/>
+			<xsd:enumeration value = "-aVR"/>
+			<xsd:enumeration value = "aVL"/>
+			<xsd:enumeration value = "aVF"/>
+			<xsd:enumeration value = "V1"/>
+			<xsd:enumeration value = "V2"/>
+			<xsd:enumeration value = "V3"/>
+			<xsd:enumeration value = "V4"/>
+			<xsd:enumeration value = "V5"/>
+			<xsd:enumeration value = "V6"/>
+			<xsd:enumeration value = "C1"/>
+			<xsd:enumeration value = "C2"/>
+			<xsd:enumeration value = "C3"/>
+			<xsd:enumeration value = "C4"/>
+			<xsd:enumeration value = "C5"/>
+			<xsd:enumeration value = "C6"/>
+			<xsd:enumeration value = "V3R"/>
+			<xsd:enumeration value = "V4R"/>
+			<xsd:enumeration value = "V7"/>
+			<xsd:enumeration value = "V8"/>
+			<xsd:enumeration value = "C3R"/>
+			<xsd:enumeration value = "C4R"/>
+			<xsd:enumeration value = "C7"/>
+			<xsd:enumeration value = "C8"/>
+			<xsd:enumeration value = "VX1"/>
+			<xsd:enumeration value = "VX2"/>
+			<xsd:enumeration value = "VX3"/>
+			<xsd:enumeration value = "VX4"/>
+			<xsd:enumeration value = "CX1"/>
+			<xsd:enumeration value = "CX2"/>
+			<xsd:enumeration value = "CX3"/>
+			<xsd:enumeration value = "CX4"/>
+			<xsd:enumeration value = "X"/>
+			<xsd:enumeration value = "Y"/>
+			<xsd:enumeration value = "Z"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEvcgname">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "X"/>
+			<xsd:enumeration value = "Y"/>
+			<xsd:enumeration value = "Z"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPElistofleadname">
+		<xsd:list itemType = "TYPEleadname"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPElistofvcgname">
+		<xsd:list itemType = "TYPEvcgname"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPElistofrhythmlead">
+		<xsd:union memberTypes = "TYPElistofleadname TYPElistofvcgname"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEcompress">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "XLI"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEnbitspersample">
+		<xsd:restriction base = "xsd:positiveInteger">
+			<xsd:maxInclusive value = "24"/>
+			<xsd:minInclusive value = "8"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEdataencoding">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Plain"/>
+			<xsd:enumeration value = "Base64"/>
+			<xsd:enumeration value = "Hex"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEmachine">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Unknown"/>
+			<xsd:enumeration value = "HeartstartMRx"/>
+			<xsd:enumeration value = "IntelliVue"/>
+			<xsd:enumeration value = "CMS"/>
+			<xsd:enumeration value = "PageWriter"/>
+			<xsd:enumeration value = "PageWriter XL"/>
+			<xsd:enumeration value = "PageWriter Touch"/>
+			<xsd:enumeration value = "PageWriter Trim"/>
+			<xsd:enumeration value = "5600C System"/>
+			<xsd:enumeration value = "M1730 System"/>
+			<xsd:enumeration value = "M1729 System"/>
+			<xsd:enumeration value = "M3700 System"/>
+			<xsd:enumeration value = "Migrated from 5600C System"/>
+			<xsd:enumeration value = "Other Manufacturer Systems"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEacquisitiontype">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "MIDA"/>
+			<xsd:enumeration value = "EASI"/>
+			<xsd:enumeration value = "STD-12"/>
+			<xsd:enumeration value = "STD-15"/>
+			<xsd:enumeration value = "STD-16"/>
+			<xsd:enumeration value = "STD-18"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEleadset">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Unknown"/>
+			<xsd:enumeration value = "STD-3"/>
+			<xsd:enumeration value = "STD-4"/>
+			<xsd:enumeration value = "STD-5"/>
+			<xsd:enumeration value = "MCL-5"/>
+			<xsd:enumeration value = "STD-12"/>
+			<xsd:enumeration value = "STD-12 MASON-LIKAR"/>
+			<xsd:enumeration value = "MIDA"/>
+			<xsd:enumeration value = "EASI"/>
+			<xsd:enumeration value = "EASI ON STERNUM STANDARD"/>
+			<xsd:enumeration value = "EASI ON STERNUM MASON-LIKAR"/>
+			<xsd:enumeration value = "EASI OFF STERNUM STANDARD"/>
+			<xsd:enumeration value = "EASI OFF STERNUM MASON-LIKAR"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEreporttype">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "MIDA"/>
+			<xsd:enumeration value = "EASI"/>
+			<xsd:enumeration value = "STD-12"/>
+			<xsd:enumeration value = "STD-12 MASON-LIKAR"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEleadsequence">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Standard"/>
+			<xsd:enumeration value = "Cabrera"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEtimesequence">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Continuous"/>
+			<xsd:enumeration value = "Simultaneous"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEreportdescription">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Standard 12 Lead Report"/>
+			<xsd:enumeration value = "Standard 12 Lead Report with Mason Likar lead set"/>
+			<xsd:enumeration value = "MIDA derived 12 Lead Report"/>
+			<xsd:enumeration value = "EASI derived 12 Lead Report"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEsamplingrate">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "125"/>
+			<xsd:enumeration value = "250"/>
+			<xsd:enumeration value = "500"/>
+			<xsd:enumeration value = "1000"/>
+			<xsd:enumeration value = "2000"/>
+			<xsd:enumeration value = "4000"/>
+			<xsd:enumeration value = "8000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEsignalresolution">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "1.25"/>
+			<xsd:enumeration value = "2.5"/>
+			<xsd:enumeration value = "5"/>
+			<xsd:enumeration value = "10"/>
+			<xsd:enumeration value = "20"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEsignalbandwidth">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "0.05-100"/>
+			<xsd:enumeration value = "0.05-150"/>
+			<xsd:enumeration value = "0.05-300"/>
+			<xsd:enumeration value = "0.05-500"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPElowpassfiltersetting">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "None"/>
+			<xsd:enumeration value = "40"/>
+			<xsd:enumeration value = "100"/>
+			<xsd:enumeration value = "150"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEhighpassfiltersetting">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "None"/>
+			<xsd:enumeration value = "0.05"/>
+			<xsd:enumeration value = "0.15"/>
+			<xsd:enumeration value = "0.5"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEacsetting">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "50"/>
+			<xsd:enumeration value = "60"/>
+			<xsd:enumeration value = "Unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEacfiltersetting">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "None"/>
+			<xsd:enumeration value = "50"/>
+			<xsd:enumeration value = "60"/>
+			<xsd:enumeration value = "Unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEacharmonicssetting">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "None"/>
+			<xsd:enumeration value = "100"/>
+			<xsd:enumeration value = "150"/>
+			<xsd:enumeration value = "100,150"/>
+			<xsd:enumeration value = "120"/>
+			<xsd:enumeration value = "180"/>
+			<xsd:enumeration value = "120,180"/>
+			<xsd:enumeration value = "Unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEactioncode">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "ECG OK"/>
+			<xsd:enumeration value = "Poor ECG, retry if possible"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEmessagecode">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "None"/>
+			<xsd:enumeration value = "Acceptable trace"/>
+			<xsd:enumeration value = "Check QA message history"/>
+			<xsd:enumeration value = "Overrange"/>
+			<xsd:enumeration value = "Artifact"/>
+			<xsd:enumeration value = "Baseline wander"/>
+			<xsd:enumeration value = "Missing lead(s)"/>
+			<xsd:enumeration value = "Phone noise"/>
+			<xsd:enumeration value = "AC interference"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEpaceamptype">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Up swing first"/>
+			<xsd:enumeration value = "Down swing first"/>
+			<xsd:enumeration value = "Positive"/>
+			<xsd:enumeration value = "Negative"/>
+			<xsd:enumeration value = "Biphasic"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEpacemode">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = ""/>
+			<xsd:enumeration value = "Atrial pace"/>
+			<xsd:enumeration value = "Ventricular pace"/>
+			<xsd:enumeration value = "Atrial sense ventricular pace"/>
+			<xsd:enumeration value = "AV dual pace"/>
+			<xsd:enumeration value = "Mixed pace"/>
+			<xsd:enumeration value = "Intermittent pace"/>
+			<xsd:enumeration value = "Demand pace"/>
+			<xsd:enumeration value = "Unknown pace"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEpacemalf">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = ""/>
+			<xsd:enumeration value = "Non capture"/>
+			<xsd:enumeration value = "Non sense"/>
+			<xsd:enumeration value = "Non capture and non sense"/>
+			<xsd:enumeration value = "Free run"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEpacemisc">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = ""/>
+			<xsd:enumeration value = "Pace like artifacts"/>
+			<xsd:enumeration value = "ECG acquired with magnet in place"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEectopicrhythm">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = ""/>
+			<xsd:enumeration value = "APC Atrial Premature Complex"/>
+			<xsd:enumeration value = "JPC Junctional Premature Complex"/>
+			<xsd:enumeration value = "APCS Atrial Premature Complexes"/>
+			<xsd:enumeration value = "JPCS Junctional Premature Complexes"/>
+			<xsd:enumeration value = "ABIG Supra-ventricular Bigeminy"/>
+			<xsd:enumeration value = "VPC Ventricular Premature Complex"/>
+			<xsd:enumeration value = "VPCS Ventricular Premature Complexes"/>
+			<xsd:enumeration value = "APC(S) and PVC(S) Ectopics, both Supravent and Vent in origin"/>
+			<xsd:enumeration value = "VTRIG Ventricular Trigeminy"/>
+			<xsd:enumeration value = "VBIG Ventricular Bigeminy"/>
+			<xsd:enumeration value = "MFPVCS Multiform VPCs"/>
+			<xsd:enumeration value = "PAIR Pair(s) of Ventricular Complexes"/>
+			<xsd:enumeration value = "MFPAIR Pair(s) with Multiform V complexes(not necessarily in the pair)"/>
+			<xsd:enumeration value = "RUN Run(s) (>=3) of Ventricular Complexes"/>
+			<xsd:enumeration value = "MFRUN Run(s) with Multiform V complexes(not necessarily in the run)"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEstatementsource">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = ""/>
+			<xsd:enumeration value = "Analysis program"/>
+			<xsd:enumeration value = "Quality monitor"/>
+			<xsd:enumeration value = "Serial comparison"/>
+			<xsd:enumeration value = "Editor"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEstatementsubtype">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Analysis"/>
+			<xsd:enumeration value = "Serial comparison"/>
+			<xsd:enumeration value = "Other"/>
+			<xsd:enumeration value = "Unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEunparsedstatementsource">
+		<xsd:restriction base = "TYPEstatementsource"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEcodedstatementsource">
+		<xsd:restriction base = "TYPEstatementsource"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEuncodedstatementsource">
+		<xsd:restriction base = "TYPEstatementsource"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEqualitystatementsource">
+		<xsd:restriction base = "TYPEstatementsource"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEremarkstatementsource">
+		<xsd:restriction base = "TYPEstatementsource"/>
+	</xsd:simpleType>
+	<xsd:simpleType name = "TYPEformat">
+		<xsd:restriction base = "xsd:string">
+			<xsd:enumeration value = "Narrow"/>
+			<xsd:enumeration value = "Wide"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

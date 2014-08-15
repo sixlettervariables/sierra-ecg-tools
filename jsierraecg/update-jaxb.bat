@@ -1,0 +1,1 @@
+﻿xjc -d src -b src\org\sierraecg\schema\SierraECG.jxb src\org\sierraecg\schema\SierraECG.xsd
