@@ -1,5 +1,5 @@
 # Sierra ECG XML Reader MATLAB/Octave Example
-This script is a standalone MATLAB/Octave script which implements the basic functionality required to read a Philips Sierra ECG XML file. Included in this distribution are the two dependencies (`base64decode` and `lzw2norm`) of the file. If you are using GNU Octave you do not need `base64decode.m` as it is included in your distribution.
+This script is a standalone MATLAB/[Octave](http://www.gnu.org/software/octave/) script which implements the basic functionality required to read a Philips Sierra ECG XML file. Included in this distribution are the two dependencies (`base64decode` and `lzw2norm`) of the file. If you are using GNU Octave you do not need `base64decode.m` as it is included in your distribution.
 
 ## Usage
 Simply load `sierra_ecg.m` in your MATLAB or Octave environment. You will be prompted to select a Sierra ECG XML file. Once the processing has been completed you will be prompted to save a CSV file containing the results. Lastly, you will be provided a quick plot of each of the leads as an example.
