@@ -4,18 +4,18 @@ This script is a standalone MATLAB/[Octave](http://www.gnu.org/software/octave/)
 ## Usage
 Simply load `sierra_ecg.m` in your MATLAB or Octave environment. You will be prompted to select a Sierra ECG XML file. Once the processing has been completed you will be prompted to save a CSV file containing the results. Lastly, you will be provided a quick plot of each of the leads as an example.
 
-Once the script has completed, a single matrix variable (`master`) containing the 12-Lead data will be available:
+Once the script has completed, a single matrix variable (`leads`) containing the 12-Lead data will be available:
 
 ```
 octave:1> source sierra_ecg.m
-octave:2> class(master)
+octave:2> class(leads)
 ans = double
-octave:3> size(master)
+octave:3> size(leads)
 ans =
 
    5500     12
    
-octave:4> master(:, 1)
+octave:4> leads(:, 1)
 ans = 
 
   -15
