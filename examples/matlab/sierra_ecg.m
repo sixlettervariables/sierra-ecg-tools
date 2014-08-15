@@ -29,7 +29,7 @@
 
 clear;
 clc;
-master = {}; %This will ultimately hold the extracted data.
+leads = {}; % This will ultimately hold the extracted data.
 
 
 % File import
@@ -174,59 +174,59 @@ for n = 1:12
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    master = [master z];
+    leads = [leads z];
 
     % move to the next lead (8 byte header + datasize bytes of payload)
     leadOffset = leadOffset + 8 + datasize;
 end;
 
-% Convert master cell array to numeric matrix
-master = cell2mat(master);
+% Convert leads cell array to numeric matrix
+leads = cell2mat(leads);
 
 % Reconstruct Lead III, aVR, aVL, aVF
-master(:,3) = master(:,2) - master(:,1) - master(:,3);
-master(:,4) = -master(:,4) - (master(:,1) + master(:,2))/2;
-master(:,5) = (master(:,1) - master(:,3))/2 - master(:,5);
-master(:,6) = (master(:,2) + master(:,3))/2 - master(:,6);
+leads(:,3) = leads(:,2) - leads(:,1) - leads(:,3);
+leads(:,4) = -leads(:,4) - (leads(:,1) + leads(:,2))/2;
+leads(:,5) = (leads(:,1) - leads(:,3))/2 - leads(:,5);
+leads(:,6) = (leads(:,2) + leads(:,3))/2 - leads(:,6);
 
 % 12-Lead Plot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure('numbertitle','off','name','12-Lead Plots');
 subplot(6,2,1);
-plot((master(:,1)));
+plot((leads(:,1)));
 title('I');
 subplot(6,2,2);
-plot((master(:,2)));
+plot((leads(:,2)));
 title('II');
 subplot(6,2,3);
-plot((master(:,3)));
+plot((leads(:,3)));
 title('III');
 subplot(6,2,4);
-plot((master(:,4)));
+plot((leads(:,4)));
 title('aVR');
 subplot(6,2,5);
-plot((master(:,5)));
+plot((leads(:,5)));
 title('aVL');
 subplot(6,2,6);
-plot((master(:,6)));
+plot((leads(:,6)));
 title('aVF');
 subplot(6,2,7);
-plot((master(:,7)));
+plot((leads(:,7)));
 title('V1');
 subplot(6,2,8);
-plot((master(:,8)));
+plot((leads(:,8)));
 title('V2');
 subplot(6,2,9);
-plot((master(:,9)));
+plot((leads(:,9)));
 title('V3');
 subplot(6,2,10);
-plot((master(:,10)));
+plot((leads(:,10)));
 title('V4');
 subplot(6,2,11);
-plot((master(:,11)));
+plot((leads(:,11)));
 title('V5');
 subplot(6,2,12);
-plot((master(:,12)));
+plot((leads(:,12)));
 title('V6');
 
 % Save the 12-Lead data to a CSV file for general analytical purposes
@@ -248,5 +248,5 @@ if slashcheck == 0
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-csvwrite([savefolder savefile], master);
+csvwrite([savefolder savefile], leads);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
