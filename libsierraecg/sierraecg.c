@@ -184,6 +184,9 @@ static int internalCheckVersion(ctx_t *ctx)
         else if (xmlStrEqual(version, "1.04")) {
             strcpy(ctx->ecg->version, "1.04");
         }
+        else if (xmlStrEqual(version, "1.04.01")) {
+            strcpy(ctx->ecg->version, "1.04");
+        }
         else {
             xmlXPathFreeObject(xpathObj);
             return E_FAIL;
@@ -228,7 +231,7 @@ static int internalOpen(const char *path, ctx_t *ctx, ecg_t *ecg)
 
     if(xmlXPathRegisterNs(ctx->xpathCtx, NS, NS_XMLNS) != 0) {
         fprintf(stderr,"Error: unable to register NS with prefix=\"%s\" and href=\"%s\"\n", NS, NS_XMLNS);
-        return E_FAIL;	
+        return E_FAIL;  
     }
 
     if (FAILED(internalCheckVersion(ctx))) {
@@ -285,10 +288,17 @@ static xmlXPathObjectPtr findParsedWaveforms(ctx_t *ctx)
         dataEncoding = xmlGetProp(node, "dataencoding");
         ctx->isBase64 = (dataEncoding && xmlStrEqual(dataEncoding, "Base64"));
 
-        compressFlag = xmlGetProp(node, "compressflag");
-        if (ctx->isXliCompressed = (compressFlag && xmlStrEqual(compressFlag, "True"))) {
-            compressMethod = xmlGetProp(node, "compressmethod");
+        if (0 == strcmp(ctx->ecg->version, "1.04")) {
+            compressMethod = xmlGetProp(node, "compression");
             ctx->isXliCompressed = compressMethod && xmlStrEqual(compressMethod, "XLI");
+        }
+        else {
+            // 1.03
+            compressFlag = xmlGetProp(node, "compressflag");
+            if (ctx->isXliCompressed = (compressFlag && xmlStrEqual(compressFlag, "True"))) {
+                compressMethod = xmlGetProp(node, "compressmethod");
+               ctx->isXliCompressed = compressMethod && xmlStrEqual(compressMethod, "XLI");
+            }
         }
     }
 
@@ -440,7 +450,12 @@ static int updateParsedWaveforms(ctx_t *ctx, xmlXPathObjectPtr xpathObj)
     nodes->nodeTab[0] = NULL;
 
     xmlSetProp(node, "dataencoding", "Plain");
-    xmlSetProp(node, "compressflag", "False");
+    if (0 == strcmp(ctx->ecg->version, "1.04")) {
+        xmlSetProp(node, "compression", NULL);
+    }
+    else {
+        xmlSetProp(node, "compressflag", "False");
+    }
 
     output = xmlBufferCreate();
     for (lead = 0; lead < ctx->ecg->valid; ++lead) {

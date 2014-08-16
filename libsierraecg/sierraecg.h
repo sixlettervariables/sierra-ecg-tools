@@ -42,7 +42,7 @@ typedef struct _lead {
  * 6-11. V1-V6
  */
 typedef struct _ecg {
-	char version[8];    /** i.e. 1.03 or 1.04 */
+	char version[8];    /** i.e. 1.03 or 1.04 or 1.04.01 */
 	lead_t leads[16]; /** Retrieved lead data */
 	size_t valid;     /** Count of valid leads */
 } ecg_t;
