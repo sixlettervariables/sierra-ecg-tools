@@ -80,15 +80,18 @@ public abstract class SierraEcgTransformer {
 		Node node = (Node)xpath.evaluate("//DEFAULT:documentversion",
 			xdoc, XPathConstants.NODE);
 		if (node != null) {
-			switch (node.getTextContent()) {
-				case "1.03":
-					return new SierraEcgTransformerImpl_1_03(xdoc.getDocumentElement());
-				case "1.04":
-				case "1.04.01":
-					return new SierraEcgTransformerImpl_1_04(xdoc.getDocumentElement());
-
-				default:
-					throw new UnsupportedOperationException("Unsupported Sierra ECG XML file " + node.getTextContent());
+			String version = node.getTextContent();
+			if (version.equals("1.03")) {
+				return new SierraEcgTransformerImpl_1_03(xdoc.getDocumentElement());
+			}
+			else if (version.equals("1.04")) {
+				return new SierraEcgTransformerImpl_1_04(xdoc.getDocumentElement());
+			}
+			else if (version.equals("1.04.01")) {
+				return new SierraEcgTransformerImpl_1_04(xdoc.getDocumentElement());
+			}
+			else {
+				throw new UnsupportedOperationException("Unsupported Sierra ECG XML file " + node.getTextContent());
 			}
 		}
 
