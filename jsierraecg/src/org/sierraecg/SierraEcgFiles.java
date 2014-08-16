@@ -1,3 +1,24 @@
+/** jsierraecg - SierraEcgFiles.java
+ *  Copyright (c) 2011 Christopher A. Watford
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of
+ *  this software and associated documentation files (the "Software"), to deal in
+ *  the Software without restriction, including without limitation the rights to
+ *  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ *  of the Software, and to permit persons to whom the Software is furnished to do
+ *  so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  SOFTWARE.
+ */
 package org.sierraecg;
 
 import java.io.ByteArrayInputStream;
@@ -6,96 +27,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
-import org.sierraecg.codecs.Base64;
-import org.sierraecg.codecs.XliDecompressor;
-import org.sierraecg.schema.Parsedwaveforms;
-import org.sierraecg.schema.Restingecgdata;
-import org.sierraecg.schema.TYPEcompress;
-import org.sierraecg.schema.TYPEdataencoding;
-import org.sierraecg.schema.TYPEflag;
-import org.sierraecg.schema.TYPEreporttype;
+import org.xml.sax.SAXException;
 
 public final class SierraEcgFiles {
 	
 	private SierraEcgFiles() {
 	}
 	
-	private static Restingecgdata preprocess(JAXBContext context, File input) throws JAXBException, IOException {
-		Unmarshaller reader = context.createUnmarshaller();
-		Restingecgdata restingecgdata = (Restingecgdata)reader.unmarshal(input);
-		DecodedLead[] leads = extractLeads(restingecgdata);
-		
-		StringBuffer buffer = new StringBuffer();
-        for (DecodedLead lead : leads) {
-        	for (int count = 0; count < lead.size(); ++count) {
-        		buffer.append(lead.get(count));
-        		if (count % 25 > 0 || count == 0) {
-        			buffer.append(" ");
-        		} 
-        		else {
-        			buffer.append("\n");
-        		}
-        	}
-        }
-        
-        Parsedwaveforms parsedwaveforms = restingecgdata.getWaveforms().getParsedwaveforms();
-        parsedwaveforms.setDataencoding(TYPEdataencoding.PLAIN);
-        parsedwaveforms.setCompressflag(TYPEflag.FALSE);
-        parsedwaveforms.setValue(buffer.toString());
-        
-        return restingecgdata;
+	public static DecodedLead[] transform(File input, File output) throws IOException, JAXBException, XPathExpressionException, ParserConfigurationException, SAXException {
+		SierraEcgTransformer transformer = SierraEcgTransformer.create(input);
+
+		return transformer.transform(output);
 	}
 	
-	public static Restingecgdata preprocess(File input) throws IOException, JAXBException {
-		JAXBContext context = JAXBContext.newInstance("org.sierraecg.schema");
-		
-		return preprocess(context, input);
-	}
-	
-	public static void preprocess(File input, File output) throws IOException, JAXBException {
-		JAXBContext context = JAXBContext.newInstance("org.sierraecg.schema");
-		
-		Restingecgdata restingecgdata = preprocess(context, input);
-        
-        Marshaller writer = context.createMarshaller();
-        writer.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        writer.marshal(restingecgdata, output);
-	}
-	
-	public static DecodedLead[] extractLeads(Restingecgdata input) throws IOException {
-		Parsedwaveforms parsedwaveforms = input.getWaveforms().getParsedwaveforms();
-		
-		InputStream in = new ByteArrayInputStream(parsedwaveforms.getValue().getBytes());
-		if (parsedwaveforms.getDataencoding() == TYPEdataencoding.BASE_64) {
-			in = new Base64.InputStream(in);
-		}
-		
-		ArrayList<int[]> leadData = new ArrayList<int[]>();
-		if (parsedwaveforms.getCompressflag() == TYPEflag.TRUE
-		 && parsedwaveforms.getCompressmethod() == TYPEcompress.XLI) {
-			XliDecompressor xli = new XliDecompressor(in);
-			int[] payload;
-			while (null != (payload = xli.readLeadPayload())) {
-				leadData.add(payload);
-			}
-		}
-		
-		TYPEreporttype reporttype = input.getReportinfo().getReporttype();
-		DecodedLead[] leads = DecodedLead.createFromLeadSet(reporttype.value(), leadData);
-		
-		return leads;
-	}
-	
-	public static DecodedLead[] extractLeads(File input) throws IOException, JAXBException {
-		JAXBContext context = JAXBContext.newInstance("org.sierraecg.schema");
-		Unmarshaller reader = context.createUnmarshaller();
-		Restingecgdata restingecgdata = (Restingecgdata)reader.unmarshal(input);
-		
-		return extractLeads(restingecgdata);
+	public static DecodedLead[] extractLeads(File input) throws IOException, JAXBException, XPathExpressionException, ParserConfigurationException, SAXException {
+		SierraEcgTransformer transformer = SierraEcgTransformer.create(input);
+
+		return transformer.extractLeads();
 	}
 }

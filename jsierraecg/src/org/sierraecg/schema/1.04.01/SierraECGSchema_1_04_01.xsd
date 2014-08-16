@@ -1,0 +1,3169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Conforms to w3c http://www.w3.org/2001/XMLSchema-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www3.medical.philips.com" targetNamespace="http://www3.medical.philips.com" elementFormDefault="qualified">
+	<xsd:annotation>
+	<xsd:documentation xml:lang="en">
+
+
+Note:	all amplitudes are in microvolts (uV);
+all intervals, durations, and fiducial times are in milliseconds;
+                  filter frequency cutoff values are in Hertz (Hz). Revision history:
+- all rev 1.04 and 1.04.01modifications described in "Philips_ECG_ Schema_1.04.01_Changes_March_19_2008.xls"
+
+
+rev. 1.04.01 March 19, 2008
+- Added "PageWriter TC" to device list "TYPEmachine"
+- Added "analysiserror" and "analysiserrormessage" to "..\internalmeasurements\crossleadmeasurements"
+- Changed "documentversion" to "1.04.01"
+
+
+rev. 1.04 Sept. 6, 2005
+- made pacepulse element "TYPEnull" so that whitespace in the pacepulse element will not prevent schema validation. (TMVue exports whitespace in this element).
+
+
+rev. 1.04 June 27, 2005
+- deleted TYPEInvalid and changed TYPEfiducial to TYPEInvalidPlus
+
+
+rev. 1.04 June 10, 2005
+- re-inserted all Cx labels for backwards compatibility
+
+
+rev. 1.04 June 9, 2005
+- added patient@customcriteriaversion and patient@othercriteriaversion
+- added additional lead labels and deleted all Cx labels
+- made a few more elements optional
+- added dataacquisition/modality
+- added generalpatientdata/secondaryid
+- added "Migration" to statementsource
+- added optional globalmeasurements/atrialrate
+
+
+
+rev. 1.04 April 27, 2005
+- comments updated
+
+
+rev. 1.04  March 28, 2005 (d)
+- all "people" (except patient) are now one element holding their "name"; with a 64 char max @id attribute
+- added editor (to documentinfo) with @id @date @time;
+- added confirmingclinician (to interpretation) with @id @date @time;
+- added internalmeasurements/configsettings
+-simplified "namedmeasurement"
+- added union with null to pacemode, pacemisc, pacemalf, ectopicrhythm
+- added   xsd:whiteSpace value "collapse"    to elements which allow "" (null) values.
+-   this allows:    both pacemode/   and
+pacemode
+/pacemode  (which includes a CR/LF/Tab) to pass schema validation
+
+
+rev. 1.04  March 11, 2005
+- in parsedwaveforms, unparsedwaveforms, and leadwaveforms:
+a)renamed "hipassbandwidth" to "hipass" to be consistent with dataacquisition b)renamed "lowpassbandwidth" to "lowpass" to be consistent with dataacquisition Note: "hipass" and "lowpass" were specified in:
+"Philips_ECG_ Schema_1.04_Changes_March_4_2005.xls"
+c) added signaloffset (integer) and signalsigned (flag) since these could also be modified by a system after signal acquisition
+d) made resolution, hipass, lowpass, notchfiltered and signalsigned "required" attributes e) renamed "nbitspersample" to "bitspersample" to be consistent with dataacquisition
+f)  made samplespersecond type "float" to match dataacquisition g) re-ordered sequence of attributes to be more logical
+- changed "signaloffset" in dataacquisition from type "string" to "integer"
+- repbeat@samplespersecond has also been changed to type "float".
+
+
+rev. 1.04  March 4, 2005
+- renamed ../userdefine@number to ../userdefine/@index.
+- deleted legacy crossleadmeasurements/pon qrson qrsoff ton toff; rep beat measurements should be used.
+- deleted "default 0" for pacemode, pacemalf,pacemisc,ectopicrhythm
+- deleted all "default False" for flag attributes, and explicitly made those attributes optional: if not present, assume "False"
+
+
+rev. 1.04  March 3, 2005
+- added optional "filename" element to documentinfo section
+
+
+rev. 1.04  March 2, 2005
+
+
+-TYPEacquisitiontype:  "STD-12" changed to "10-WIRE" for consistency
+- patient @criteriaversionforpatientdata attribute added back in
+
+
+rev. 1.04   March 1, 2005
+- major modifications; described in "Philips_ECG_ Schema_1.04_Changes_March_1_2005.xls"
+
+
+rev. 1.03	Sep. 22nd. 2003
+- add tag compareinfostatement under
+ /restingecgdata/interpretations/interpretation/serialcomparison/previousecg/ July 29th. 2003
+- allow float values for amplitude gain and time gain
+eg. allow 2.5mm/mv setting for amplitude gain
+July 21st. 2003
+- add valid lead names: X, Y, and Z
+- allow no groupmeasurement(usually when Renaissance given defective data)
+- add new type TYPEinteger to allow vector meas. to have invalid values(blank, Failed etc...)
+this is the case if Renaissance encounter bad data
+- add optional reviewingclinician element under acquirer
+- add optional @printtruncationflag in reportformat to indicate printing of truncated fields is requested
+- change the ncolumn max from 5 to 12 to accomodate 1x12(PAN12) report
+- add optional @machineid to the machine element( Sierra/Viper deviceid)
+- make @crc optional; if not there, don't enforce crc checking
+- add drgcategory the same level as symptom, history etc...
+- add optional global meas. qrs transversed vector
+- add optional defaultage attribute to the age element
+- add optional acsetting element under signalcharacteristics
+- change STATflag attribute in orderinfo to priority
+- correct an error in the userdefine minimum req.(from 1 to 0)
+- add drgcategories element as parent of drgcategory element
+- add code attribute to the drgcategory element
+- make the id attribute of race, symptom, history, medication and diagnosis required
+- make the code attribute of race, symptom, history, medication and diagnosis optional
+- add attribute timesequence to waveformformat element
+the possible value for timesequence is Continous or Simultaneous
+- make previousecg element optional
+- add date and time attribute to the previousecg element
+- add crc attribute to root element restingecgdata
+will compute crc from documentinfo to the end of the file
+
+
+- add new values to TYPEstatementsource
+- change previousecgs to previousecg
+- add status attribute to previousecg element
+- add element severity to previousecg element
+- add subtype attribute to codedstatement
+- add subtype attribute to qualitystatement
+- add new type TYPEstatementsubtype
+- rename compareinfostatement to mdsignatureline
+- delete elements under interpretationdatastructure except statementcomponents
+- add/modify machine element possible values
+- add attribute detaildescription for machine element; will be used to store machine information such as software rev. etc...
+the current convention is : MFG:MODEL:SW_REV(: separated values)
+
+rev. 1.02	Nov. 25th. 2002
+- add Unknown value to gender element
+- allow multiple words for race element
+- add pacestatus element to indicate the patient pace state
+- modify serial comparison tags per recommendation from Leigh Wells
+- for age only allows 1 type of entry: dob or years or months or weeks etc...
+- add fiducial attributes for the rep beat waveforms
+- add more possible values to the pace status, pace misc. and pace modes
+- add optional extended measurement flag in the report info
+- add optional unique database id for Viper database
+- add optional filterflag to the parsedwaveform
+- add optional lead names with active pace detections
+- add optional pace amplitude value attributes
+
+
+rev. 1.01	June 10th. 2002
+- add new element compareinfostatement
+- add new attrib criteriaversionforpatientdata
+- patientid element cannot be null; has to contain between 1 and 40 chars inclusive
+- add optional id attrib to race, severity, ecg_severity, symptom, history, diagnosis and medication
+- simplify the elements in interpretationdatastructure; also add code and id attrib to the elements
+- add new enum values to TYPEcriteriaversion: V8, None and Unknown
+- remove 1 enum value from TYPEcriteriaversion: P1
+
+
+rev. 1.00	May 23rd. 2002
+
+
+- Draft to Release status
+
+
+
+</xsd:documentation>
+</xsd:annotation>
+<!-- -->
+<!--Conforms to w3c http://www.w3.org/2001/XMLSchema-->
+<!-- -->
+<!-- include the extended type file for custom types -->
+<xsd:include schemaLocation="SierraECGExtendedType.xsd"/>
+<!-- -->
+<!-- ============================================================================== -->
+<!--   This is the highest level document description: -->
+<xsd:element name="restingecgdata">
+<xsd:complexType>
+<xsd:sequence>
+<!-- document/file information: -->
+<xsd:element ref="documentinfo"/>
+<!-- these are user-configurable fields from the cardiograph: -->
+<xsd:element ref="userdefines" minOccurs="0"/>
+<!-- ECG "order" information: -->
+<xsd:element ref="orderinfo" minOccurs="0"/>
+<!-- this section contains links to previous and/or subsequent ECGs: -->
+<xsd:element ref="otherECGs" minOccurs="0"/>
+<!-- description of the report format used to display the visual ECG report: -->
+<xsd:element ref="reportinfo"/>
+<!-- description of the data acquisition settings, as well as the acquirer, eg., hospital, location, physician, etc.: -->
+<xsd:element ref="dataacquisition"/>
+<!-- patient information: -->
+<xsd:element ref="patient"/>
+     <!-- these "internal" measurements are measurements and variables generated by the automated diagnostic algorithm; global meaurements in the "interpretation" section supercede these values:  -->
+<xsd:element ref="internalmeasurements" minOccurs="0"/>
+     <!-- this section contains diagnostic interpretations made by the diagnostic algorithm and/or interpretations added or editted by a reviewing cardiologist;  in addition, this section contains
+the final "global" measurements, which also may have been manually editted; these measurements will always take precedence over those in the "internalmeasurements" section: -->
+<xsd:element ref="interpretations" minOccurs="0"/>
+    <!-- ECG waveform sample values;  the settings in the "dataacquisition" section describe the waveform data, unless the data has subsequently been modified (e.g., filtered, resampled) by a subsequent device,
+in which case a flag is set, and the settings in this section will then describe the waveform data: -->
+<xsd:element ref="waveforms" minOccurs="0"/>
+</xsd:sequence>
+<xsd:attribute name="crc" type="xsd:string" use="optional"/>
+<xsd:attribute name="status" type="TYPErestingecgstatus" use="required"/>
+<xsd:attribute name="lang" type="xsd:language" use="required"/>
+<xsd:attribute name="locale" type="xsd:language" use="optional"/>
+<!-- @crc: the cyclic-redundancy-check value, if available. -->
+</xsd:complexType>
+</xsd:element>
+<!-- ============================================================================== -->
+<xsd:element name="documentinfo">
+<xsd:complexType>
+<xsd:sequence>
+<!-- this is usually the name of the file, that is not a requirement; this field should always be a
+36 character GUID (globally unique identifier), followed by ".xml": -->
+<xsd:element ref="documentname"/>
+<!-- optional filename (if different from the documentname; no length restrictions): -->
+<xsd:element name="filename" type="xsd:string" minOccurs="0"/>
+<!-- name of the schema: -->
+<xsd:element ref="documenttype"/>
+<!-- schema version: -->
+<xsd:element ref="documentversion"/>
+<!-- name with @id of the most recent ECG editor (with @date and @time of last edit) -->
+<xsd:element name="editor" type="TYPEpersonwithdatetime" minOccurs="0"/>
+<!-- optional comments added to describe the ECG -->
+<xsd:element name="comments" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<!-- should be "GUID.xml" with a 36 character GUID -->
+<xsd:element name="documentname">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:length value="40"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="documenttype">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="PhilipsECG"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="documentversion">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="1.04.01"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<!-- ============================================================================== -->
+<!-- user defined fields: -->
+<xsd:element name="userdefines">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="userdefine" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="userdefine">
+<xsd:complexType>
+<xsd:sequence>
+<!-- user configured label: -->
+<xsd:element ref="label"/>
+<!-- the user entered value of the field: -->
+<xsd:element ref="value"/>
+</xsd:sequence>
+<xsd:attribute name="index" type="xsd:positiveInteger" use="required"/>
+<!-- @number: the ID of the userdefine, i.e., 1,2,3, ...,:  -->
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="label">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="value">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<!-- ============================================================================== -->
+<xsd:element name="orderinfo">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="ordernumber"/>
+<xsd:element ref="uniqueorderid"/>
+<xsd:element name="orderbillingcode" type="xsd:string" minOccurs="0"/>
+<xsd:element name="orderremarks" type="xsd:string" minOccurs="0"/>
+<xsd:element ref="reasonfororder" minOccurs="0"/>
+<xsd:element ref="drgcategories" minOccurs="0"/>
+<xsd:element ref="orderstatus" minOccurs="0"/>
+<!-- this is the logical dept association: -->
+<xsd:element ref="inbox" minOccurs="0"/>
+<!-- optional elements for future use: -->
+<xsd:element name="other" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="label" type="xsd:string" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="priority" type="xsd:string" use="required"/>
+<xsd:attribute name="orderrequestdate" type="xsd:date" use="optional"/>
+<xsd:attribute name="orderrequesttime" type="xsd:time" use="optional"/>
+<xsd:attribute name="dateprocessed" type="xsd:date" use="optional"/>
+<xsd:attribute name="timeprocessed" type="xsd:time" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="ordernumber">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="uniqueorderid">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="reasonfororder">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="drgcategories">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="drgcategory" minOccurs="0" maxOccurs="4"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="drgcategory">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="id" type="xsd:string" use="required"/>
+<xsd:attribute name="code" type="xsd:string" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="orderstatus">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="inbox">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<!-- ============================================================================== -->
+<!-- links to previous or subsequent ECGs: -->
+<xsd:element name="otherECGs">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="otherECG" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:sequence>
+<!-- type is either "previous" or "subsequent" -->
+<xsd:element name="type" type="TYPEotherECGtype"/>
+<xsd:element name="documentname" type="xsd:string"/>
+<xsd:element ref="severity" minOccurs="0"/>
+<xsd:element name="mdsignatureline" type="xsd:string" minOccurs="0"/>
+<!-- optional other information (future use): -->
+<!-- other info has both a "label" (attribute) and a "value" (node): -->
+<xsd:element name="other" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="label" type="xsd:string" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="date" type="xsd:date" use="required"/>
+<xsd:attribute name="time" type="xsd:time" use="required"/>
+<xsd:attribute name="status" type="TYPErestingecgstatus" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:simpleType name="TYPEotherECGtype">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="previous"/>
+<xsd:enumeration value="subsequent"/>
+</xsd:restriction>
+</xsd:simpleType>
+<!-- ============================================================================== -->
+<xsd:element name="reportinfo">
+<xsd:complexType>
+<xsd:sequence>
+<!-- reportlabel provides important information to the reviewing clinician, and should be printed on the report; (or at least if it is not a standard 12 lead.....)
+it combines electrode placement information with report format information: -->
+<xsd:element ref="reportlabel"/>
+<!-- a more detailed description of the report:
+(if "reportlabel" is "Other", then this description should be used): -->
+<xsd:element ref="reportdescription"/>
+<!-- format characteristics: -->
+<xsd:element ref="reportformat"/>
+<!-- waveform gain settings to be used for the report: -->
+<xsd:element ref="reportgain"/>
+<!-- bandwidth settings to be used for the report: -->
+<xsd:element ref="reportbandwidth"/>
+<!-- this is a complete copy of all the settings for a report;
+to be used to save either the original report settings if they are subsequently modified, or modified report settings, or report settings for an individual user -->
+<xsd:element ref="savedreportinfo" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+<xsd:attribute name="date" type="xsd:date" use="required"/>
+<xsd:attribute name="time" type="xsd:time" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="reportlabel" type="TYPEreportlabel"/>
+<!-- Use "STD 12 LEAD" for most reports;
+Use "STD 12 LEAD; REP BEAT" for PAN-12 report -->
+<xsd:simpleType name="TYPEreportlabel">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="STD 12 LEAD"/>
+<xsd:enumeration value="STD 12+ LEAD"/>
+<xsd:enumeration value="MASON-LIKAR 12 LEAD"/>
+<xsd:enumeration value="MASON-LIKAR 12+ LEAD"/>
+<xsd:enumeration value="MOD LEAD PLACEMENT"/>
+<xsd:enumeration value="STD PLACEMENT; SOME LEADS DERIVED"/>
+<xsd:enumeration value="MASON-LIKAR; SOME LEADS DERIVED"/>
+<xsd:enumeration value="MOD LEAD PLACEMENT; SOME LEADS DERIVED"/>
+<xsd:enumeration value="EASI DERIVED LEADS"/>
+<xsd:enumeration value="EASI (OFF STERNUM) DERIVED LEADS"/>
+<xsd:enumeration value="STD 12 LEAD; REP BEAT"/>
+<xsd:enumeration value="STD 12+ LEAD; REP BEAT"/>
+<xsd:enumeration value="MASON-LIKAR 12 LEAD; REP BEAT"/>
+<xsd:enumeration value="MASON-LIKAR 12+ LEAD; REP BEAT"/>
+<xsd:enumeration value="MOD LEAD PLACEMENT; REP BEAT"/>
+<xsd:enumeration value="EASI DERIVED LEADS; REP BEAT"/>
+<xsd:enumeration value="EASI (OFF STERNUM) DERIVED LEADS; REP BEAT"/>
+<xsd:enumeration value="MIDA"/>
+<xsd:enumeration value="NEHB"/>
+<xsd:enumeration value="Other"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:annotation>
+  <xsd:documentation> Example reportdescriptions: "Standard 12 Lead Report" "Standard 12+ Lead Report" "Standard 15 Lead Report"
+"12 Lead Report with Mason Likar Lead Placement" "12 Lead Report with Alternate Lead Placement"
+"Standard 12 Lead Report; Some Leads Derived" "MIDA Derived 12 Lead Report"
+"EASI Derived 12 Lead Report"
+"Standard 12 Lead Report; Representative Beat Display"
+</xsd:documentation>
+</xsd:annotation>
+<xsd:element name="reportdescription" type="xsd:string"/>
+<xsd:element name="reportformat">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="interpretationformat"/>
+<xsd:element ref="waveformformat"/>
+    <!-- @extendedmeasflag is set "True" if the report format contains extra pages with lead-by-lead measurements, etc (i.e., the "measurement matrix") -->
+</xsd:sequence>
+<xsd:attribute name="extendedmeasflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="printtruncationflag" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="interpretationformat" type="TYPEinterpretationformat"/>
+<xsd:element name="waveformformat">
+<xsd:complexType>
+<xsd:sequence>
+<!-- rows and columns of the main waveform section: -->
+<xsd:element ref="mainwaveformformat"/>
+<!-- number of leads in the rhythm waveform section: -->
+<xsd:element ref="rhythmwaveformformat"/>
+</xsd:sequence>
+<xsd:attribute name="leadsequence" type="TYPEleadsequence" use="required"/>
+<xsd:attribute name="timesequence" type="TYPEtimesequence" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="mainwaveformformat">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPElistofleadname">
+<xsd:attribute name="nrow" type="xsd:positiveInteger" use="required"/>
+<xsd:attribute name="ncolumn" type="xsd:positiveInteger" use="required"/>
+<xsd:attribute name="repbeat" type="TYPEflag" use="optional"/>
+</xsd:extension>
+<!-- "repbeat" attribute "True" signifies display of the representative beat waveform for each lead -->
+<!-- (note that for repbeat display, "timesequence" should be set to "Simultaneous") -->
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="rhythmwaveformformat">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPElistofleadname">
+<xsd:attribute name="nrhythm" type="xsd:nonNegativeInteger" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:simpleType name="TYPEleadsequence">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Standard"/>
+<xsd:enumeration value="Cabrera"/>
+</xsd:restriction>
+</xsd:simpleType>
+<!-- Continuous means that time increases "continuously" across the ncolumn's of the main waveform section; Simultaneous means that all the columns of the main waveform section occur at the same time -->
+<xsd:simpleType name="TYPEtimesequence">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Continuous"/>
+<xsd:enumeration value="Simultaneous"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:element name="reportgain">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="amplitudegain"/>
+<xsd:element ref="timegain"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="amplitudegain">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="overallgain"/>
+<xsd:element ref="groupgain" minOccurs="0"/>
+<xsd:element ref="individualleadgain" minOccurs="0"/>
+</xsd:sequence>
+<xsd:attribute name="unit" use="required">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="mm/mv"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:attribute>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="overallgain" type="xsd:float"/>
+<xsd:element name="groupgain">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:float">
+<xsd:attribute name="leadgroupname" use="required">
+<xsd:simpleType>
+<xsd:list itemType="TYPEleadname"/>
+</xsd:simpleType>
+</xsd:attribute>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="individualleadgain">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:float">
+<xsd:attribute name="leadname" type="TYPEleadname" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="timegain">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:float">
+<xsd:attribute name="unit" use="required">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="mm/s"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:attribute>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="reportbandwidth">
+<xsd:complexType>
+<xsd:sequence>
+<!-- desired high pass frequency cutoff of the displayed waveform data: -->
+<xsd:element ref="highpassfiltersetting"/>
+<!-- desired low pass frequency cutoff of the displayed waveform data: -->
+<xsd:element ref="lowpassfiltersetting"/>
+<!-- the "notch filter" refers to the A/C powerline electromagnetic interference removal filter -->
+<xsd:element ref="notchfiltersetting"/>
+<!-- much of the powerline interference appears at the 3rd harmonic of the powerline frequency... -->
+<xsd:element ref="notchharmonicssetting" minOccurs="0"/>
+<!-- set "True" if the special "artifact" filter should be run on the data before displaying it: -->
+<xsd:element ref="artifactfilterflag" minOccurs="0"/>
+<!-- set "True" if a hysteresis filter should be run on the data before displaying it: -->
+<xsd:element ref="hysteresisfilterflag" minOccurs="0"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="highpassfiltersetting" type="xsd:float"/>
+<xsd:element name="lowpassfiltersetting" type="xsd:positiveInteger"/>
+<xsd:element name="notchfiltersetting" type="TYPEacfiltersetting"/>
+<xsd:element name="notchharmonicssetting" type="TYPEacharmonicssetting"/>
+<xsd:element name="artifactfilterflag" type="TYPEflag"/>
+<xsd:element name="hysteresisfilterflag" type="TYPEflag"/>
+<!-- multiple copies of the report info can be saved using this element:
+"original" should be set True if this describes the original report settings at time of dataacquisition. "userid" could be used to specify the settings desired by a particular user. -->
+<xsd:element name="savedreportinfo">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="reportlabel"/>
+<xsd:element ref="reportdescription"/>
+<xsd:element ref="reportformat"/>
+<xsd:element ref="reportgain"/>
+<xsd:element ref="reportbandwidth"/>
+<xsd:element name="other" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="label" type="xsd:string" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="date" type="xsd:date" use="required"/>
+<xsd:attribute name="time" type="xsd:time" use="required"/>
+<xsd:attribute name="original" type="TYPEflag" use="optional"/>
+<xsd:attribute name="userid" type="xsd:string" use="optional"/>
+<xsd:attribute name="other" type="xsd:string" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:simpleType name="TYPEinterpretationformat">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="None"/>
+<xsd:enumeration value="Severity only"/>
+<xsd:enumeration value="Short measurements"/>
+<xsd:enumeration value="Extended measurements"/>
+<xsd:enumeration value="Interpretations"/>
+<xsd:enumeration value="Interpretations and reasons"/>
+<xsd:enumeration value="Other"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEacfiltersetting">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="None"/>
+<xsd:enumeration value="50"/>
+<xsd:enumeration value="60"/>
+<xsd:enumeration value="50 60"/>
+<xsd:enumeration value="Other"/>
+<xsd:enumeration value="Unknown"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEacharmonicssetting">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="None"/>
+<xsd:enumeration value="100"/>
+<xsd:enumeration value="150"/>
+<xsd:enumeration value="100 150"/>
+<xsd:enumeration value="120"/>
+<xsd:enumeration value="180"/>
+<xsd:enumeration value="120 180"/>
+<xsd:enumeration value="Other"/>
+<xsd:enumeration value="Unknown"/>
+</xsd:restriction>
+</xsd:simpleType>
+<!-- end of reportinfo -->
+<!-- ============================================================================== -->
+<xsd:element name="dataacquisition">
+<xsd:complexType>
+<xsd:sequence>
+<!-- the ECG Management System database id, if different: -->
+<xsd:element name="databaseid" type="xsd:string" minOccurs="0"/>
+<!-- the modality of the ECG acquisition: eg., RESTING, EXERCISE: -->
+<xsd:element name="modality" type="xsd:string" minOccurs="0"/>
+<!-- this describes the data acquisition device: -->
+<xsd:element ref="machine"/>
+<!-- this describes the people & place of acquisition: -->
+<xsd:element ref="acquirer"/>
+<!-- this describes the signal characteristics at time of data acquisition. -->
+<!-- note that this does NOT describe the waveform in this file, -->
+<!--    since it may have been subsequently modified: -->
+<xsd:element ref="signalcharacteristics"/>
+</xsd:sequence>
+<xsd:attribute name="date" type="xsd:date" use="required"/>
+<xsd:attribute name="time" type="xsd:time" use="required"/>
+<xsd:attribute name="statflag" type="TYPEflag" use="optional"/>
+<!-- date & time of ECG acquisition: -->
+<!-- if this is a "Stat" ECG, set to "True": -->
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="machine">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEmachine">
+<xsd:attribute name="machineid" type="xsd:string" use="optional"/>
+<xsd:attribute name="detaildescription" type="xsd:string" use="required"/>
+</xsd:extension>
+<!-- this is the serial number or other ID of this particular device: -->
+<!-- this should contain model number and software version: -->
+<!-- eg., "Philips Medical Products:M5000:X.01.00.35" -->
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="acquirer">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="encounterid" minOccurs="0"/>
+<xsd:element name="operator" type="TYPEperson" minOccurs="0"/>
+<xsd:element ref="room" minOccurs="0"/>
+<xsd:element ref="bed" minOccurs="0"/>
+<xsd:element ref="departmentid" minOccurs="0"/>
+<xsd:element ref="departmentname" minOccurs="0"/>
+<xsd:element ref="institutionid" minOccurs="0"/>
+<xsd:element ref="institutionname" minOccurs="0"/>
+<xsd:element ref="facilityid" minOccurs="0"/>
+<xsd:element ref="facilityname" minOccurs="0"/>
+<xsd:element name="orderingclinician" type="TYPEperson" minOccurs="0"/>
+<xsd:element name="fellow" type="TYPEperson" minOccurs="0"/>
+<xsd:element name="attendingclinician" type="TYPEperson" minOccurs="0"/>
+<xsd:element name="referringclinician" type="TYPEperson" minOccurs="0"/>
+<xsd:element name="consultingclinician" type="TYPEperson" minOccurs="0"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="encounterid">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="40"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="signalcharacteristics">
+<xsd:complexType>
+<xsd:sequence>
+<!-- sample rate of the digitized signal; samples-per-second: -->
+<xsd:element ref="samplingrate"/>
+<!-- resolution of least-significant-bit, in micro-volts: -->
+<xsd:element ref="resolution"/>
+<!-- this is the high-pass filter frequency cutoff, e.g., 0.05 or 0.5Hz, etc: -->
+<xsd:element ref="hipass"/>
+<!-- this is the low-pass filter frequency cutoff, e.g., 150, or 100Hz, etc: -->
+<xsd:element ref="lowpass"/>
+<!-- this is the power-line frequency of the data acquisition device, if known: -->
+<xsd:element ref="acsetting" minOccurs="0"/>
+<!-- set "True" if data has been power-line notch filtered: -->
+<xsd:element name="notchfiltered" type="TYPEflag" minOccurs="0"/>
+<!-- a list of notch filter frequencies: eg, "60" or "60 120 180" -->
+<xsd:element name="notchfilterfreqs" type="xsd:string" minOccurs="0"/>
+<!-- set "True" if data has been filtered by the special artifact filter: -->
+<xsd:element name="artfiltered" type="TYPEflag" minOccurs="0"/>
+<!-- this describes the acquisition in terms of number of wires/font-end type on the patient: -->
+<xsd:element ref="acquisitiontype"/>
+<!-- description if acquisitiontype is "Other": -->
+<xsd:element name="otheracquisitioninfo" type="xsd:string" minOccurs="0"/>
+<!-- bits per sample of the A/D converter: -->
+<xsd:element ref="bitspersample"/>
+<!-- value of any offset wich must be subtracted form the data: -->
+<xsd:element ref="signaloffset"/>
+<!-- "True" is the data is signed: -->
+<xsd:element ref="signalsigned"/>
+<!-- number of channels acquired: -->
+<xsd:element ref="numberchannelsallocated"/>
+<!-- number of channels valid, if known: -->
+<xsd:element ref="numberchannelsvalid"/>
+<!-- description of the electrode placement, if known (eg., Mason-Likar): -->
+<xsd:element ref="electrodeplacement"/>
+<!-- description if electrodeplacement is "Other": -->
+<xsd:element name="otherplacementinfo" type="xsd:string" minOccurs="0"/>
+<!-- list of derived leads, if any (eg., "V1 V3 V5 V6"): -->
+<xsd:element ref="derivedleads" minOccurs="0"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="samplingrate" type="xsd:float"/>
+<xsd:element name="resolution" type="xsd:float"/>
+<xsd:element name="hipass" type="xsd:float"/>
+<xsd:element name="lowpass" type="xsd:positiveInteger"/>
+<xsd:element name="acsetting" type="TYPEacsetting"/>
+<xsd:simpleType name="TYPEacsetting">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="50"/>
+<xsd:enumeration value="60"/>
+<xsd:enumeration value="Unknown"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:element name="acquisitiontype" type="TYPEacquisitiontype"/>
+<xsd:element name="bitspersample" type="xsd:positiveInteger"/>
+<xsd:element name="signaloffset" type="xsd:integer"/>
+<xsd:element name="signalsigned" type="TYPEflag"/>
+<xsd:element name="numberchannelsallocated" type="xsd:nonNegativeInteger"/>
+<xsd:element name="numberchannelsvalid" type="xsd:nonNegativeInteger"/>
+<xsd:element name="electrodeplacement" type="TYPEelectrodeplacement"/>
+<xsd:element name="derivedleads" type="TYPEderivedleads"/>
+<xsd:element name="operatorid">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="room">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="bed">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="departmentid">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="departmentname">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="institutionid">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="institutionname">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="facilityid">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="facilityname">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:simpleType name="TYPEmachine">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Unknown"/>
+<xsd:enumeration value="HeartstartMRx"/>
+<xsd:enumeration value="IntelliVue"/>
+<xsd:enumeration value="CMS"/>
+<xsd:enumeration value="PageWriter"/>
+<xsd:enumeration value="PageWriter XL"/>
+<xsd:enumeration value="PageWriter Touch"/>
+<xsd:enumeration value="PageWriter Trim"/>
+<xsd:enumeration value="PageWriter TC"/>
+<xsd:enumeration value="5600C System"/>
+<xsd:enumeration value="M1730 System"/>
+<xsd:enumeration value="M1729 System"/>
+<xsd:enumeration value="M3700 System"/>
+<xsd:enumeration value="Holter"/>
+<xsd:enumeration value="Telemetry"/>
+<xsd:enumeration value="Stress"/>
+<xsd:enumeration value="Migrated from 5600C System"/>
+<xsd:enumeration value="Other Manufacturer System"/>
+<xsd:enumeration value="Other Manufacturer Device"/>
+<xsd:enumeration value="Other Philips Cardiograph"/>
+<xsd:enumeration value="Other Philips Defibrillator"/>
+<xsd:enumeration value="Other Philips Monitor"/>
+<xsd:enumeration value="Other"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEacquisitiontype">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="MIDA"/>
+<xsd:enumeration value="EASI"/>
+<xsd:enumeration value="3-WIRE"/>
+<xsd:enumeration value="4-WIRE"/>
+<xsd:enumeration value="5-WIRE"/>
+<xsd:enumeration value="6-WIRE"/>
+<xsd:enumeration value="7-WIRE"/>
+<xsd:enumeration value="8-WIRE"/>
+<xsd:enumeration value="9-WIRE"/>
+<xsd:enumeration value="10-WIRE"/>
+<xsd:enumeration value="11-WIRE"/>
+<xsd:enumeration value="12-WIRE"/>
+<xsd:enumeration value="13-WIRE"/>
+<xsd:enumeration value="14-WIRE"/>
+<xsd:enumeration value="15-WIRE"/>
+<xsd:enumeration value="16-WIRE"/>
+<xsd:enumeration value="17-WIRE"/>
+<xsd:enumeration value="18-WIRE"/>
+<xsd:enumeration value="19-WIRE"/>
+<xsd:enumeration value="20-WIRE"/>
+<xsd:enumeration value="21-WIRE"/>
+<xsd:enumeration value="22-WIRE"/>
+<xsd:enumeration value="23-WIRE"/>
+<xsd:enumeration value="24-WIRE"/>
+<xsd:enumeration value="Other"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEelectrodeplacement">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Unknown"/>
+<xsd:enumeration value="STD"/>
+<xsd:enumeration value="STD 12+"/>
+<xsd:enumeration value="MASON-LIKAR"/>
+<xsd:enumeration value="MASON-LIKAR 12+"/>
+<xsd:enumeration value="MODIFIED"/>
+<xsd:enumeration value="MODIFIED 12+"/>
+<xsd:enumeration value="MIDA"/>
+<xsd:enumeration value="EASI"/>
+<xsd:enumeration value="EASI OFF STERNUM"/>
+<xsd:enumeration value="FRANK"/>
+<xsd:enumeration value="NEHB"/>
+<xsd:enumeration value="Other"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="TYPEderivedleads">
+<xsd:simpleContent>
+<xsd:extension base="TYPElistofleadname"/>
+</xsd:simpleContent>
+</xsd:complexType>
+<!-- end of data acquisition -->
+<!-- ============================================================================== -->
+<xsd:element name="patient">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="generalpatientdata"/>
+<xsd:element ref="patientmedicaldata" minOccurs="0"/>
+</xsd:sequence>
+<xsd:attribute name="criteriaversionforpatientdata" type="TYPEcriteriaversion" use="required"/>
+<xsd:attribute name="customcriteriaversion" type="TYPEcustomcriteriaversion" use="optional"/>
+<xsd:attribute name="othercriteriaversion" type="xsd:string" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="generalpatientdata">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="patientid"/>
+<!-- optional unique patient id for internal use by the ECG management system: -->
+<xsd:element ref="uniquepatientid" minOccurs="0"/>
+<!-- optional Medical Record Number, if different from patientid: -->
+<xsd:element name="MRN" type="xsd:string" minOccurs="0"/>
+<xsd:element name="secondaryid" type="xsd:string" minOccurs="0"/>
+<xsd:element ref="name"/>
+<xsd:element ref="age"/>
+<xsd:element name="pacestatus" type="TYPEpacestatus"/>
+<xsd:element ref="sex"/>
+<xsd:element ref="race" minOccurs="0"/>
+<xsd:element ref="height" minOccurs="0"/>
+<xsd:element ref="weight" minOccurs="0"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:simpleType name="TYPEageyears">
+<xsd:restriction base="xsd:nonNegativeInteger">
+<xsd:maxInclusive value="199"/>
+<xsd:minInclusive value="1"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEsex">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Unknown"/>
+<xsd:enumeration value="Male"/>
+<xsd:enumeration value="Female"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:element name="patientmedicaldata">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="bloodpressure" minOccurs="0"/>
+<xsd:element ref="symptom" minOccurs="0" maxOccurs="4"/>
+<xsd:element ref="history" minOccurs="0" maxOccurs="4"/>
+<xsd:element ref="diagnosis" minOccurs="0" maxOccurs="4"/>
+<xsd:element ref="medication" minOccurs="0" maxOccurs="4"/>
+<xsd:element ref="drgcategory" minOccurs="0" maxOccurs="4"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="patientid">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:minLength value="1"/>
+<xsd:maxLength value="40"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="uniquepatientid" type="xsd:string"/>
+<xsd:element name="name">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="lastname" minOccurs="0"/>
+<xsd:element ref="firstname" minOccurs="0"/>
+<xsd:element ref="middlename" minOccurs="0"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="lastname">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="40"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="firstname">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="40"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="middlename">
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="40"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="age">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:choice>
+<xsd:element ref="dateofbirth" minOccurs="0"/>
+<xsd:element ref="years" minOccurs="0"/>
+<xsd:element ref="months" minOccurs="0"/>
+<xsd:element ref="weeks" minOccurs="0"/>
+<xsd:element ref="days" minOccurs="0"/>
+<xsd:element ref="hours" minOccurs="0"/>
+<xsd:element ref="minutes" minOccurs="0"/>
+</xsd:choice>
+</xsd:sequence>
+<xsd:attribute name="defaultage" type="TYPEageyears" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="dateofbirth" type="TYPEdate"/>
+<xsd:element name="years" type="TYPEageyears"/>
+<xsd:element name="months" type="xsd:positiveInteger"/>
+<xsd:element name="weeks" type="xsd:positiveInteger"/>
+<xsd:element name="days" type="xsd:positiveInteger"/>
+<xsd:element name="hours" type="xsd:positiveInteger"/>
+<xsd:element name="minutes" type="xsd:positiveInteger"/>
+<xsd:element name="sex" type="TYPEsex"/>
+<xsd:element name="race">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="code" type="xsd:NMTOKENS" use="optional"/>
+<xsd:attribute name="id" type="xsd:NMTOKENS" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="height">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:choice>
+<xsd:element name="cm" type="TYPEheight"/>
+<xsd:element name="inch" type="TYPEheight"/>
+</xsd:choice>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="weight">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:choice>
+<xsd:element name="kg" type="TYPEweight"/>
+<xsd:element name="lb" type="TYPEweight"/>
+</xsd:choice>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="bloodpressure">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="systolic"/>
+<xsd:element ref="diastolic"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="systolic">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="mmHg" type="TYPEbp"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="diastolic">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="mmHg" type="TYPEbp"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="symptom">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="code" type="xsd:NMTOKEN" use="optional"/>
+<xsd:attribute name="id" type="xsd:NMTOKEN" use="required"/>
+<xsd:attribute name="value" type="xsd:string" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="history">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="code" type="xsd:NMTOKEN" use="optional"/>
+<xsd:attribute name="id" type="xsd:NMTOKEN" use="required"/>
+<xsd:attribute name="value" type="xsd:string" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="diagnosis">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="code" type="xsd:NMTOKEN" use="optional"/>
+<xsd:attribute name="id" type="xsd:NMTOKEN" use="required"/>
+<xsd:attribute name="value" type="xsd:string" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="medication">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="code" type="xsd:NMTOKEN" use="optional"/>
+<xsd:attribute name="id" type="xsd:NMTOKEN" use="required"/>
+<xsd:attribute name="value" type="xsd:string" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="pt_race">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="code" type="xsd:NMTOKENS" use="optional"/>
+<xsd:attribute name="id" type="xsd:NMTOKENS" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="dx">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="code" type="xsd:NMTOKEN" use="required"/>
+<xsd:attribute name="id" type="xsd:NMTOKEN" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="rx">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="code" type="xsd:NMTOKEN" use="required"/>
+<xsd:attribute name="id" type="xsd:NMTOKEN" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<!-- end of patient -->
+<!-- ============================================================================== -->
+<xsd:element name="internalmeasurements">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="crossleadmeasurements" minOccurs="0"/>
+<xsd:element ref="groupmeasurements" minOccurs="0"/>
+<xsd:element ref="leadmeasurements" minOccurs="0"/>
+<xsd:element ref="configsettings" minOccurs="0"/>
+</xsd:sequence>
+<xsd:attribute name="date" type="xsd:date" use="required"/>
+<xsd:attribute name="time" type="xsd:time" use="required"/>
+<xsd:attribute name="measurementversion" type="TYPEmeasurementversion" use="required"/>
+<xsd:attribute name="custommeasurementversion" type="TYPEcustommeasurementversion" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:simpleType name="TYPEmeasurementversion">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="7"/>
+<xsd:enumeration value="8"/>
+<xsd:enumeration value="9"/>
+<xsd:enumeration value="A"/>
+<xsd:enumeration value="B"/>
+<xsd:enumeration value="C"/>
+<xsd:enumeration value="D"/>
+<xsd:enumeration value="E"/>
+<xsd:enumeration value="F"/>
+<xsd:enumeration value="10"/>
+<xsd:enumeration value="11"/>
+<xsd:enumeration value="12"/>
+<xsd:enumeration value="13"/>
+<xsd:enumeration value="14"/>
+<xsd:enumeration value="15"/>
+<xsd:enumeration value="Custom"/>
+<xsd:enumeration value="Other Manufacturer"/>
+<xsd:enumeration value="Other"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:element name="crossleadmeasurements">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:group ref="crossleadmeasurements.elements"/>
+</xsd:sequence>
+<xsd:attribute name="fixedmultpflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="multptestvalidflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="qrslikeartfflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="pacebeatmeasflag" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:group name="crossleadmeasurements.elements">
+<xsd:sequence>
+<!-- if any pacepulses are detected, this should be a list of leads on which the pacepulse detector was run; -->
+<!-- whether or not that particular lead detected any pace pulses: -->
+<!-- (some devices run the pace pulse detector on all leads, others run it only on some leads) -->
+<xsd:element ref="pacedetectleads" minOccurs="0"/>
+<xsd:element ref="pacepulses" minOccurs="0"/>
+<xsd:element ref="pacemode" minOccurs="0"/>
+<xsd:element ref="pacemalf" minOccurs="0"/>
+<xsd:element ref="pacemisc" minOccurs="0"/>
+<xsd:element ref="ectopicrhythm" minOccurs="0"/>
+<xsd:element ref="qtintdispersion" minOccurs="0"/>
+<xsd:element ref="numberofcomplexes" minOccurs="0"/>
+<xsd:element ref="numberofgroups" minOccurs="0"/>
+<xsd:element ref="beatclassification" minOccurs="0"/>
+<xsd:element ref="qamessagecodes" minOccurs="0"/>
+<xsd:element ref="qaactioncode" minOccurs="0"/>
+<xsd:element ref="pfrontaxis" minOccurs="0"/>
+<xsd:element ref="phorizaxis" minOccurs="0"/>
+<xsd:element ref="i40frontaxis" minOccurs="0"/>
+<xsd:element ref="i40horizaxis" minOccurs="0"/>
+<xsd:element ref="qrsfrontaxis" minOccurs="0"/>
+<xsd:element ref="qrshorizaxis" minOccurs="0"/>
+<xsd:element ref="t40frontaxis" minOccurs="0"/>
+<xsd:element ref="t40horizaxis" minOccurs="0"/>
+<xsd:element ref="stfrontaxis" minOccurs="0"/>
+<xsd:element ref="sthorizaxis" minOccurs="0"/>
+<xsd:element ref="tfrontaxis" minOccurs="0"/>
+<xsd:element ref="thorizaxis" minOccurs="0"/>
+<xsd:element ref="atrialrate" minOccurs="0"/>
+<xsd:element ref="lowventrate" minOccurs="0"/>
+<xsd:element ref="meanventrate" minOccurs="0"/>
+<xsd:element ref="highventrate" minOccurs="0"/>
+<xsd:element ref="meanprint" minOccurs="0"/>
+<xsd:element ref="meanprseg" minOccurs="0"/>
+<xsd:element ref="meanqrsdur" minOccurs="0"/>
+<xsd:element ref="meanqtint" minOccurs="0"/>
+<xsd:element ref="meanqtc" minOccurs="0"/>
+<xsd:element ref="deltawavecount" minOccurs="0"/>
+<xsd:element ref="deltawavepercent" minOccurs="0"/>
+<xsd:element ref="bigeminycount" minOccurs="0"/>
+<xsd:element ref="bigeminystring" minOccurs="0"/>
+<xsd:element ref="trigeminycount" minOccurs="0"/>
+<xsd:element ref="trigeminystring" minOccurs="0"/>
+<xsd:element ref="wenckcount" minOccurs="0"/>
+<xsd:element ref="wenckstring" minOccurs="0"/>
+<xsd:element ref="flutterfibcount" minOccurs="0"/>
+<!-- additional algorithm variables: -->
+<!-- lead reversal code: -->
+<xsd:element name="leadreversalcode" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- atrial rhythm code: -->
+<xsd:element name="atrialrhythm" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- atrial rate (beats per minute) from the power spectrum/ autocorrelation of the QRST residual: -->
+<xsd:element name="atrialratepowerspect" type="TYPErate" minOccurs="0"/>
+<!-- ventricular rhythm code -->
+<xsd:element name="ventrhythm" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- percentage of beats with random RR interval variation: -->
+<xsd:element name="randomrrpercent" type="TYPEpercent" minOccurs="0"/>
+<!-- percentage of beats with regular RR interals: -->
+<xsd:element name="regularrrpercent" type="TYPEpercent" minOccurs="0"/>
+<!-- percentage of beats in the largest RR interval cluster: -->
+<xsd:element name="biggestrrgrouppercent" type="TYPEpercent" minOccurs="0"/>
+<!-- variation (std.dev./mean) of RR intervals in the largest RR cluster: -->
+<xsd:element name="biggestrrgroupvar" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- total number of RR interval groups or clusters: -->
+<xsd:element name="nrrgroups" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- height of RR interval ACF peak in percent: -->
+<xsd:element name="bigemrrintvlacf" type="TYPEpercent" minOccurs="0"/>
+<!-- height of RR interval ACF peak in percent: -->
+<xsd:element name="trigemrrintvlacf" type="TYPEpercent" minOccurs="0"/>
+<!-- atrial fibrillation (Afib) frequency from the power spectral density (PSD): -->
+<xsd:element name="fibfreqmhz" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- amplitude of afib-peak frequency component of the PSD: -->
+<xsd:element name="fibampnv" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- 10dB width of the afib-peak frequency component of the PSD: -->
+<xsd:element name="fibwidthmhz" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- median frequency from the PSD, half power above, half power below -->
+<xsd:element name="fibmedianfreqmhz" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- cycle length taken from the atrial signal autocorrelation function (ACF): -->
+<xsd:element name="afltcyclelen" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- height of percent-normalized cycle-length ACF peak, 0-100%: -->
+<xsd:element name="afltacfpeak" type="TYPEpercent" minOccurs="0"/>
+<!-- width of cycle-length ACF peak in millisec: -->
+<xsd:element name="afltacfpeakwidth" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- percentage of all P waves or F waves that have the same shape: -->
+<xsd:element name="constantpshapepct" type="TYPEpercent" minOccurs="0"/>
+<!-- error of P to P intervals compared to avg. PP interval: -->
+<xsd:element name="atrialrateirregpct" type="TYPEpercent" minOccurs="0"/>
+<!-- vector loop measurements: -->
+<xsd:group ref="vectorloopmxs.elements" minOccurs="0"/>
+<!-- preexcitation code: -->
+<xsd:element name="preexcitation" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- global beat annotations: -->
+<xsd:element ref="beats" minOccurs="0"/>
+<!-- return code from the algorithm to the host: -->
+<xsd:element name="analysiserror" type="xsd:nonNegativeInteger" minOccurs="0"/>
+<!-- (localized) message string corresponding to the analysiserror code: -->
+<xsd:element name="analysiserrormessage" type="xsd:string" minOccurs="0"/>
+<!-- reserved for future use: -->
+<xsd:element ref="namedmeasurement" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:group>
+<xsd:element name="qamessagecodes">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="qamessagecode" minOccurs="0" maxOccurs="4"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qamessagecode" type="TYPEmessagecode"/>
+<xsd:simpleType name="TYPEmessagecode">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="None"/>
+<xsd:enumeration value="Acceptable trace"/>
+<xsd:enumeration value="Check QA message history"/>
+<xsd:enumeration value="Overrange"/>
+<xsd:enumeration value="Artifact"/>
+<xsd:enumeration value="Baseline wander"/>
+<xsd:enumeration value="Missing lead(s)"/>
+<xsd:enumeration value="Phone noise"/>
+<xsd:enumeration value="AC interference"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:element name="qaactioncode" type="TYPEactioncode"/>
+<xsd:simpleType name="TYPEactioncode">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="ECG OK"/>
+<xsd:enumeration value="Poor ECG, retry if possible"/>
+</xsd:restriction>
+</xsd:simpleType>
+<!-- start of vector loop measurement definitions: ============== -->
+<xsd:group name="vectorloopmxs.elements">
+<xsd:sequence>
+<!-- Transverse (ie., Horizontal) Plane  -->
+<!-- p-wave  -->
+<xsd:element name="transpcwrot" type="TYPEcwRot" minOccurs="0"/>
+<xsd:element name="transpinitangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="transpinitmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="transpmaxangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="transpmaxmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="transptermangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="transptermmag" type="TYPEmag" minOccurs="0"/>
+<!-- qrs-wave  -->
+<xsd:element name="transqrscwrot" type="TYPEcwRot" minOccurs="0"/>
+<xsd:element name="transqrsinitangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="transqrsinitmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="transqrsmaxangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="transqrsmaxmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="transqrstermangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="transqrstermmag" type="TYPEmag" minOccurs="0"/>
+<!-- t-wave  -->
+<xsd:element name="transtcwrot" type="TYPEcwRot" minOccurs="0"/>
+<xsd:element name="transtinitangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="transtinitmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="transtmaxangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="transtmaxmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="transttermangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="transttermmag" type="TYPEmag" minOccurs="0"/>
+<!-- Frontal Plane  -->
+<!-- p-wave  -->
+<xsd:element name="frontpcwrot" type="TYPEcwRot" minOccurs="0"/>
+<xsd:element name="frontpinitangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="frontpinitmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="frontpmaxangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="frontpmaxmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="frontptermangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="frontptermmag" type="TYPEmag" minOccurs="0"/>
+<!-- qrs-wave  -->
+<xsd:element name="frontqrscwrot" type="TYPEcwRot" minOccurs="0"/>
+<xsd:element name="frontqrsinitangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="frontqrsinitmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="frontqrsmaxangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="frontqrsmaxmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="frontqrstermangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="frontqrstermmag" type="TYPEmag" minOccurs="0"/>
+<!-- t-wave  -->
+<xsd:element name="fronttcwrot" type="TYPEcwRot" minOccurs="0"/>
+<xsd:element name="fronttinitangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="fronttinitmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="fronttmaxangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="fronttmaxmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="frontttermangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="frontttermmag" type="TYPEmag" minOccurs="0"/>
+<!-- Sagittal Plane  -->
+<!-- p-wave  -->
+<xsd:element name="sagpcwrot" type="TYPEcwRot" minOccurs="0"/>
+<xsd:element name="sagpinitangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="sagpinitmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="sagpmaxangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="sagpmaxmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="sagptermangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="sagptermmag" type="TYPEmag" minOccurs="0"/>
+<!-- qrs-wave  -->
+<xsd:element name="sagqrscwrot" type="TYPEcwRot" minOccurs="0"/>
+<xsd:element name="sagqrsinitangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="sagqrsinitmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="sagqrsmaxangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="sagqrsmaxmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="sagqrstermangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="sagqrstermmag" type="TYPEmag" minOccurs="0"/>
+<!-- t-wave  -->
+<xsd:element name="sagtcwrot" type="TYPEcwRot" minOccurs="0"/>
+<xsd:element name="sagtinitangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="sagtinitmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="sagtmaxangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="sagtmaxmag" type="TYPEmag" minOccurs="0"/>
+<xsd:element name="sagttermangle" type="TYPEangle" minOccurs="0"/>
+<xsd:element name="sagttermmag" type="TYPEmag" minOccurs="0"/>
+</xsd:sequence>
+</xsd:group>
+<!-- score between -100(counter-clockwise) and 100(clockwise) indicating confidence: -->
+<xsd:simpleType name="TYPEcwRot1">
+<xsd:restriction base="xsd:integer">
+<xsd:maxInclusive value="100"/>
+<xsd:minInclusive value="-100"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEcwRot">
+<xsd:union memberTypes="TYPEcwRot1 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<!-- vector angle (degrees): -->
+<xsd:simpleType name="TYPEangle1">
+<xsd:restriction base="xsd:integer">
+<xsd:maxInclusive value="360"/>
+<xsd:minInclusive value="-360"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEangle">
+<xsd:union memberTypes="TYPEangle1 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<!-- vector magnitude (microvolts): -->
+<xsd:simpleType name="TYPEmag1">
+<xsd:restriction base="xsd:nonNegativeInteger"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEmag">
+<xsd:union memberTypes="TYPEmag1 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<!-- end of vector loop measurements definition =============== -->
+<!-- =================================================-->
+<xsd:element name="beats">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="beat" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="group" type="xsd:nonNegativeInteger"/>
+<xsd:element name="pon" type="TYPEfiducial" minOccurs="0"/>
+<xsd:element name="poff" type="TYPEfiducial" minOccurs="0"/>
+<xsd:element name="qon" type="TYPEfiducial" minOccurs="0"/>
+<xsd:element name="qoff" type="TYPEfiducial" minOccurs="0"/>
+<xsd:element name="ton" type="TYPEfiducial" minOccurs="0"/>
+<xsd:element name="toff" type="TYPEfiducial" minOccurs="0"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<!-- ============= ====================================-->
+<xsd:element name="namedmeasurement">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="name" type="xsd:string"/>
+<xsd:element name="value" type="xsd:string"/>
+</xsd:sequence>
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="xsd:string" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<!-- end of crossleadmeasurements.elements ================================ -->
+<xsd:element name="groupmeasurements">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="groupmeasurement" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="groupmeasurement">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:group ref="groupmeasurement.elements"/>
+</xsd:sequence>
+<xsd:attribute name="groupnumber" use="required">
+<xsd:simpleType>
+<xsd:restriction base="xsd:nonNegativeInteger">
+<xsd:maxInclusive value="20"/>
+<xsd:minInclusive value="0"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:attribute>
+<xsd:attribute name="interpflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="sinusflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="prprogflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="wenckflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="bigflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="trigflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="aberrantflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="multptestflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="qrsmeasflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="atrialpaceflag" type="TYPEflagUnk" use="optional"/>
+<xsd:attribute name="ventdualpaceflag" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:group name="groupmeasurement.elements">
+<xsd:sequence>
+<xsd:element ref="membercount"/>
+<xsd:element ref="memberpercent" minOccurs="0"/>
+<xsd:element ref="longestrun" minOccurs="0"/>
+<xsd:element ref="meanqrsdur" minOccurs="0"/>
+<xsd:element ref="lowventrate" minOccurs="0"/>
+<xsd:element ref="meanventrate" minOccurs="0"/>
+<xsd:element ref="highventrate" minOccurs="0"/>
+<xsd:element ref="ventratestddev" minOccurs="0"/>
+<xsd:element ref="meanrrint" minOccurs="0"/>
+<xsd:element ref="atrialrate" minOccurs="0"/>
+<xsd:element ref="atrialratestddev" minOccurs="0"/>
+<xsd:element ref="avgpcount" minOccurs="0"/>
+<xsd:element ref="notavgpbeats" minOccurs="0"/>
+<xsd:element ref="lowprint" minOccurs="0"/>
+<xsd:element ref="meanprint" minOccurs="0"/>
+<xsd:element ref="highprint" minOccurs="0"/>
+<xsd:element ref="printstddev" minOccurs="0"/>
+<xsd:element ref="meanprseg" minOccurs="0"/>
+<xsd:element ref="meanqtint" minOccurs="0"/>
+<xsd:element ref="meanqtseg" minOccurs="0"/>
+<xsd:element ref="comppausecount" minOccurs="0"/>
+<!-- reserved for future use: -->
+<xsd:element ref="namedmeasurement" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:group>
+<!-- ============================================== -->
+<xsd:element name="leadmeasurements">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="leadmeasurement" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="leadmeasurement">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="pacepulses" minOccurs="0"/>
+<xsd:group ref="leadmeasurement.elements"/>
+</xsd:sequence>
+<xsd:attribute name="leadname" type="TYPEleadname" use="required"/>
+<xsd:attribute name="pexistflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="pmeasflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="pnotchflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="qrsexistflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="qrsspikeflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="qrsmeasflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="qrsnotchflag" type="TYPEnotch" use="optional"/>
+<xsd:attribute name="qrsdeltaflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="stexistflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="stmeasflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="texistflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="tmeasflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="tnotchflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="atrialpaceflag" type="TYPEflagUnk" use="optional"/>
+<xsd:attribute name="ventpaceflag" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:group name="leadmeasurement.elements">
+<xsd:sequence>
+<xsd:element ref="leadqualitystates" minOccurs="0"/>
+<xsd:element ref="pamp" minOccurs="0"/>
+<xsd:element ref="pdur" minOccurs="0"/>
+<xsd:element ref="parea" minOccurs="0"/>
+<xsd:element ref="ppamp" minOccurs="0"/>
+<xsd:element ref="ppdur" minOccurs="0"/>
+<xsd:element ref="ppppdur" minOccurs="0"/>
+<xsd:element ref="pparea" minOccurs="0"/>
+<xsd:element ref="pppparea" minOccurs="0"/>
+<xsd:element ref="qamp" minOccurs="0"/>
+<xsd:element ref="qdur" minOccurs="0"/>
+<xsd:element ref="ramp" minOccurs="0"/>
+<xsd:element ref="rdur" minOccurs="0"/>
+<xsd:element ref="samp" minOccurs="0"/>
+<xsd:element ref="sdur" minOccurs="0"/>
+<xsd:element ref="rpamp" minOccurs="0"/>
+<xsd:element ref="rpdur" minOccurs="0"/>
+<xsd:element ref="spamp" minOccurs="0"/>
+<xsd:element ref="spdur" minOccurs="0"/>
+<xsd:element ref="vat" minOccurs="0"/>
+<xsd:element ref="qrsppk" minOccurs="0"/>
+<xsd:element ref="qrsdur" minOccurs="0"/>
+<xsd:element ref="qrsarea" minOccurs="0"/>
+<xsd:element ref="ston" minOccurs="0"/>
+<xsd:element ref="stmid" minOccurs="0"/>
+<xsd:element ref="st80" minOccurs="0"/>
+<xsd:element ref="stend" minOccurs="0"/>
+<xsd:element ref="stdur" minOccurs="0"/>
+<xsd:element ref="stslope" minOccurs="0"/>
+<xsd:element ref="stshape" minOccurs="0"/>
+<xsd:element ref="tamp" minOccurs="0"/>
+<xsd:element ref="tdur" minOccurs="0"/>
+<xsd:element ref="tarea" minOccurs="0"/>
+<xsd:element ref="tpamp" minOccurs="0"/>
+<xsd:element ref="tptpdur" minOccurs="0"/>
+<xsd:element ref="tpdur" minOccurs="0"/>
+<xsd:element ref="tparea" minOccurs="0"/>
+<xsd:element ref="tptparea" minOccurs="0"/>
+<xsd:element ref="print" minOccurs="0"/>
+<xsd:element ref="prseg" minOccurs="0"/>
+<xsd:element ref="qtint" minOccurs="0"/>
+<xsd:element ref="beats" minOccurs="0"/>
+<!-- reserved for future use: -->
+<xsd:element ref="namedmeasurement" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:group>
+<!-- algorithm configuration settings needed if the ECG is ever re-analyzed by the diagnostic algorithm: -->
+<xsd:element name="configsettings">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="bradyhrlimit" type="TYPEintegerORnull" minOccurs="0"/>
+<xsd:element name="asianlvhcriteria" type="TYPEflag" minOccurs="0"/>
+<xsd:element name="qualitystmts" type="TYPEintegerORnull" minOccurs="0"/>
+<xsd:element name="sensitivity" type="TYPEintegerORnull" minOccurs="0"/>
+<xsd:element ref="configsetting" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<!-- for future use: -->
+<xsd:element name="configsetting">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="name" type="xsd:string"/>
+<xsd:element name="value" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="leadqualitystates">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="inops" minOccurs="0" maxOccurs="unbounded"/>
+<xsd:element ref="saturations" minOccurs="0" maxOccurs="unbounded"/>
+<xsd:element ref="baseartifacts" minOccurs="0" maxOccurs="unbounded"/>
+<xsd:element ref="acartifacts" minOccurs="0" maxOccurs="unbounded"/>
+<xsd:element ref="muscleartifacts" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+<xsd:attribute name="qrsclippingflag" type="TYPEflag" use="required"/>
+<xsd:attribute name="overrangeflag" type="TYPEflag" use="required"/>
+<xsd:attribute name="measuredflag" type="TYPEflag" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="inops">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="inop" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="saturations">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="saturation" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="baseartifacts">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="baseartifact" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+<xsd:attribute name="level" type="TYPEnoiselevel" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="acartifacts">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="acartifact" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+<xsd:attribute name="level" type="TYPEnoiselevel" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="muscleartifacts">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="muscleartifact" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+<xsd:attribute name="level" type="TYPEnoiselevel" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="inop">
+<xsd:complexType>
+<xsd:attribute name="starttime" type="TYPEstarttime" use="required"/>
+<xsd:attribute name="duration" type="TYPEduration" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="saturation">
+<xsd:complexType>
+<xsd:attribute name="starttime" type="TYPEstarttime" use="required"/>
+<xsd:attribute name="duration" type="TYPEduration" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="baseartifact">
+<xsd:complexType>
+<xsd:attribute name="starttime" type="TYPEstarttime" use="required"/>
+<xsd:attribute name="duration" type="TYPEduration" use="required"/>
+<xsd:attribute name="level" type="TYPEnoiselevel" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="acartifact">
+<xsd:complexType>
+<xsd:attribute name="starttime" type="TYPEstarttime" use="required"/>
+<xsd:attribute name="duration" type="TYPEduration" use="required"/>
+<xsd:attribute name="level" type="TYPEnoiselevel" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="muscleartifact">
+<xsd:complexType>
+<xsd:attribute name="starttime" type="TYPEstarttime" use="required"/>
+<xsd:attribute name="duration" type="TYPEduration" use="required"/>
+<xsd:attribute name="level" type="TYPEnoiselevel" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<!-- ============================================================================== -->
+<xsd:element name="interpretations">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="interpretation" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="interpretation">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="serialcomparison" minOccurs="0"/>
+<xsd:element ref="interpretationdatastructure" minOccurs="0"/>
+<xsd:element ref="globalmeasurements" minOccurs="0"/>
+<xsd:element ref="mdsignatureline" minOccurs="0"/>
+<!-- name with @id of the most recent confirming clinician (with @date and @time of confirmation) -->
+<xsd:element name="confirmingclinician" type="TYPEpersonwithdatetime" minOccurs="0"/>
+<xsd:element ref="severity" minOccurs="0"/>
+<xsd:element ref="statement" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+<xsd:attribute name="date" type="xsd:date" use="required"/>
+<xsd:attribute name="time" type="xsd:time" use="required"/>
+<xsd:attribute name="criteriaversion" type="TYPEcriteriaversion" use="required"/>
+<xsd:attribute name="criteriaversiondate" type="xsd:date" use="optional"/>
+<xsd:attribute name="customcriteriaversion" type="TYPEcustomcriteriaversion" use="optional"/>
+<xsd:attribute name="othercriteriaversion" type="xsd:string" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="serialcomparison">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="previousecg" minOccurs="0">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="documentname" type="xsd:string"/>
+<xsd:element ref="severity"/>
+<xsd:element name="mdsignatureline" type="xsd:string"/>
+<xsd:element name="compareinfostatement" type="xsd:string"/>
+</xsd:sequence>
+<xsd:attribute name="date" type="xsd:date" use="required"/>
+<xsd:attribute name="time" type="xsd:time" use="required"/>
+<xsd:attribute name="status" type="TYPErestingecgstatus" use="required"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="date" type="xsd:date" use="required"/>
+<xsd:attribute name="time" type="xsd:time" use="required"/>
+<xsd:attribute name="scalgversion" type="xsd:string" use="required"/>
+<xsd:attribute name="scalgversiondate" type="xsd:date" use="optional"/>
+<xsd:attribute name="scstatementversion" type="xsd:string" use="optional"/>
+<xsd:attribute name="scstatementversiondate" type="xsd:date" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="globalmeasurements">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="heartrate">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPErate">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPErate" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="rrint">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="atrialrate" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPErate">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPErate" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="pdur" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="print">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qonset">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEfiducial">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEfiducial" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qrsdur">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="tonset" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEfiducial">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEfiducial" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qtint">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qtcb">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qtcf" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qtco" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="methodname" type="xsd:string" use="required"/>
+<xsd:attribute name="label" type="xsd:string" use="required"/>
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<!-- list of leads ordered by stability of the T wave offset measurement on that lead; most stable comes first -->
+<xsd:element name="toffsetstabilityrank" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPElistofleadname"/>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="pfrontaxis">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="i40frontaxis" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="t40frontaxis" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qrsfrontaxis">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="stfrontaxis" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="tfrontaxis">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="phorizaxis" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="i40horizaxis" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="t40horizaxis" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qrshorizaxis" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="sthorizaxis" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="thorizaxis" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEaxis">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEaxis" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<!-- reserved for future use: -->
+<xsd:element ref="namedmeasurement" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<!-- globalmeasurements @editedflag will be "True" if ANY global measurement has been edited -->
+</xsd:complexType>
+</xsd:element>
+<!-- the ECG is confirmed by, or for, a confirming clinician;
+the element holds the person's ID (eg., logname or UPIN);
+@date of the confirmation
+@time of the confirmation -->
+<xsd:simpleType name="TYPEcriteriaversion">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="01"/>
+<xsd:enumeration value="02"/>
+<xsd:enumeration value="03"/>
+<xsd:enumeration value="04"/>
+<xsd:enumeration value="05"/>
+<xsd:enumeration value="06"/>
+<xsd:enumeration value="07"/>
+<xsd:enumeration value="08"/>
+<xsd:enumeration value="09"/>
+<xsd:enumeration value="0A"/>
+<xsd:enumeration value="0B"/>
+<xsd:enumeration value="0C"/>
+<xsd:enumeration value="0D"/>
+<xsd:enumeration value="0E"/>
+<xsd:enumeration value="0F"/>
+<xsd:enumeration value="10"/>
+<xsd:enumeration value="11"/>
+<xsd:enumeration value="12"/>
+<xsd:enumeration value="13"/>
+<xsd:enumeration value="14"/>
+<xsd:enumeration value="15"/>
+<xsd:enumeration value="16"/>
+<xsd:enumeration value="17"/>
+<xsd:enumeration value="18"/>
+<xsd:enumeration value="19"/>
+<xsd:enumeration value="1A"/>
+<xsd:enumeration value="P2"/>
+<xsd:enumeration value="P3"/>
+<xsd:enumeration value="P4"/>
+<xsd:enumeration value="H0"/>
+<xsd:enumeration value="H8"/>
+<xsd:enumeration value="T0"/>
+<xsd:enumeration value="T8"/>
+<xsd:enumeration value="V8"/>
+<xsd:enumeration value="S9"/>
+<xsd:enumeration value="None"/>
+<xsd:enumeration value="Unknown"/>
+<xsd:enumeration value="Custom"/>
+<xsd:enumeration value="Other"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:element name="severity">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="code" type="xsd:string" use="optional"/>
+<xsd:attribute name="id" type="xsd:nonNegativeInteger" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="interpretationdatastructure">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="statementcomponents" minOccurs="0"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="modifiers">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="modifier" minOccurs="0" maxOccurs="3">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="numericcode" type="xsd:nonNegativeInteger" use="required"/>
+<xsd:attribute name="modifiercode" type="xsd:string" use="required"/>
+<xsd:attribute name="added" type="TYPEflag" use="optional"/>
+<xsd:attribute name="deleted" type="TYPEflag" use="optional"/>
+<xsd:attribute name="changed" type="TYPEflag" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="changed" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="scmodifiers">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="scmodifier" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="scnumericcode" type="xsd:nonNegativeInteger" use="required"/>
+<xsd:attribute name="scmodifiercode" type="xsd:string" use="required"/>
+<xsd:attribute name="added" type="TYPEflag" use="optional"/>
+<xsd:attribute name="deleted" type="TYPEflag" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="changed" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="variables">
+<xsd:complexType>
+<xsd:sequence minOccurs="0" maxOccurs="4">
+<xsd:choice>
+<xsd:element ref="numericvalue"/>
+<xsd:element ref="listofECGlead"/>
+<xsd:element ref="groupofECGlead"/>
+</xsd:choice>
+</xsd:sequence>
+<xsd:attribute name="changed" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="numericvalue">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="changed" type="TYPEflag" use="optional"/>
+<xsd:attribute name="ndigits" type="xsd:nonNegativeInteger" use="required"/>
+<xsd:attribute name="nprecision" type="xsd:nonNegativeInteger" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="unparsedstatement">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="lhsstatement" type="xsd:string"/>
+<xsd:element name="rhsstatement" type="xsd:string"/>
+</xsd:sequence>
+<xsd:attribute name="statementnumber" type="xsd:nonNegativeInteger" use="required"/>
+<xsd:attribute name="code" type="xsd:string" use="required"/>
+<xsd:attribute name="format" type="TYPEformat" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="codedstatement">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="modifiers"/>
+<xsd:element ref="scmodifiers"/>
+<xsd:element ref="variables"/>
+<xsd:element ref="unparsedstatement"/>
+</xsd:sequence>
+<xsd:attribute name="source" type="TYPEcodedstatementsource" use="required"/>
+<xsd:attribute name="subtype" type="TYPEstatementsubtype" use="required"/>
+<xsd:attribute name="deleted" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="uncodedstatement">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="source" type="TYPEuncodedstatementsource" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qualitystatement">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="modifiers"/>
+<xsd:element ref="variables"/>
+<xsd:element ref="unparsedstatement"/>
+</xsd:sequence>
+<xsd:attribute name="source" type="TYPEqualitystatementsource" use="required"/>
+<xsd:attribute name="subtype" type="TYPEstatementsubtype" use="required"/>
+<xsd:attribute name="deleted" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="remarkstatement">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="source" type="TYPEremarkstatementsource" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="statementcomponents">
+<xsd:complexType>
+<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+<xsd:choice>
+<xsd:element ref="codedstatement"/>
+<xsd:element ref="uncodedstatement"/>
+<xsd:element ref="qualitystatement"/>
+<xsd:element ref="remarkstatement"/>
+</xsd:choice>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="statement">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="statementcode"/>
+<xsd:element ref="leftstatement"/>
+<xsd:element ref="rightstatement"/>
+</xsd:sequence>
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="statementcode" type="xsd:string"/>
+<xsd:element name="leftstatement" type="xsd:string"/>
+<xsd:element name="rightstatement" type="xsd:string"/>
+<xsd:simpleType name="TYPEstatementsource">
+<xsd:restriction base="xsd:string">
+<xsd:whiteSpace value="collapse"/>
+<xsd:enumeration value=""/>
+<xsd:enumeration value="Analysis program"/>
+<xsd:enumeration value="Quality monitor"/>
+<xsd:enumeration value="Serial comparison"/>
+<xsd:enumeration value="Editor"/>
+<xsd:enumeration value="Migration"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEstatementsubtype">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Analysis"/>
+<xsd:enumeration value="Serial comparison"/>
+<xsd:enumeration value="Other"/>
+<xsd:enumeration value="Unknown"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEunparsedstatementsource">
+<xsd:restriction base="TYPEstatementsource"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEcodedstatementsource">
+<xsd:restriction base="TYPEstatementsource"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEuncodedstatementsource">
+<xsd:restriction base="TYPEstatementsource"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEqualitystatementsource">
+<xsd:restriction base="TYPEstatementsource"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEremarkstatementsource">
+<xsd:restriction base="TYPEstatementsource"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEformat">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Narrow"/>
+<xsd:enumeration value="Wide"/>
+</xsd:restriction>
+</xsd:simpleType>
+<!-- end of interpretations -->
+<!-- ============================================================================== -->
+<xsd:element name="waveforms">
+<xsd:complexType>
+<xsd:sequence>
+<!-- waveforms in this file: -->
+<xsd:element ref="parsedwaveforms" minOccurs="0"/>
+<!-- waveforms external to this file: -->
+<xsd:element ref="unparsedwaveforms" minOccurs="0"/>
+
+
+<!-- individual lead waveforms in this file: -->
+<xsd:element ref="leadwaveforms" minOccurs="0" maxOccurs="unbounded"/>
+<!-- vector waveforms in this file: -->
+<xsd:element ref="vcgs" minOccurs="0"/>
+<!-- representative beat waveforms in this file: -->
+<xsd:element ref="repbeats" minOccurs="0"/>
+<!-- waveform annotations: -->
+<xsd:element ref="annotations" minOccurs="0"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<!-- parsedwaveforms ========================  -->
+<xsd:annotation>
+<xsd:documentation>
+This is the ECG waveform data which is contained in this file.
+All the data for channel (i.e., "lead") 1 comes first, followed by all the data for channel 2, etc. Attributes:
+@dataencoding: how the data is encoded: eg., "Base64".
+Use "Plain" for sample values in ascii: "10 20 35...." .
+@compression: name the type of compression if the data is compressed
+(e.g., "XLI" for standard Philips cardiograph compression; if not compressed, omit this attribute) .
+@numberofleads: number of channels or "leads".
+@leadlabels: list of lead labels, with a space as separator, eg., "I II III aVR aVL aVF V1 V2 V3 V4 V5 V6".
+@durationperchannel: duration per channel in milliseconds, eg., 11000 for 11 sec.
+@samplespersecond: samples per second.
+@resolution: amplitude resolution (of least significant bit), in uV (eg., 5).
+@signaloffset: value to be subtracted from each sample point; assume 0 if not present
+@signalsigned: "True" if sample values are signed values
+@bitspersample: the number of bits in each sample, e.g., 16 for short integer;
+note that this is NOT the number of bits of the A/D converter, but is the word size of the waveform values.
+@hipass: high pass frequency bandwidth of the waveform, Hz (eg., 0.05).
+@lowpass: low pass frequency bandwidth of the waveform, Hz (eg., 150).
+@notchfiltered: set "True" if the notch filter has been applied to the waveform data.
+@notchfilterfreqs: if notch filtered, this is a list of powerline filter frequencies
+(eg., "60", or main plus harmonics  "60 120 180").
+@artfiltered: set "True" if data has been filtered by the speical Philips "artifact" filter
+@waveformmodified: set "True" if the waveform has been modified since the original data acquisition.
+@modifiedby: the device or system which has modified the wavefrom since original data acquisition.
+@up/down sampled: set "True" if the waveform sample rate has been changed since data acquisition.
+@up/down samplemethod: describes up/down sample method, eg., "linear interpolation".
+@donotfilter: set "True" if data should not be filtered under any circumstances, but should
+
+
+be displayed "as is".
+@donotanalyze: set "True" if data should not be re-analyzed by a diagnostic algorithm under any circumstances.
+@otherdescription: for future use if needed.
+</xsd:documentation>
+</xsd:annotation>
+<xsd:element name="parsedwaveforms">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="dataencoding" type="TYPEdataencoding" use="required"/>
+<xsd:attribute name="compression" type="xsd:string" use="optional"/>
+<xsd:attribute name="numberofleads" type="xsd:positiveInteger" use="required"/>
+<xsd:attribute name="leadlabels" type="TYPElistofleadname" use="required"/>
+<xsd:attribute name="durationperchannel" type="TYPEduration" use="required"/>
+<xsd:attribute name="samplespersecond" type="xsd:float" use="required"/>
+<xsd:attribute name="resolution" type="xsd:float" use="required"/>
+<xsd:attribute name="signaloffset" type="xsd:integer" use="optional"/>
+<xsd:attribute name="signalsigned" type="TYPEflag" use="required"/>
+<xsd:attribute name="bitspersample" type="xsd:positiveInteger" use="required"/>
+<xsd:attribute name="hipass" type="xsd:float" use="required"/>
+<xsd:attribute name="lowpass" type="xsd:integer" use="required"/>
+<xsd:attribute name="notchfiltered" type="TYPEflag" use="required"/>
+<xsd:attribute name="notchfilterfreqs" type="xsd:string" use="optional"/>
+<xsd:attribute name="artfiltered" type="TYPEflag" use="optional"/>
+<xsd:attribute name="waveformmodified" type="TYPEflag" use="optional"/>
+<xsd:attribute name="modifiedby" type="xsd:string" use="optional"/>
+<xsd:attribute name="upsampled" type="TYPEflag" use="optional"/>
+<xsd:attribute name="upsamplemethod" type="xsd:string" use="optional"/>
+<xsd:attribute name="downsampled" type="TYPEflag" use="optional"/>
+<xsd:attribute name="downsamplemethod" type="xsd:string" use="optional"/>
+<xsd:attribute name="donotfilter" type="TYPEflag" use="optional"/>
+<xsd:attribute name="donotanalyze" type="TYPEflag" use="optional"/>
+<xsd:attribute name="otherinfo" type="xsd:string" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+
+<!--unparsedwaveforms ======================  -->
+<xsd:annotation>
+<xsd:documentation>
+
+
+This is the ECG waveform data which is NOT contained in this file, but is referenced through a link (href).
+
+
+See parsedwaveforms for attribute explanations.
+</xsd:documentation>
+</xsd:annotation>
+<xsd:element name="unparsedwaveforms">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="href" type="xsd:string" use="required"/>
+<xsd:attribute name="dataencoding" type="TYPEdataencoding" use="required"/>
+<xsd:attribute name="compression" type="xsd:string" use="optional"/>
+<xsd:attribute name="numberofleads" type="xsd:positiveInteger" use="required"/>
+<xsd:attribute name="leadlabels" type="TYPElistofleadname" use="required"/>
+<xsd:attribute name="durationperchannel" type="TYPEduration" use="required"/>
+<xsd:attribute name="samplespersecond" type="xsd:float" use="required"/>
+<xsd:attribute name="resolution" type="xsd:float" use="required"/>
+<xsd:attribute name="signaloffset" type="xsd:integer" use="optional"/>
+<xsd:attribute name="signalsigned" type="TYPEflag" use="required"/>
+<xsd:attribute name="bitspersample" type="xsd:positiveInteger" use="required"/>
+<xsd:attribute name="hipass" type="xsd:float" use="required"/>
+<xsd:attribute name="lowpass" type="xsd:integer" use="required"/>
+<xsd:attribute name="notchfiltered" type="TYPEflag" use="required"/>
+<xsd:attribute name="notchfilterfreqs" type="xsd:string" use="optional"/>
+<xsd:attribute name="artfiltered" type="TYPEflag" use="optional"/>
+<xsd:attribute name="waveformmodified" type="TYPEflag" use="optional"/>
+<xsd:attribute name="modifiedby" type="xsd:string" use="optional"/>
+<xsd:attribute name="upsampled" type="TYPEflag" use="optional"/>
+<xsd:attribute name="upsamplemethod" type="xsd:string" use="optional"/>
+<xsd:attribute name="downsampled" type="TYPEflag" use="optional"/>
+<xsd:attribute name="downsamplemethod" type="xsd:string" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+
+<xsd:annotation>
+<xsd:documentation>
+This is ECG waveform data which is contained in this file, but appears as a set of individual lead elements.
+
+
+See parsedwaveforms for attribute explanations.
+</xsd:documentation>
+</xsd:annotation>
+<xsd:element name="leadwaveforms">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="leadwaveform" maxOccurs="unbounded"/>
+</xsd:sequence>
+<xsd:attribute name="dataencoding" type="TYPEdataencoding" use="required"/>
+<xsd:attribute name="compression" type="xsd:string" use="optional"/>
+<xsd:attribute name="numberofleads" type="xsd:positiveInteger" use="required"/>
+<xsd:attribute name="leadlabels" type="TYPElistofleadname" use="required"/>
+<xsd:attribute name="durationperchannel" type="TYPEduration" use="required"/>
+<xsd:attribute name="samplespersecond" type="xsd:float" use="required"/>
+<xsd:attribute name="resolution" type="xsd:float" use="required"/>
+<xsd:attribute name="signaloffset" type="xsd:integer" use="optional"/>
+<xsd:attribute name="signalsigned" type="TYPEflag" use="required"/>
+<xsd:attribute name="bitspersample" type="xsd:positiveInteger" use="required"/>
+<xsd:attribute name="hipass" type="xsd:float" use="required"/>
+<xsd:attribute name="lowpass" type="xsd:integer" use="required"/>
+<xsd:attribute name="notchfiltered" type="TYPEflag" use="required"/>
+<xsd:attribute name="notchfilterfreqs" type="xsd:string" use="optional"/>
+<xsd:attribute name="artfiltered" type="TYPEflag" use="optional"/>
+<xsd:attribute name="waveformmodified" type="TYPEflag" use="optional"/>
+<xsd:attribute name="modifiedby" type="xsd:string" use="optional"/>
+<xsd:attribute name="upsampled" type="TYPEflag" use="optional"/>
+<xsd:attribute name="upsamplemethod" type="xsd:string" use="optional"/>
+<xsd:attribute name="downsampled" type="TYPEflag" use="optional"/>
+<xsd:attribute name="downsamplemethod" type="xsd:string" use="optional"/>
+<xsd:attribute name="donotfilter" type="TYPEflag" use="optional"/>
+<xsd:attribute name="donotanalyze" type="TYPEflag" use="optional"/>
+<xsd:attribute name="otherinfo" type="xsd:string" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="leadwaveform">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="leadname" type="TYPEleadname" use="required"/>
+<xsd:attribute name="starttime" type="TYPEstarttime" use="required"/>
+<xsd:attribute name="duration" type="TYPEduration" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<!--vector cardiograms - vcgs ========================  -->
+<xsd:element name="vcgs">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="vcg" maxOccurs="unbounded"/>
+</xsd:sequence>
+<xsd:attribute name="dataencoding" type="TYPEdataencoding" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="vcg">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="vcgname" type="TYPEvcgname" use="required"/>
+<xsd:attribute name="duration" type="TYPEduration" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:simpleType name="TYPEvcgname">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="X"/>
+<xsd:enumeration value="Y"/>
+<xsd:enumeration value="Z"/>
+</xsd:restriction>
+</xsd:simpleType>
+<!--repbeats ========================  -->
+<xsd:element name="repbeats">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="repbeat" maxOccurs="unbounded"/>
+<!-- @compression is present if data is compressed, and describes method (eg., "Huffman")
+@resolution is in microvolts
+@repbeatmethod is "mean" for Philips; (another choice is "median" for GE migrated files) -->
+</xsd:sequence>
+<xsd:attribute name="dataencoding" type="TYPEdataencoding" use="required"/>
+<xsd:attribute name="compression" type="xsd:string" use="optional"/>
+<xsd:attribute name="samplespersec" type="xsd:float" use="required"/>
+<xsd:attribute name="resolution" type="xsd:float" use="required"/>
+<xsd:attribute name="repbeatmethod" type="xsd:string" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="repbeat">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="pdur" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="print">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qonset">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEfiducial">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEfiducial" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qrsdur">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="tonset" minOccurs="0">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEfiducial">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEfiducial" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="qtint">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEduration">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="TYPEduration" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element ref="annotations" minOccurs="0"/>
+<xsd:element name="waveform">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="duration" type="TYPEduration" use="required"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="leadname" type="TYPEleadname" use="required"/>
+</xsd:complexType>
+</xsd:element>
+<!--   end of repbeats ================================= -->
+<!-- general purpose waveform annotation elements: -->
+<xsd:element name="annotations">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="annotation" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:sequence>
+<!-- name of lead this annot. applies to; if global, omit the leadname -->
+<xsd:element name="leadname" type="TYPEleadname" minOccurs="0"/>
+<!-- the time of the annotation in millisec: -->
+<!--	use edited flag and uneditiedvalue only if the annotation was edited -->
+<xsd:element name="time">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:float">
+<xsd:attribute name="editedflag" type="TYPEflag" use="optional"/>
+<xsd:attribute name="uneditedvalue" type="xsd:nonNegativeInteger" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<!-- the annotation label: -->
+<xsd:element name="label" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:simpleType name="TYPEdataencoding">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Plain"/>
+<xsd:enumeration value="Base64"/>
+<xsd:enumeration value="Hex"/>
+</xsd:restriction>
+</xsd:simpleType>
+<!-- end of waveforms ================================================================-->
+<xsd:simpleType name="TYPErestingecgstatus">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Not yet determined"/>
+<xsd:enumeration value="New"/>
+<xsd:enumeration value="Await review"/>
+<xsd:enumeration value="Await confirm"/>
+<xsd:enumeration value="Confirmed"/>
+<xsd:enumeration value="Unconfirmed"/>
+<xsd:enumeration value="Archived"/>
+<xsd:enumeration value="Deleted"/>
+<xsd:enumeration value="Other"/>
+</xsd:restriction>
+</xsd:simpleType>
+<!-- ======================================================================= ======= -->
+<xsd:element name="listofECGlead">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPElistofleadname">
+<xsd:attribute name="changed" type="TYPEflag" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="groupofECGlead">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPElistofleadname">
+<xsd:attribute name="changed" type="TYPEflag" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="mdsignatureline" type="xsd:string"/>
+<xsd:element name="pamp" type="TYPEamplitude"/>
+<xsd:element name="pdur" type="TYPEduration"/>
+<xsd:element name="parea" type="TYPEarea"/>
+<xsd:element name="ppamp" type="TYPEamplitude"/>
+<xsd:element name="ppdur" type="TYPEduration"/>
+<xsd:element name="ppppdur" type="TYPEduration"/>
+<xsd:element name="pparea" type="TYPEarea"/>
+<xsd:element name="pppparea" type="TYPEarea"/>
+<xsd:element name="qamp" type="TYPEamplitude"/>
+<xsd:element name="qdur" type="TYPEduration"/>
+<xsd:element name="ramp" type="TYPEamplitude"/>
+<xsd:element name="rdur" type="TYPEduration"/>
+<xsd:element name="samp" type="TYPEamplitude"/>
+<xsd:element name="sdur" type="TYPEduration"/>
+<xsd:element name="rpamp" type="TYPEamplitude"/>
+<xsd:element name="rpdur" type="TYPEduration"/>
+<xsd:element name="spamp" type="TYPEamplitude"/>
+<xsd:element name="spdur" type="TYPEduration"/>
+<xsd:element name="vat" type="TYPEstarttime"/>
+<xsd:element name="qrsppk" type="TYPEpeaktopeak"/>
+<xsd:element name="qrsdur" type="TYPEduration"/>
+<xsd:element name="qrsarea" type="TYPEarea"/>
+<xsd:element name="ston" type="TYPEamplitude"/>
+<xsd:element name="stmid" type="TYPEamplitude"/>
+<xsd:element name="st80" type="TYPEamplitude"/>
+<xsd:element name="stend" type="TYPEamplitude"/>
+<xsd:element name="stdur" type="TYPEduration"/>
+<xsd:element name="stslope" type="TYPEstslope"/>
+<xsd:element name="stshape" type="TYPEstshape"/>
+<xsd:element name="tamp" type="TYPEamplitude"/>
+<xsd:element name="tdur" type="TYPEduration"/>
+<xsd:element name="tarea" type="TYPEarea"/>
+<xsd:element name="tpamp" type="TYPEamplitude"/>
+<xsd:element name="tptpdur" type="TYPEduration"/>
+<xsd:element name="tpdur" type="TYPEduration"/>
+<xsd:element name="tparea" type="TYPEarea"/>
+<xsd:element name="tptparea" type="TYPEarea"/>
+<xsd:element name="print" type="TYPEduration"/>
+<xsd:element name="prseg" type="TYPEduration"/>
+<xsd:element name="qtint" type="TYPEduration"/>
+<xsd:element name="pacedetectleads" type="TYPElistofleadname"/>
+<xsd:element name="pacepulses">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element ref="pacepulse" minOccurs="0" maxOccurs="unbounded"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="pacepulse">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="TYPEnull">
+<xsd:attribute name="starttime" type="TYPEstarttime" use="required"/>
+<xsd:attribute name="duration" type="TYPEduration" use="optional"/>
+<xsd:attribute name="upswingamp" type="xsd:nonNegativeInteger" use="optional"/>
+<xsd:attribute name="downswingamp" type="xsd:nonNegativeInteger" use="optional"/>
+<xsd:attribute name="paceamptype" type="TYPEpaceamptype" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="pacemode" type="TYPEintegerORnull"/>
+<xsd:element name="pacemalf" type="TYPEintegerORnull"/>
+<xsd:element name="pacemisc" type="TYPEintegerORnull"/>
+<xsd:element name="ectopicrhythm" type="TYPEintegerORnull"/>
+<xsd:element name="qtintdispersion" type="TYPEduration"/>
+<xsd:element name="numberofcomplexes" type="TYPEcount"/>
+<xsd:element name="numberofgroups" type="TYPEcount"/>
+<xsd:element name="beatclassification" type="TYPElistofgroupnumber"/>
+<xsd:simpleType name="TYPElistofgroupnumber">
+<xsd:list itemType="TYPEgroupnumber"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEgroupnumber">
+<xsd:restriction base="xsd:nonNegativeInteger">
+<xsd:maxInclusive value="50"/>
+<xsd:minInclusive value="0"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:element name="pfrontaxis" type="TYPEaxis"/>
+<xsd:element name="phorizaxis" type="TYPEaxis"/>
+<xsd:element name="i40frontaxis" type="TYPEaxis"/>
+<xsd:element name="i40horizaxis" type="TYPEaxis"/>
+<xsd:element name="qrsfrontaxis" type="TYPEaxis"/>
+<xsd:element name="qrshorizaxis" type="TYPEaxis"/>
+<xsd:element name="t40frontaxis" type="TYPEaxis"/>
+<xsd:element name="t40horizaxis" type="TYPEaxis"/>
+<xsd:element name="stfrontaxis" type="TYPEaxis"/>
+<xsd:element name="sthorizaxis" type="TYPEaxis"/>
+<xsd:element name="tfrontaxis" type="TYPEaxis"/>
+<xsd:element name="thorizaxis" type="TYPEaxis"/>
+<xsd:element name="atrialrate" type="TYPErate"/>
+<xsd:element name="heartrate" type="TYPErate"/>
+<xsd:element name="lowventrate" type="TYPErate"/>
+<xsd:element name="meanventrate" type="TYPErate"/>
+<xsd:element name="highventrate" type="TYPErate"/>
+<xsd:element name="meanprint" type="TYPEduration"/>
+<xsd:element name="meanprseg" type="TYPEduration"/>
+<xsd:element name="meanqrsdur" type="TYPEduration"/>
+<xsd:element name="meanqtint" type="TYPEduration"/>
+<xsd:element name="meanqtc" type="TYPEduration"/>
+<xsd:element name="deltawavecount" type="TYPEcount"/>
+<xsd:element name="deltawavepercent" type="TYPEpercent"/>
+<xsd:element name="bigeminycount" type="TYPEcount"/>
+<xsd:element name="bigeminystring" type="TYPEcount"/>
+<xsd:element name="trigeminycount" type="TYPEcount"/>
+<xsd:element name="trigeminystring" type="TYPEcount"/>
+<xsd:element name="wenckcount" type="TYPEcount"/>
+<xsd:element name="wenckstring" type="TYPEcount"/>
+<xsd:element name="flutterfibcount" type="TYPEcount"/>
+<xsd:element name="membercount" type="TYPEcount"/>
+<xsd:element name="memberpercent" type="TYPEpercent"/>
+<xsd:element name="longestrun" type="TYPEcount"/>
+<xsd:element name="ventratestddev" type="TYPErate"/>
+<xsd:element name="meanrrint" type="TYPEduration"/>
+<xsd:element name="atrialratestddev" type="TYPErate"/>
+<xsd:element name="avgpcount" type="TYPEcount"/>
+<xsd:element name="notavgpbeats" type="TYPEcount"/>
+<xsd:element name="lowprint" type="TYPEduration"/>
+<xsd:element name="highprint" type="TYPEduration"/>
+<xsd:element name="printstddev" type="TYPEduration"/>
+<xsd:element name="meanqtseg" type="TYPEduration"/>
+<xsd:element name="comppausecount" type="TYPEcount"/>
+<!-- ============================================================================== -->
+<!-- Types: -->
+<xsd:simpleType name="TYPEnull">
+<xsd:restriction base="xsd:string">
+<xsd:whiteSpace value="collapse"/>
+<xsd:enumeration value=""/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEdate">
+<xsd:union memberTypes="TYPEnull xsd:date"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEtime">
+<xsd:union memberTypes="TYPEnull xsd:time"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEinvalidPlus">
+<xsd:restriction base="xsd:string">
+<xsd:whiteSpace value="collapse"/>
+<xsd:enumeration value=""/>
+<xsd:enumeration value="Indeterminate"/>
+<xsd:enumeration value="Invalid"/>
+<xsd:enumeration value="Failed"/>
+<xsd:enumeration value="Unknown"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEflag">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="True"/>
+<xsd:enumeration value="False"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEnotch">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="None"/>
+<xsd:enumeration value="Positive"/>
+<xsd:enumeration value="Negative"/>
+<xsd:enumeration value="Both positive and negative"/>
+<xsd:enumeration value="Unknown"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEflagUnk">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Unknown"/>
+<xsd:enumeration value="True"/>
+<xsd:enumeration value="False"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEpacestatus">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Paced"/>
+<xsd:enumeration value="Non paced"/>
+<xsd:enumeration value="Paced with magnet"/>
+<xsd:enumeration value="Unknown"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEinteger">
+<xsd:union memberTypes="xsd:integer TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEintegerORnull">
+<xsd:union memberTypes="TYPEnull xsd:integer"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEamplitude2">
+<xsd:restriction base="xsd:integer">
+<xsd:maxInclusive value="10000"/>
+<xsd:minInclusive value="-10000"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEamplitude">
+<xsd:union memberTypes="TYPEamplitude2 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEpeaktopeak2">
+<xsd:restriction base="xsd:integer">
+<xsd:maxInclusive value="20000"/>
+<xsd:minInclusive value="0"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEpeaktopeak">
+<xsd:union memberTypes="TYPEpeaktopeak2 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEstarttime">
+<xsd:union memberTypes="xsd:nonNegativeInteger TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEduration">
+<xsd:union memberTypes="xsd:nonNegativeInteger TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEfiducial">
+<xsd:union memberTypes="xsd:nonNegativeInteger TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEarea2">
+<xsd:restriction base="xsd:integer">
+<xsd:maxInclusive value="20000"/>
+<xsd:minInclusive value="-20000"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEarea">
+<xsd:union memberTypes="TYPEarea2 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEcount">
+<xsd:union memberTypes="xsd:nonNegativeInteger TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEpercent2">
+<xsd:restriction base="xsd:nonNegativeInteger">
+<xsd:maxInclusive value="100"/>
+<xsd:minInclusive value="0"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEpercent">
+<xsd:union memberTypes="TYPEpercent2 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPErate2">
+<xsd:restriction base="xsd:nonNegativeInteger">
+<xsd:maxInclusive value="1200"/>
+<xsd:minInclusive value="0"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPErate">
+<xsd:union memberTypes="TYPErate2 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEaxis2">
+<xsd:restriction base="xsd:integer">
+<xsd:maxInclusive value="360"/>
+<xsd:minInclusive value="-360"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEaxis">
+<xsd:union memberTypes="TYPEaxis2 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEstslope2">
+<xsd:restriction base="xsd:integer">
+<xsd:maxInclusive value="90"/>
+<xsd:minInclusive value="-90"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEstslope">
+<xsd:union memberTypes="TYPEstslope2 TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEbp">
+<xsd:union memberTypes="xsd:float TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEheight">
+<xsd:union memberTypes="xsd:float TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEweight">
+<xsd:union memberTypes="xsd:float TYPEinvalidPlus"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEstshape">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Straight"/>
+<xsd:enumeration value="Convex"/>
+<xsd:enumeration value="Concave"/>
+<xsd:enumeration value="Unknown"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEnoiselevel">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="None"/>
+<xsd:enumeration value="Light"/>
+<xsd:enumeration value="Marked"/>
+<xsd:enumeration value="Severe"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEnoise">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Baseline artifacts"/>
+<xsd:enumeration value="AC artifacts"/>
+<xsd:enumeration value="Muscle artifacts"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEleadname">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="I"/>
+<xsd:enumeration value="II"/>
+<xsd:enumeration value="III"/>
+<xsd:enumeration value="aVR"/>
+<xsd:enumeration value="-aVR"/>
+<xsd:enumeration value="aVL"/>
+<xsd:enumeration value="aVF"/>
+<xsd:enumeration value="V1"/>
+<xsd:enumeration value="V2"/>
+<xsd:enumeration value="V3"/>
+<xsd:enumeration value="V4"/>
+<xsd:enumeration value="V5"/>
+<xsd:enumeration value="V6"/>
+<xsd:enumeration value="V7"/>
+<xsd:enumeration value="V8"/>
+<xsd:enumeration value="V9"/>
+<xsd:enumeration value="V2R"/>
+<xsd:enumeration value="V3R"/>
+<xsd:enumeration value="V4R"/>
+<xsd:enumeration value="V5R"/>
+<xsd:enumeration value="V6R"/>
+<xsd:enumeration value="V7R"/>
+<xsd:enumeration value="V8R"/>
+<xsd:enumeration value="V9R"/>
+<xsd:enumeration value="C1"/>
+<xsd:enumeration value="C2"/>
+<xsd:enumeration value="C3"/>
+<xsd:enumeration value="C4"/>
+<xsd:enumeration value="C5"/>
+<xsd:enumeration value="C6"/>
+<xsd:enumeration value="C7"/>
+<xsd:enumeration value="C8"/>
+<xsd:enumeration value="C9"/>
+<xsd:enumeration value="C2R"/>
+<xsd:enumeration value="C3R"/>
+<xsd:enumeration value="C4R"/>
+<xsd:enumeration value="C5R"/>
+<xsd:enumeration value="C6R"/>
+<xsd:enumeration value="C7R"/>
+<xsd:enumeration value="C8R"/>
+<xsd:enumeration value="C9R"/>
+<xsd:enumeration value="CX1"/>
+<xsd:enumeration value="CX2"/>
+<xsd:enumeration value="CX3"/>
+<xsd:enumeration value="CX4"/>
+<xsd:enumeration value="Id"/>
+<xsd:enumeration value="IId"/>
+<xsd:enumeration value="IIId"/>
+<xsd:enumeration value="aVRd"/>
+<xsd:enumeration value="-aVRd"/>
+<xsd:enumeration value="aVLd"/>
+<xsd:enumeration value="aVFd"/>
+<xsd:enumeration value="V1d"/>
+<xsd:enumeration value="V2d"/>
+<xsd:enumeration value="V3d"/>
+<xsd:enumeration value="V4d"/>
+<xsd:enumeration value="V5d"/>
+<xsd:enumeration value="V6d"/>
+<xsd:enumeration value="V7d"/>
+<xsd:enumeration value="V8d"/>
+<xsd:enumeration value="V9d"/>
+<xsd:enumeration value="V2Rd"/>
+<xsd:enumeration value="V3Rd"/>
+<xsd:enumeration value="V4Rd"/>
+<xsd:enumeration value="V5Rd"/>
+<xsd:enumeration value="V6Rd"/>
+<xsd:enumeration value="V7Rd"/>
+<xsd:enumeration value="V8Rd"/>
+<xsd:enumeration value="V9Rd"/>
+<xsd:enumeration value="X"/>
+<xsd:enumeration value="Y"/>
+<xsd:enumeration value="Z"/>
+<xsd:enumeration value="Xd"/>
+<xsd:enumeration value="Yd"/>
+<xsd:enumeration value="Zd"/>
+<xsd:enumeration value="VX1"/>
+<xsd:enumeration value="VX2"/>
+<xsd:enumeration value="VX3"/>
+<xsd:enumeration value="VX4"/>
+<xsd:enumeration value="A1"/>
+<xsd:enumeration value="A2"/>
+<xsd:enumeration value="A3"/>
+<xsd:enumeration value="A4"/>
+<xsd:enumeration value="USER1"/>
+<xsd:enumeration value="USER2"/>
+<xsd:enumeration value="USER3"/>
+<xsd:enumeration value="CC5"/>
+<xsd:enumeration value="CM5"/>
+<xsd:enumeration value="CH"/>
+<xsd:enumeration value="ML"/>
+<xsd:enumeration value="LA"/>
+<xsd:enumeration value="RA"/>
+<xsd:enumeration value="LL"/>
+<xsd:enumeration value="i"/>
+<xsd:enumeration value="E"/>
+<xsd:enumeration value="C"/>
+<xsd:enumeration value="A"/>
+<xsd:enumeration value="M"/>
+<xsd:enumeration value="F"/>
+<xsd:enumeration value="H"/>
+<xsd:enumeration value="MaVR"/>
+<xsd:enumeration value="MVR"/>
+<xsd:enumeration value="S"/>
+<xsd:enumeration value="AS"/>
+<xsd:enumeration value="ES"/>
+<xsd:enumeration value="IS"/>
+<xsd:enumeration value="V"/>
+<xsd:enumeration value="VM"/>
+<xsd:enumeration value="MZ"/>
+<xsd:enumeration value="MY"/>
+<xsd:enumeration value="NEHB_D"/>
+<xsd:enumeration value="NEHB_A"/>
+<xsd:enumeration value="NEHB_J"/>
+<xsd:enumeration value="BP_X"/>
+<xsd:enumeration value="BP_Y"/>
+<xsd:enumeration value="BP_Z"/>
+<xsd:enumeration value="ECG"/>
+<xsd:enumeration value="MCL"/>
+<xsd:enumeration value="MCL1"/>
+<xsd:enumeration value="PADS"/>
+<xsd:enumeration value="PADDLES"/>
+<xsd:enumeration value="PACE"/>
+<xsd:enumeration value="RESP"/>
+<xsd:enumeration value="RESP-Imp"/>
+<xsd:enumeration value="RESP-ECG-derived"/>
+<xsd:enumeration value="RESP-ECG-derived-I"/>
+<xsd:enumeration value="RESP-ECG-derived-II"/>
+<xsd:enumeration value="RESP-ECG-derived-III"/>
+<xsd:enumeration value="RESP-ECG-derived-aVR"/>
+<xsd:enumeration value="RESP-ECG-derived-aVL"/>
+<xsd:enumeration value="RESP-ECG-derived-aVF"/>
+<xsd:enumeration value="RESP-ECG-derived-V1"/>
+<xsd:enumeration value="RESP-ECG-derived-V2"/>
+<xsd:enumeration value="RESP-ECG-derived-V3"/>
+<xsd:enumeration value="RESP-ECG-derived-V4"/>
+<xsd:enumeration value="RESP-ECG-derived-V5"/>
+<xsd:enumeration value="RESP-ECG-derived-V6"/>
+<xsd:enumeration value="PLETH"/>
+<xsd:enumeration value="?"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPElistofleadname">
+<xsd:list itemType="TYPEleadname"/>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEpaceamptype">
+<xsd:restriction base="xsd:string">
+<xsd:enumeration value="Up swing first"/>
+<xsd:enumeration value="Down swing first"/>
+<xsd:enumeration value="Positive"/>
+<xsd:enumeration value="Negative"/>
+<xsd:enumeration value="Biphasic"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEstringMax32">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="32"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="TYPEstringMax64">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="64"/>
+</xsd:restriction>
+</xsd:simpleType>
+<!-- All "people" are represented with one of these two types;
+the element hold the person's name if known, else the null string ""
+@the id attribute holds the person's ID (eg., logname or UPIN): -->
+<xsd:complexType name="TYPEperson">
+<xsd:simpleContent>
+<xsd:extension base="TYPEstringMax32">
+<xsd:attribute name="id" type="TYPEstringMax64" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+<!-- Person with additional date and time attribute, representing time that an action was performed (eg., edit or confirmation);
+the element hold the person's name if known, else the null string ""
+@date of the last "action"
+@time of the last "action"
+@the id attribute holds the person's ID (eg., logname or UPIN) -->
+<xsd:complexType name="TYPEpersonwithdatetime">
+<xsd:simpleContent>
+<xsd:extension base="TYPEstringMax32">
+<xsd:attribute name="date" type="TYPEdate" use="optional"/>
+<xsd:attribute name="time" type="TYPEtime" use="optional"/>
+<xsd:attribute name="id" type="TYPEstringMax64" use="optional"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:schema>
+

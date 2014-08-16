@@ -1,0 +1,43 @@
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb"
+          xmlns:xsi="http://www.w3.org/2000/10/XMLSchema-instance"
+          xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          version="2.1">
+    <bindings schemaLocation="SierraECGSchema_1_04_01.xsd" version="1.0">
+        <!-- Customise the package name -->
+        <schemaBindings>
+            <package name="org.sierraecg.schema.jaxb._1_04"/>
+        </schemaBindings>
+
+        <!-- rename the savedreportinfo other element -->
+        <bindings node="//xs:element[@name='savedreportinfo']">
+            <bindings node=".//xs:attribute[@name='other']">
+                <property name="OtherAttribute"/>
+            </bindings>
+        </bindings>
+
+        <!-- rename the value element -->
+        <bindings node="//xs:element[@name='symptom']">
+            <bindings node=".//xs:attribute[@name='value']">
+                <property name="ValueAttribute"/>
+            </bindings>
+        </bindings>
+        
+        <bindings node="//xs:element[@name='history']">
+            <bindings node=".//xs:attribute[@name='value']">
+                <property name="ValueAttribute"/>
+            </bindings>
+        </bindings>
+        
+        <bindings node="//xs:element[@name='diagnosis']">
+            <bindings node=".//xs:attribute[@name='value']">
+                <property name="ValueAttribute"/>
+            </bindings>
+        </bindings>
+        
+        <bindings node="//xs:element[@name='medication']">
+            <bindings node=".//xs:attribute[@name='value']">
+                <property name="ValueAttribute"/>
+            </bindings>
+        </bindings>
+    </bindings>
+</bindings>
