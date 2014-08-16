@@ -1,0 +1,72 @@
+<project name="jsierraecg" default="dist" basedir=".">
+    <description>
+        Builds the jsierraecg class library.
+    </description>
+		
+	<echoproperties/>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+	<property name="schema13" location="src/org/sierraecg/schema/1.03"/>
+	<property name="schema14" location="src/org/sierraecg/schema/1.04.01"/>
+	
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+		<classpath>
+			<fileset dir="${java.home}/lib" includes="*.jar"/>
+			<!-- Java 1.6 users should get JAXB and plop a local copy down -->
+			<!--<fileset dir="${user.home}/jaxb-ri-2.2.7/lib" includes="*.jar"/> -->
+		</classpath>
+	</taskdef>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+	
+	<target name="jaxb" depends="init"
+				description="updating JAXB bindigs">
+		<xjc destdir="${src}"
+			removeOldOutput="yes" package="org.sierraecg.schema.jaxb._1_03">
+			<schema dir="${schema13}" includes="*.xsd" />
+			<binding dir="${schema13}" includes="*.jxb" />
+			<produces dir="${src}/org/sierraecg/schema/jaxb/_1_03" includes="**/*" />
+		</xjc>
+		<xjc destdir="${src}"
+			removeOldOutput="yes" package="org.sierraecg.schema.jaxb._1_04">
+			<schema dir="${schema14}" includes="*.xsd" />
+			<binding dir="${schema14}" includes="*.jxb" />
+			<produces dir="${src}/org/sierraecg/schema/jaxb/_1_04" includes="**/*" />
+		</xjc>
+	</target>
+
+  <target name="compile" depends="init"
+        description="compiling" >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}"/>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="distributing" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+		
+		<manifest file="${build}/MANIFEST.MF">
+		  <attribute name="Built-By" value="${user.name}"/>
+			<attribute name="Main-Class" value="org.sierraecg.Test" />
+		</manifest>
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/lib/jsierraecg-${DSTAMP}.jar" basedir="${build}"
+				 manifest="${build}/MANIFEST.MF"/>
+  </target>
+
+  <target name="clean"
+        description="cleaning" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+</project>
