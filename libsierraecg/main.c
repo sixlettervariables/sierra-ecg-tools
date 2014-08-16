@@ -31,13 +31,14 @@
 
 int main(int argc, char* argv[])
 {
-    ecg_t ecg;
+//   ecg_t ecg;
 
-    if (sierraecg_init()) abort();
+  if (sierraecg_init()) abort();
 
-    if (argc < 1) {
-        fprintf(stderr, "Usage: sierraecg.exe <input>\n");
-    }
+  if (argc < 2) {
+    fprintf(stderr, "Usage: sierraecg.exe <input>\n");
+		return 1;
+  }
  //   else if (sierraecg_read(argv[1], &ecg)) {
  //       fprintf(stderr, "Errors while parsing Sierra ECG file\n");
  //   }
@@ -46,6 +47,6 @@ int main(int argc, char* argv[])
 
 	sierraecg_decompress(argv[1], "output.xml");
 
-    sierraecg_cleanup();
-    return 0;
+  sierraecg_cleanup();
+  return 0;
 }
