@@ -1,0 +1,2150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restingecgdata xsi:schemaLocation="http://www3.medical.philips.com PhilipsECG.xsd" status="Await confirm" lang="en" locale="US" xmlns="http://www3.medical.philips.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <documentinfo>
+    <documentname>7eacbc80-0549-11df-4823-000738300029.xml</documentname>
+    <filename>\Storage Card\PhilipsArchiveInternal\7eacbc80-0549-11df-4823-000738300029.xml</filename>
+    <documenttype>PhilipsECG</documenttype>
+    <documentversion>1.04</documentversion>
+    <editor />
+    <comments>XML document modified by TraceMasterVue's ECGTranslator (for XML to XML conversions) on Tue Jan 19 15:20:01 2010</comments>
+  </documentinfo>
+  <userdefines>
+    <userdefine index="1">
+      <label>FIN#</label>
+      <value>120190145</value>
+    </userdefine>
+    <userdefine index="2">
+      <label>.</label>
+      <value>.  120190145</value>
+    </userdefine>
+    <userdefine index="3">
+      <label>Ordering MD</label>
+      <value>X</value>
+    </userdefine>
+    <userdefine index="4">
+      <label>Indications</label>
+      <value />
+    </userdefine>
+    <userdefine index="5">
+      <label>Comments:</label>
+      <value />
+    </userdefine>
+    <userdefine index="6">
+      <label />
+      <value />
+    </userdefine>
+    <userdefine index="7">
+      <label />
+      <value />
+    </userdefine>
+    <userdefine index="8">
+      <label />
+      <value />
+    </userdefine>
+  </userdefines>
+  <orderinfo priority="">
+    <ordernumber />
+    <uniqueorderid />
+    <orderbillingcode />
+    <orderremarks />
+    <reasonfororder>TEST PT</reasonfororder>
+    <drgcategories>
+      <drgcategory id="" />
+    </drgcategories>
+    <orderstatus />
+    <inbox />
+  </orderinfo>
+  <reportinfo date="2010-01-19" time="15:19:22">
+    <reportlabel>STD 12 LEAD</reportlabel>
+    <reportdescription>Standard 12 Lead Report</reportdescription>
+    <reportformat extendedmeasflag="False" printtruncationflag="False">
+      <interpretationformat>Interpretations</interpretationformat>
+      <waveformformat leadsequence="Standard" timesequence="Simultaneous">
+        <mainwaveformformat nrow="3" ncolumn="4">I II III aVR aVL aVF V1 V2 V3 V4 V5 V6</mainwaveformformat>
+        <rhythmwaveformformat nrhythm="1">II</rhythmwaveformformat>
+      </waveformformat>
+    </reportformat>
+    <reportgain>
+      <amplitudegain unit="mm/mv">
+        <overallgain>10.00</overallgain>
+      </amplitudegain>
+      <timegain unit="mm/s">25.00</timegain>
+    </reportgain>
+    <reportbandwidth>
+      <highpassfiltersetting>0.15</highpassfiltersetting>
+      <lowpassfiltersetting>100</lowpassfiltersetting>
+      <notchfiltersetting>60</notchfiltersetting>
+      <notchharmonicssetting>None</notchharmonicssetting>
+      <artifactfilterflag>True</artifactfilterflag>
+      <hysteresisfilterflag>False</hysteresisfilterflag>
+    </reportbandwidth>
+  </reportinfo>
+  <dataacquisition date="2010-01-19" time="15:19:22" statflag="False">
+    <machine machineid="EKG1715" detaildescription="Philips Medical Products:860315:A.01.01.01">PageWriter Touch</machine>
+    <acquirer>
+      <operator id="VWJ" />
+      <departmentid>00</departmentid>
+      <departmentname>Heart Station #1</departmentname>
+      <institutionid>1</institutionid>
+      <institutionname>Y</institutionname>
+      <facilityid>00</facilityid>
+      <facilityname>Z</facilityname>
+    </acquirer>
+    <signalcharacteristics>
+      <samplingrate>500</samplingrate>
+      <resolution>5</resolution>
+      <hipass>0.05</hipass>
+      <lowpass>150</lowpass>
+      <acsetting>60</acsetting>
+      <notchfiltered>False</notchfiltered>
+      <notchfilterfreqs />
+      <acquisitiontype>10-WIRE</acquisitiontype>
+      <bitspersample>16</bitspersample>
+      <signaloffset>0</signaloffset>
+      <signalsigned>True</signalsigned>
+      <numberchannelsallocated>12</numberchannelsallocated>
+      <numberchannelsvalid>12</numberchannelsvalid>
+      <electrodeplacement>STD</electrodeplacement>
+    </signalcharacteristics>
+  </dataacquisition>
+  <patient criteriaversionforpatientdata="0A">
+    <generalpatientdata>
+      <patientid>9999</patientid>
+      <uniquepatientid />
+      <MRN />
+      <name>
+        <lastname>ZZDEMOPTONLY</lastname>
+        <firstname>ADULT</firstname>
+        <middlename />
+      </name>
+      <age defaultage="50">
+        <dateofbirth>1950-01-01</dateofbirth>
+      </age>
+      <pacestatus>Unknown</pacestatus>
+      <sex>Male</sex>
+      <height>
+        <inch />
+      </height>
+      <weight>
+        <lb />
+      </weight>
+    </generalpatientdata>
+    <patientmedicaldata>
+      <bloodpressure>
+        <systolic>
+          <mmHg />
+        </systolic>
+        <diastolic>
+          <mmHg />
+        </diastolic>
+      </bloodpressure>
+    </patientmedicaldata>
+  </patient>
+  <internalmeasurements date="2010-01-19" time="15:19:22" measurementversion="9">
+    <crossleadmeasurements fixedmultpflag="True" multptestvalidflag="True" qrslikeartfflag="False" pacebeatmeasflag="False">
+      <pacepulses />
+      <pacemode>0</pacemode>
+      <pacemalf>0</pacemalf>
+      <pacemisc>0</pacemisc>
+      <ectopicrhythm>0</ectopicrhythm>
+      <qtintdispersion>112</qtintdispersion>
+      <numberofcomplexes>13</numberofcomplexes>
+      <numberofgroups>1</numberofgroups>
+      <beatclassification>1 1 1 1 1 1 1 1 1 1 1 1 1</beatclassification>
+      <qamessagecodes>
+        <qamessagecode>None</qamessagecode>
+        <qamessagecode>None</qamessagecode>
+        <qamessagecode>None</qamessagecode>
+        <qamessagecode>None</qamessagecode>
+      </qamessagecodes>
+      <qaactioncode>ECG OK</qaactioncode>
+      <pfrontaxis>81</pfrontaxis>
+      <phorizaxis>26</phorizaxis>
+      <i40frontaxis>73</i40frontaxis>
+      <i40horizaxis>-11</i40horizaxis>
+      <qrsfrontaxis>78</qrsfrontaxis>
+      <qrshorizaxis>-63</qrshorizaxis>
+      <t40frontaxis>141</t40frontaxis>
+      <t40horizaxis>-88</t40horizaxis>
+      <stfrontaxis>65</stfrontaxis>
+      <sthorizaxis>57</sthorizaxis>
+      <tfrontaxis>67</tfrontaxis>
+      <thorizaxis>52</thorizaxis>
+      <atrialrate>77</atrialrate>
+      <lowventrate>70</lowventrate>
+      <meanventrate>84</meanventrate>
+      <highventrate>104</highventrate>
+      <meanprint>144</meanprint>
+      <meanprseg>44</meanprseg>
+      <meanqrsdur>84</meanqrsdur>
+      <meanqtint>352</meanqtint>
+      <meanqtc>416</meanqtc>
+      <deltawavecount>0</deltawavecount>
+      <deltawavepercent>0</deltawavepercent>
+      <bigeminycount>0</bigeminycount>
+      <bigeminystring>0</bigeminystring>
+      <trigeminycount>0</trigeminycount>
+      <trigeminystring>0</trigeminystring>
+      <wenckcount>0</wenckcount>
+      <wenckstring>0</wenckstring>
+      <flutterfibcount>0</flutterfibcount>
+      <transpcwrot>0</transpcwrot>
+      <transpinitangle>27</transpinitangle>
+      <transpinitmag>167</transpinitmag>
+      <transpmaxangle>27</transpmaxangle>
+      <transpmaxmag>167</transpmaxmag>
+      <transptermangle>8</transptermangle>
+      <transptermmag>17</transptermmag>
+      <transqrscwrot>-100</transqrscwrot>
+      <transqrsinitangle>17</transqrsinitangle>
+      <transqrsinitmag>472</transqrsinitmag>
+      <transqrsmaxangle>303</transqrsmaxangle>
+      <transqrsmaxmag>2120</transqrsmaxmag>
+      <transqrstermangle>219</transqrstermangle>
+      <transqrstermmag>565</transqrstermmag>
+      <transtcwrot>-89</transtcwrot>
+      <transtinitangle>35</transtinitangle>
+      <transtinitmag>612</transtinitmag>
+      <transtmaxangle>35</transtmaxangle>
+      <transtmaxmag>662</transtmaxmag>
+      <transttermangle>34</transttermangle>
+      <transttermmag>295</transttermmag>
+      <frontpcwrot>6</frontpcwrot>
+      <frontpinitangle>42</frontpinitangle>
+      <frontpinitmag>202</frontpinitmag>
+      <frontpmaxangle>41</frontpmaxangle>
+      <frontpmaxmag>207</frontpmaxmag>
+      <frontptermangle>45</frontptermangle>
+      <frontptermmag>22</frontptermmag>
+      <frontqrscwrot>100</frontqrscwrot>
+      <frontqrsinitangle>14</frontqrsinitangle>
+      <frontqrsinitmag>467</frontqrsinitmag>
+      <frontqrsmaxangle>35</frontqrsmaxangle>
+      <frontqrsmaxmag>1492</frontqrsmaxmag>
+      <frontqrstermangle>207</frontqrstermangle>
+      <frontqrstermmag>492</frontqrstermmag>
+      <fronttcwrot>100</fronttcwrot>
+      <fronttinitangle>24</fronttinitangle>
+      <fronttinitmag>545</fronttinitmag>
+      <fronttmaxangle>25</fronttmaxangle>
+      <fronttmaxmag>600</fronttmaxmag>
+      <frontttermangle>30</frontttermangle>
+      <frontttermmag>285</frontttermmag>
+      <sagpcwrot>0</sagpcwrot>
+      <sagpinitangle>57</sagpinitangle>
+      <sagpinitmag>150</sagpinitmag>
+      <sagpmaxangle>61</sagpmaxangle>
+      <sagpmaxmag>150</sagpmaxmag>
+      <sagptermangle>82</sagptermangle>
+      <sagptermmag>17</sagptermmag>
+      <sagqrscwrot>100</sagqrscwrot>
+      <sagqrsinitangle>3</sagqrsinitangle>
+      <sagqrsinitmag>275</sagqrsinitmag>
+      <sagqrsmaxangle>154</sagqrsmaxangle>
+      <sagqrsmaxmag>1972</sagqrsmaxmag>
+      <sagqrstermangle>212</sagqrstermangle>
+      <sagqrstermmag>420</sagqrstermmag>
+      <sagtcwrot>100</sagtcwrot>
+      <sagtinitangle>32</sagtinitangle>
+      <sagtinitmag>417</sagtinitmag>
+      <sagtmaxangle>34</sagtmaxangle>
+      <sagtmaxmag>455</sagtmaxmag>
+      <sagttermangle>41</sagttermangle>
+      <sagttermmag>217</sagttermmag>
+    </crossleadmeasurements>
+    <groupmeasurements>
+      <groupmeasurement groupnumber="1" interpflag="False" sinusflag="False" prprogflag="False" wenckflag="False" bigflag="False" trigflag="False" aberrantflag="False" multptestflag="True" qrsmeasflag="True" atrialpaceflag="False" ventdualpaceflag="False">
+        <membercount>13</membercount>
+        <memberpercent>100</memberpercent>
+        <longestrun>13</longestrun>
+        <meanqrsdur>80</meanqrsdur>
+        <lowventrate>70</lowventrate>
+        <meanventrate>84</meanventrate>
+        <highventrate>104</highventrate>
+        <ventratestddev>14</ventratestddev>
+        <meanrrint>716</meanrrint>
+        <atrialrate>82</atrialrate>
+        <atrialratestddev>14</atrialratestddev>
+        <avgpcount>1</avgpcount>
+        <notavgpbeats>0</notavgpbeats>
+        <lowprint />
+        <meanprint>140</meanprint>
+        <highprint>140</highprint>
+        <printstddev>4</printstddev>
+        <meanprseg>52</meanprseg>
+        <meanqtint>332</meanqtint>
+        <meanqtseg>256</meanqtseg>
+        <comppausecount>0</comppausecount>
+      </groupmeasurement>
+    </groupmeasurements>
+    <leadmeasurements>
+      <leadmeasurement leadname="I" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>45</pamp>
+        <pdur>108</pdur>
+        <parea>5</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>66</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>5</pppparea>
+        <qamp>0</qamp>
+        <qdur>0</qdur>
+        <ramp>265</ramp>
+        <rdur>48</rdur>
+        <samp>-130</samp>
+        <sdur>24</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>32</vat>
+        <qrsppk>395</qrsppk>
+        <qrsdur>72</qrsdur>
+        <qrsarea>12</qrsarea>
+        <ston>20</ston>
+        <stmid>32</stmid>
+        <st80>57</st80>
+        <stend>60</stend>
+        <stdur>84</stdur>
+        <stslope>11</stslope>
+        <stshape>Straight</stshape>
+        <tamp>190</tamp>
+        <tdur>176</tdur>
+        <tarea>48</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>176</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>48</tptparea>
+        <print>120</print>
+        <prseg>44</prseg>
+        <qtint>336</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="II" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>233</pamp>
+        <pdur>92</pdur>
+        <parea>36</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>97</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>36</pppparea>
+        <qamp>-60</qamp>
+        <qdur>12</qdur>
+        <ramp>1533</ramp>
+        <rdur>40</rdur>
+        <samp>-470</samp>
+        <sdur>28</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>40</vat>
+        <qrsppk>2003</qrsppk>
+        <qrsdur>80</qrsdur>
+        <qrsarea>58</qrsarea>
+        <ston>30</ston>
+        <stmid>80</stmid>
+        <st80>157</st80>
+        <stend>162</stend>
+        <stdur>84</stdur>
+        <stslope>31</stslope>
+        <stshape>Straight</stshape>
+        <tamp>468</tamp>
+        <tdur>204</tdur>
+        <tarea>130</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>204</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>130</tptparea>
+        <print>152</print>
+        <prseg>44</prseg>
+        <qtint>344</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="III" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>198</pamp>
+        <pdur>96</pdur>
+        <parea>29</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>91</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>29</pppparea>
+        <qamp>-90</qamp>
+        <qdur>20</qdur>
+        <ramp>1303</ramp>
+        <rdur>40</rdur>
+        <samp>-360</samp>
+        <sdur>32</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>48</vat>
+        <qrsppk>1663</qrsppk>
+        <qrsdur>92</qrsdur>
+        <qrsarea>46</qrsarea>
+        <ston>7</ston>
+        <stmid>47</stmid>
+        <st80>102</st80>
+        <stend>105</stend>
+        <stdur>84</stdur>
+        <stslope>22</stslope>
+        <stshape>Straight</stshape>
+        <tamp>278</tamp>
+        <tdur>196</tdur>
+        <tarea>76</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>196</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>76</tptparea>
+        <print>140</print>
+        <prseg>36</prseg>
+        <qtint>352</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="aVR" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>-133</pamp>
+        <pdur>164</pdur>
+        <parea>-20</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>89</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>-20</pppparea>
+        <qamp>-908</qamp>
+        <qdur>40</qdur>
+        <ramp>270</ramp>
+        <rdur>32</rdur>
+        <samp>0</samp>
+        <sdur>0</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>48</vat>
+        <qrsppk>1178</qrsppk>
+        <qrsdur>72</qrsdur>
+        <qrsarea>-37</qrsarea>
+        <ston>-25</ston>
+        <stmid>-57</stmid>
+        <st80>-110</st80>
+        <stend>-112</stend>
+        <stdur>84</stdur>
+        <stslope>-22</stslope>
+        <stshape>Straight</stshape>
+        <tamp>-333</tamp>
+        <tdur>204</tdur>
+        <tarea>-93</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>204</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>-93</tptparea>
+        <print>148</print>
+        <prseg>56</prseg>
+        <qtint>340</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="aVL" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="True" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>-83</pamp>
+        <pdur>92</pdur>
+        <parea>-11</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>78</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>-11</pppparea>
+        <qamp>0</qamp>
+        <qdur>0</qdur>
+        <ramp>55</ramp>
+        <rdur>20</rdur>
+        <samp>-550</samp>
+        <sdur>36</sdur>
+        <rpamp>125</rpamp>
+        <rpdur>36</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>64</vat>
+        <qrsppk>675</qrsppk>
+        <qrsdur>92</qrsdur>
+        <qrsarea>-17</qrsarea>
+        <ston>7</ston>
+        <stmid>-7</stmid>
+        <st80>-22</st80>
+        <stend>-22</stend>
+        <stdur>84</stdur>
+        <stslope>-6</stslope>
+        <stshape>Straight</stshape>
+        <tamp>-65</tamp>
+        <tdur>236</tdur>
+        <tarea>-16</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>236</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>-16</tptparea>
+        <print>136</print>
+        <prseg>44</prseg>
+        <qtint>400</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="aVF" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>213</pamp>
+        <pdur>108</pdur>
+        <parea>32</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>96</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>32</pppparea>
+        <qamp>-78</qamp>
+        <qdur>12</qdur>
+        <ramp>1413</ramp>
+        <rdur>40</rdur>
+        <samp>-413</samp>
+        <sdur>32</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>40</vat>
+        <qrsppk>1826</qrsppk>
+        <qrsdur>84</qrsdur>
+        <qrsarea>52</qrsarea>
+        <ston>15</ston>
+        <stmid>62</stmid>
+        <st80>130</st80>
+        <stend>135</stend>
+        <stdur>84</stdur>
+        <stslope>27</stslope>
+        <stshape>Straight</stshape>
+        <tamp>370</tamp>
+        <tdur>224</tdur>
+        <tarea>104</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>224</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>104</tptparea>
+        <print>136</print>
+        <prseg>44</prseg>
+        <qtint>344</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="V1" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>53</pamp>
+        <pdur>32</pdur>
+        <parea>3</parea>
+        <ppamp>-43</ppamp>
+        <ppdur>52</ppdur>
+        <ppppdur>88</ppppdur>
+        <pparea>-4</pparea>
+        <pppparea>-1</pppparea>
+        <qamp>0</qamp>
+        <qdur>0</qdur>
+        <ramp>145</ramp>
+        <rdur>24</rdur>
+        <samp>-1660</samp>
+        <sdur>48</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>16</vat>
+        <qrsppk>1805</qrsppk>
+        <qrsdur>72</qrsdur>
+        <qrsarea>-93</qrsarea>
+        <ston>37</ston>
+        <stmid>52</stmid>
+        <st80>52</st80>
+        <stend>52</stend>
+        <stdur>84</stdur>
+        <stslope>1</stslope>
+        <stshape>Straight</stshape>
+        <tamp>100</tamp>
+        <tdur>220</tdur>
+        <tarea>30</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>220</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>30</tptparea>
+        <print>144</print>
+        <prseg>44</prseg>
+        <qtint>412</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="V2" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>78</pamp>
+        <pdur>56</pdur>
+        <parea>5</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>53</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>5</pppparea>
+        <qamp>0</qamp>
+        <qdur>0</qdur>
+        <ramp>378</ramp>
+        <rdur>24</rdur>
+        <samp>-2798</samp>
+        <sdur>52</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>20</vat>
+        <qrsppk>3176</qrsppk>
+        <qrsdur>76</qrsdur>
+        <qrsarea>-161</qrsarea>
+        <ston>97</ston>
+        <stmid>155</stmid>
+        <st80>220</st80>
+        <stend>225</stend>
+        <stdur>84</stdur>
+        <stslope>28</stslope>
+        <stshape>Straight</stshape>
+        <tamp>650</tamp>
+        <tdur>204</tdur>
+        <tarea>183</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>204</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>183</tptparea>
+        <print>136</print>
+        <prseg>88</prseg>
+        <qtint>368</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="V3" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>128</pamp>
+        <pdur>132</pdur>
+        <parea>16</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>85</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>16</pppparea>
+        <qamp>0</qamp>
+        <qdur>0</qdur>
+        <ramp>703</ramp>
+        <rdur>28</rdur>
+        <samp>-3778</samp>
+        <sdur>52</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>20</vat>
+        <qrsppk>4481</qrsppk>
+        <qrsdur>80</qrsdur>
+        <qrsarea>-241</qrsarea>
+        <ston>125</ston>
+        <stmid>287</stmid>
+        <st80>432</st80>
+        <stend>442</stend>
+        <stdur>84</stdur>
+        <stslope>53</stslope>
+        <stshape>Straight</stshape>
+        <tamp>1150</tamp>
+        <tdur>288</tdur>
+        <tarea>338</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>288</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>338</tptparea>
+        <print>144</print>
+        <prseg>44</prseg>
+        <qtint>448</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="V4" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>135</pamp>
+        <pdur>96</pdur>
+        <parea>20</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>89</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>20</pppparea>
+        <qamp>0</qamp>
+        <qdur>0</qdur>
+        <ramp>723</ramp>
+        <rdur>32</rdur>
+        <samp>-1823</samp>
+        <sdur>48</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>20</vat>
+        <qrsppk>2546</qrsppk>
+        <qrsdur>80</qrsdur>
+        <qrsarea>-94</qrsarea>
+        <ston>125</ston>
+        <stmid>240</stmid>
+        <st80>360</st80>
+        <stend>370</stend>
+        <stdur>84</stdur>
+        <stslope>47</stslope>
+        <stshape>Straight</stshape>
+        <tamp>890</tamp>
+        <tdur>196</tdur>
+        <tarea>254</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>196</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>254</tptparea>
+        <print>144</print>
+        <prseg>40</prseg>
+        <qtint>352</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="V5" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>113</pamp>
+        <pdur>140</pdur>
+        <parea>18</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>92</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>18</pppparea>
+        <qamp>0</qamp>
+        <qdur>0</qdur>
+        <ramp>1213</ramp>
+        <rdur>44</rdur>
+        <samp>-1175</samp>
+        <sdur>28</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>32</vat>
+        <qrsppk>2388</qrsppk>
+        <qrsdur>72</qrsdur>
+        <qrsarea>31</qrsarea>
+        <ston>75</ston>
+        <stmid>147</stmid>
+        <st80>237</st80>
+        <stend>242</stend>
+        <stdur>84</stdur>
+        <stslope>38</stslope>
+        <stshape>Straight</stshape>
+        <tamp>625</tamp>
+        <tdur>212</tdur>
+        <tarea>184</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>212</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>184</tptparea>
+        <print>144</print>
+        <prseg>52</prseg>
+        <qtint>348</qtint>
+      </leadmeasurement>
+      <leadmeasurement leadname="V6" pexistflag="True" pmeasflag="True" pnotchflag="False" qrsexistflag="True" qrsspikeflag="False" qrsmeasflag="True" qrsnotchflag="None" qrsdeltaflag="False" stexistflag="True" stmeasflag="True" texistflag="True" tmeasflag="True" tnotchflag="False" atrialpaceflag="False" ventpaceflag="False">
+        <pacepulses />
+        <leadqualitystates qrsclippingflag="False" overrangeflag="False" measuredflag="True">
+          <inops />
+          <saturations />
+          <baseartifacts level="None">
+            <baseartifact starttime="" duration="" level="None" />
+          </baseartifacts>
+          <acartifacts level="None">
+            <acartifact starttime="" duration="" level="None" />
+          </acartifacts>
+          <muscleartifacts level="None">
+            <muscleartifact starttime="" duration="" level="None" />
+          </muscleartifacts>
+        </leadqualitystates>
+        <pamp>123</pamp>
+        <pdur>140</pdur>
+        <parea>18</parea>
+        <ppamp>0</ppamp>
+        <ppdur>0</ppdur>
+        <ppppdur>89</ppppdur>
+        <pparea>0</pparea>
+        <pppparea>18</pppparea>
+        <qamp>-23</qamp>
+        <qdur>12</qdur>
+        <ramp>1645</ramp>
+        <rdur>44</rdur>
+        <samp>-533</samp>
+        <sdur>28</sdur>
+        <rpamp>0</rpamp>
+        <rpdur>0</rpdur>
+        <spamp>0</spamp>
+        <spdur>0</spdur>
+        <vat>40</vat>
+        <qrsppk>2178</qrsppk>
+        <qrsdur>84</qrsdur>
+        <qrsarea>67</qrsarea>
+        <ston>37</ston>
+        <stmid>75</stmid>
+        <st80>137</st80>
+        <stend>140</stend>
+        <stdur>84</stdur>
+        <stslope>26</stslope>
+        <stshape>Straight</stshape>
+        <tamp>405</tamp>
+        <tdur>196</tdur>
+        <tarea>113</tarea>
+        <tpamp>0</tpamp>
+        <tptpdur>196</tptpdur>
+        <tpdur>0</tpdur>
+        <tparea>0</tparea>
+        <tptparea>113</tptparea>
+        <print>136</print>
+        <prseg>44</prseg>
+        <qtint>348</qtint>
+      </leadmeasurement>
+    </leadmeasurements>
+    <configsettings>
+      <configsetting>
+        <name>borderlinestatementsensitivity</name>
+        <value>Exclude Low Certainty</value>
+      </configsetting>
+      <configsetting>
+        <name>criticalvalues</name>
+        <value>Enabled</value>
+      </configsetting>
+      <configsetting>
+        <name>checkleadplacement</name>
+        <value>Enabled</value>
+      </configsetting>
+      <configsetting>
+        <name>printrr</name>
+        <value>Disabled</value>
+      </configsetting>
+      <configsetting>
+        <name>printqtcf</name>
+        <value>Disabled</value>
+      </configsetting>
+      <configsetting>
+        <name>checkleadplacementignored</name>
+        <value>Disabled</value>
+      </configsetting>
+      <configsetting>
+        <name>CulpritVesselDetection</name>
+        <value>Disabled</value>
+      </configsetting>
+      <configsetting>
+        <name>LHSUpperCase</name>
+        <value>Disabled</value>
+      </configsetting>
+      <configsetting>
+        <name>PrintSeverity</name>
+        <value>Enabled</value>
+      </configsetting>
+      <configsetting>
+        <name>STMap</name>
+        <value>Disabled</value>
+      </configsetting>
+      <configsetting>
+        <name />
+        <value />
+      </configsetting>
+    </configsettings>
+  </internalmeasurements>
+  <interpretations>
+    <interpretation date="2010-01-19" time="15:19:22" criteriaversion="0A" criteriaversiondate="2002-06-21">
+      <interpretationdatastructure>
+        <statementcomponents>
+          <codedstatement source="Analysis program" subtype="Analysis" deleted="False">
+            <modifiers changed="False" />
+            <scmodifiers />
+            <variables changed="False">
+              <numericvalue ndigits="3" nprecision="0">60</numericvalue>
+              <numericvalue ndigits="3" nprecision="0">99</numericvalue>
+            </variables>
+            <unparsedstatement statementnumber="55" code="SR" format="Narrow">
+              <lhsstatement>SINUS RHYTHM</lhsstatement>
+              <rhsstatement>normal P axis, V-rate ***-***</rhsstatement>
+            </unparsedstatement>
+          </codedstatement>
+          <codedstatement source="Analysis program" subtype="Analysis" deleted="False">
+            <modifiers changed="False">
+              <modifier numericcode="4" modifiercode="PR">PROBABLE</modifier>
+            </modifiers>
+            <scmodifiers />
+            <variables changed="False">
+              <numericvalue ndigits="3" nprecision="0">280</numericvalue>
+            </variables>
+            <unparsedstatement statementnumber="267" code="LVHCNP" format="Narrow">
+              <lhsstatement>LEFT VENTRICULAR HYPERTROPHY</lhsstatement>
+              <rhsstatement>(RaVL+SV3)xQRSd &gt;***</rhsstatement>
+            </unparsedstatement>
+          </codedstatement>
+          <codedstatement source="Analysis program" subtype="Analysis" deleted="False">
+            <modifiers changed="False">
+              <modifier numericcode="16" modifiercode="AN">ANTERIOR</modifier>
+            </modifiers>
+            <scmodifiers />
+            <variables />
+            <unparsedstatement statementnumber="518" code="STELVH" format="Narrow">
+              <lhsstatement>ST ELEVATION, PROBABLY DUE TO LVH</lhsstatement>
+              <rhsstatement>ST &gt;0.20 mV in V1-V4 &amp; LVH</rhsstatement>
+            </unparsedstatement>
+          </codedstatement>
+        </statementcomponents>
+      </interpretationdatastructure>
+      <globalmeasurements editedflag="False">
+        <heartrate editedflag="False">84</heartrate>
+        <rrint editedflag="False">714</rrint>
+        <atrialrate editedflag="False">77</atrialrate>
+        <pdur editedflag="False">148</pdur>
+        <print editedflag="False">144</print>
+        <qonset editedflag="False">512</qonset>
+        <qrsdur editedflag="False">84</qrsdur>
+        <qtint editedflag="False">352</qtint>
+        <qtcb editedflag="False">417</qtcb>
+        <qtcf editedflag="False">394</qtcf>
+        <pfrontaxis editedflag="False">81</pfrontaxis>
+        <i40frontaxis editedflag="False">73</i40frontaxis>
+        <t40frontaxis editedflag="False">141</t40frontaxis>
+        <qrsfrontaxis editedflag="False">78</qrsfrontaxis>
+        <stfrontaxis editedflag="False">65</stfrontaxis>
+        <tfrontaxis editedflag="False">67</tfrontaxis>
+        <phorizaxis editedflag="False">26</phorizaxis>
+        <i40horizaxis editedflag="False">-11</i40horizaxis>
+        <t40horizaxis editedflag="False">-88</t40horizaxis>
+        <qrshorizaxis editedflag="False">-63</qrshorizaxis>
+        <sthorizaxis editedflag="False">57</sthorizaxis>
+        <thorizaxis editedflag="False">52</thorizaxis>
+      </globalmeasurements>
+      <mdsignatureline>Preliminary</mdsignatureline>
+      <severity code="AB" id="4">- ABNORMAL ECG -</severity>
+      <statement editedflag="False">
+        <statementcode>SR</statementcode>
+        <leftstatement>SINUS RHYTHM</leftstatement>
+        <rightstatement>normal P axis, V-rate 60-99</rightstatement>
+      </statement>
+      <statement editedflag="False">
+        <statementcode>LVHCNP</statementcode>
+        <leftstatement>PROBABLE LEFT VENTRICULAR HYPERTROPHY</leftstatement>
+        <rightstatement>(RaVL+SV3)xQRSd &gt;280</rightstatement>
+      </statement>
+      <statement editedflag="False">
+        <statementcode>STELVH</statementcode>
+        <leftstatement>ANTERIOR ST ELEVATION, PROBABLY DUE TO LVH</leftstatement>
+        <rightstatement>ST &gt;0.20 mV in V1-V4 &amp; LVH</rightstatement>
+      </statement>
+    </interpretation>
+  </interpretations>
+  <waveforms>
+    <parsedwaveforms dataencoding="Base64" compression="XLI" numberofleads="12" leadlabels="I II III aVR aVL aVF V1 V2 V3 V4 V5 V6" durationperchannel="11000" samplespersecond="500" resolution="5" signaloffset="0" signalsigned="True" bitspersample="16" hipass="0.05" lowpass="150" notchfiltered="False" notchfilterfreqs="0" donotfilter="False">
+      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
+      HgCHNAgeGbAD/wA=
+    </parsedwaveforms>
+    <repbeats dataencoding="Base64" samplespersec="500" resolution="2.5" repbeatmethod="mean">
+      <repbeat leadname="I">
+        <pdur>76</pdur>
+        <print>120</print>
+        <qonset>516</qonset>
+        <qrsdur>72</qrsdur>
+        <tonset>676</tonset>
+        <qtint>336</qtint>
+        <waveform duration="2400">
+          GgAZABkAGQAZABkAGgAZABkAGAAXABUAFQAVABQAFAAUABQAEwATABMAEwATABMAEgATABMAFAAU
+          ABMAFAAUABQAFQAWABUAFgAWABYAFgAXABcAFwAYABgAGAAZABkAGQAZABoAGgAaABoAGgAaABwA
+          HAAbABwAHAAcABwAHAAdAB4AHQAdAB0AHAAcAB0AHgAeAB4AHwAfACAAHwAfACAAIAAhAB8AHwAg
+          AB8AHwAfACAAIQAfAB4AHwAeAB8AHgAeAB0AHAAcABsAGgAZABkAFwAWABUAFQAUABMAEwASABEA
+          EAAQAA8ADQANAA0ADAALAAsACwAMAAoACgAJAAoACQAJAAkACQAIAAgACAAIAAgACAAJAAgACAAJ
+          AAgACQAJAAkACQAJAAgACAAJAAgABwAIAAgACQAJAAgACQAJAAkACAAIAAgACAAIAAgACAAIAAcA
+          BwAIAAgACAAIAAcACAAIAAgABwAIAAkACAAHAAgACAAIAAgACAAJAAkACgAJAAoACQAJAAkACQAK
+          AAoACwALAA0ADwARABEADwAOAA8AEAAQABEAEQATABQAFQAWABYAFQAVABYAFgAVABYAFgAUABEA
+          DgAHAAIAAAD//wAAAAAAAAAAAQABAAEAAAABAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAABAAEAAQAA
+          AAAAAQAFAAgACwAOABQAIQAyAEAATQBUAFUAVQBcAGQAagBqAGYAVwBCAC8AFwD//+f/0//M/9D/
+          1f/b/97/4//o/+z/+P8DAAYACQAKAAgACQAIAAgACQAJAAgACAAIAAoACgAKAAsACgAKAAoACgAJ
+          AAwADAAMAAwADQAOAA4ADQAOABAAEAARABIAEgASABEAEwATABUAFAAVABUAFQAWABcAGQAYABgA
+          GgAbABwAGwAcAB4AHwAfACAAIQAiACQAJQAmACgAKgAqACsALAAvADAAMQAzADUAOAA6ADwAPQA+
+          AEEAQwBFAEYASABIAEsATQBOAE8ATwBQAFIAUgBSAFMAUwBTAFIAUQBRAFEAUABOAEwASQBIAEYA
+          RABCAD4APAA5ADYAMwAxAC4ALAAoACUAIwAhAB8AHQAcABoAGgAXABQAFAASABEAEQAQABAAEAAO
+          AA0ADQAPAA0ADQANAA0ADQANAA0ADQAOAA4ADQANAA4ADwAOAA4ADwAPAA8ADwAPABAAEAAPAA8A
+          DwAPAA8ADwAPAA8ADgAOAA4ADwAOAA4ADgAOAA4ADQAOAA4ADQAOAA0ADAAMAAwADAANAAwADAAL
+          AAsACwAMAAsACgAKAAsACwAKAAsACgAKAAsACwAKAAkACgAJAAgACQAIAAkACgAKAAoACgAKAAkA
+          CQAJAAkACQAJAAkACAAIAAcABQAGAAUABgAFAAUABQAEAAQABgAFAAMAAwADAAQAAwADAAMAAwAE
+          AAMAAwADAAQAAwAEAAQABAAEAAUABQAFAAUABgAHAAsADQAPABAAEAAQABAAEgATABMAFAATABIA
+          DwAMAAoABgADAAEAAgACAAMABAAGAAQABAAEAAMAAgABAAAAAAAAAAIAAQABAAIAAwAEAAUABwAK
+          AAsA/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="II">
+        <pdur>108</pdur>
+        <print>152</print>
+        <qonset>516</qonset>
+        <qrsdur>80</qrsdur>
+        <tonset>656</tonset>
+        <qtint>344</qtint>
+        <waveform duration="2400">
+          QABDAEUARABFAEQARABFAEUAQwBCAD8APwA+ADwAPAA6ADsAPAA5ADoAOQA3ADgAOQA4ADoAOgA6
+          ADoAOgA6AD0APgA+AD4APwBBAEEAQgBEAEQARgBHAEcASABIAEkASwBMAE0ATQBOAFAAUQBSAFIA
+          UwBSAFQAVABUAFQAVQBXAFYAVgBWAFcAVwBWAFUAVwBYAFcAVwBYAFgAWABYAFkAWQBZAFkAWgBZ
+          AFkAVwBXAFcAWQBZAFcAVwBWAFUAVQBUAFMAUgBQAFAATwBMAEsASgBIAEcARgBEAEEAQAA+ADsA
+          OQA3ADUANQAyADEALwAtACwAKwAqACsAKQApACcAJwAnACcAJgAmACQAJAAmACUAJgAlACUAJQAm
+          ACYAJgAmACcAKAAoACkAKAApACgAKQAoACgAKQAoACgAJwAoACgAKAAoACgAKAAoACcAKAAoACcA
+          JwAmACYAJgAmACYAJwAmACYAJgAlACUAJgAmACYAJgAmACgALAAxADgAQgBIAE0AUQBTAFQAUgBT
+          AFMAVQBYAF8AZABpAGwAagBqAGwAawBrAG0AbABsAGsAagBoAGEAWgBWAFUAVABSAE4ASwBCADEA
+          IwAXAA4ACQAGAAgACwAKAAgABwAFAAMABAADAAIAAQAAAAEAAAABAAEAAAAAAAAAAAAAAAAAAAAB
+          AP//+f/w/+n/6f/u/wAAHABDAHEAogDcABwBYQGxAf8BNwJYAmUCZgJVAgECXQG4AEAA3v+H/1L/
+          Rf9K/1T/Yv9w/4L/nf+3/8//5P/0/wAABgAIAA0AEAATABcAFQAVABQAEgATABUAFQAXABgAGQAY
+          ABgAGQAbABwAHwAhACIAIwAkACUAJQAnACkALAAuADAAMQAyADIANQA5ADsAPAA/AEAAQgBEAEQA
+          RwBJAEwAUABSAFQAVwBYAFsAXwBiAGUAaQBuAHIAdAB2AHkAfQCBAIUAiACOAJIAlgCcAKAAowCo
+          AKsAsAC1ALkAvQDAAMUAyQDKAMwAzwDRANQA1gDYANkA2wDcAN0A3QDcAN0A3QDcANsA1wDVANMA
+          0ADMAMYAvwC3ALEAqwCiAJwAlQCOAIYAfwB3AHEAawBkAF8AWgBVAFAATABIAEQAQgA/AD4APAA6
+          ADkAOQA5ADkAOQA5ADoAPAA8AD0APwA/AEEAQgBCAEQARABDAEQARQBFAEUARgBHAEYARgBHAEcA
+          RwBGAEUARgBGAEYARQBEAEUARQBFAEUARQBEAEQAQwBAAEAAPwA+AD0APQA9ADwAOwA9AD4APwA/
+          AD4APgA9AD0APAA6ADkAOgA5ADkAOwA8AD0AOwA8ADwAOgA6ADsAOgA4ADgAOgA6ADcANQAzADQA
+          NAAxADAAMAAvAC4AKgAoACYAIwAiACIAJAAlACMAIgAiACIAIAAfAB0AHAAdABwAHQAdABwAHQAe
+          ABwAHQAdABwAHAAdAB4AHAAaABgAFwAWABYAFwAbACEAKAAvADgAQQBMAFYAYgBsAHIAdAB4AHkA
+          cgBeAEcAOAAtACQAIwAmACsALwAyADUAMgAqACEAGwAWABIAEgATABMAFAAWABgAGQAbAB8AIgAn
+          ACsA/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="III">
+        <pdur>104</pdur>
+        <print>140</print>
+        <qonset>508</qonset>
+        <qrsdur>90</qrsdur>
+        <tonset>664</tonset>
+        <qtint>352</qtint>
+        <waveform duration="2400">
+          JAAnACoAKwAqACsALAAsACsAKwArACsAKgApACgAJwAlACYAJwAnACcAJQAlACUAJQAlACUAJgAm
+          ACYAJgAmACgAKQApACgAKQAqACsALAAsAC0ALgAvADAALwAvAC8AMQAyADIAMwA0ADUANQA2ADcA
+          NwA1ADcANwA3ADgANwA5ADkAOAA5ADkAOgA6ADgAOAA5ADgAOAA4ADkAOAA5ADkAOQA4ADgAOQA5
+          ADgANwA4ADgAOAA4ADgAOAA4ADcANwA2ADYANgA0ADUANAAzADIAMwAxADEAMQAwAC8ALQAsACwA
+          KQApACgAJgAlACQAIgAiACEAIAAfAB8AHwAeAB4AHQAdAB0AHQAdABwAHQAdAB4AHgAdABwAHAAd
+          AB0AHQAdAB8AHwAfACAAIAAfAB8AIAAhAB8AHwAfAB8AHwAeAB4AHwAfAB4AHwAfAB8AHwAfAB8A
+          HwAfAB4AHQAdAB4AHwAeAB0AHgAeAB4AHQAeAB4AHgAeAB4AIQAmAC0ANgA9AEIARgBJAEsASwBK
+          AEkASwBLAE4AVABXAFoAWwBcAF0AXABaAFsAWgBYAFcAVgBTAE0ARQBCAEAAPgA8ADkANQAvACMA
+          FgAPAAwACQAGAAgACgALAAkABgAEAAQAAgABAAEAAQABAAAAAAABAAAAAAAAAAAAAQAAAP//AAAB
+          AAAA+v/w/+P/3f/f/+n//P8RAC0AUAB6ALQA+QBDAY4BxgHmAfkBBQIKAuQBZAHQAGoAFwDN/5L/
+          cv9x/3X/fP+J/5T/pP+3/8L/1f/n//P//v8BAAIABwAJAAsADQAMAAsACgAJAAoACgAKAA0ADgAN
+          AA0ADAAOABEAEgASABQAFQAWABYAFgAWABgAGQAaABwAHQAfAB8AIAAiACQAJgAoACoAKQArACsA
+          LQAuADAAMwA0ADcAOAA4ADoAPAA+AEAAQwBGAEgASgBMAE4AUABRAFQAVQBYAFwAXgBiAGQAZQBo
+          AGoAbQBwAHIAdAB2AHkAewB8AH0AfwCBAIIAhACFAIcAhwCJAIkAiwCMAIsAjACNAI0AjQCNAI0A
+          iwCKAIcAgwCAAHoAeAB0AG8AaQBlAGAAXABYAFMATwBKAEUAQgA+ADsAOgA2ADMAMQAvAC0ALQAs
+          ACsALAAqACoALAAsAC0ALgAuADAAMQAxADIANAA2ADUANgA1ADUANQA2ADYANgA3ADYANgA2ADgA
+          NwA3ADYANwA3ADcANgA2ADYANgA2ADYANQA0ADQANAAzADMAMgAwADEAMQAxADEALwAwADAAMQAy
+          ADIAMgAyADIAMgAxADAALwAuAC4ALwAwADEAMgAxADIAMQAxADAAMAAwAC8ALwAvAC4ALAAqACoA
+          KwApACgAKAAlACUAIwAhAB8AHQAdABwAHgAeAB4AHAAcAB0AHAAaABkAGQAZABkAGAAZABoAGgAa
+          ABkAGgAaABkAFwAZABgAGAAXABQAEgAQABAAEQASABUAGQAdACMAKwA0AEAASgBTAFsAYABkAGgA
+          ZwBdAEcAOAAxACoAJAAjACcAKQAsAC8ALgAlABwAFwATABIAEAARABIAEgAUABYAFgAXABkAGwAf
+          ACEA/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="aVR">
+        <pdur>92</pdur>
+        <print>148</print>
+        <qonset>524</qonset>
+        <qrsdur>70</qrsdur>
+        <tonset>660</tonset>
+        <qtint>340</qtint>
+        <waveform duration="2400">
+          0v/R/9L/0f/S/9L/0f/R/9D/0v/V/9b/1v/V/9j/2P/Z/9j/2P/Z/9n/2v/b/9r/2v/a/9n/2f/Z
+          /9j/2P/Z/9f/1v/W/9f/1v/U/9T/1P/T/9L/0v/R/9H/0P/Q/8//zv/O/83/zf/M/8v/y//K/8n/
+          yf/J/8n/yP/I/8j/x//F/8b/xv/G/8X/xv/G/8f/xv/E/8X/xf/E/8T/xP/E/8T/xP/D/8P/w//D
+          /8T/xP/F/8X/w//E/8X/xv/G/8X/xv/G/8f/yv/K/8v/zP/N/8//z//P/9L/0//U/9f/1v/Y/9n/
+          2//c/97/3//g/+H/4v/j/+T/5f/l/+b/5//n/+f/5//o/+j/6P/p/+r/6v/p/+n/6f/p/+n/6f/o
+          /+n/6f/o/+j/5//n/+j/6P/n/+j/6P/o/+f/6P/n/+f/6P/m/+f/6P/o/+f/5//n/+n/6P/p/+j/
+          6f/o/+n/6f/p/+n/6f/q/+n/6f/q/+n/6f/p/+n/6f/p/+j/5v/j/+H/2//X/9X/0v/R/9L/0v/S
+          /9L/0P/O/8v/x//E/8L/w//D/8P/w//D/8L/wf/B/8H/wf/C/8T/x//J/8n/y//M/87/z//U/97/
+          5v/w//f//P/+//z/+//7//z//P/9//3//v/9//7/AAAAAAAA/////wAAAAAAAAAAAAAAAP////8A
+          AAAAAwAFAAYABgACAPj/5v/K/6v/jP9p/0f/Jv/8/tL+s/6g/pv+nf6u/uT+Qf+g/+r/JABWAHAA
+          cgBuAGYAXgBXAEoAOQAlABQACAAAAPv/+//5//b/9P/w/+//8P/x//L/8//y//H/8P/v/+//7v/u
+          /+7/7f/s/+z/6//o/+j/5//m/+b/5f/k/+P/4f/h/+D/3v/e/93/2v/Y/9f/1//W/9X/0//R/9H/
+          0P/O/8z/y//J/8j/xv/D/8P/wP++/73/uv+2/7T/sf+w/6//q/+p/6b/pP+h/53/mv+X/5P/kf+O
+          /4r/iP+E/4H/f/98/3n/d/92/3T/cv9w/23/bf9s/2r/av9p/2n/av9q/2r/av9s/23/b/9y/3T/
+          dv95/33/gv+I/4z/kf+X/5v/n/+k/6r/r/+0/7j/vP/B/8T/xv/J/83/z//T/9X/1v/Y/9j/2//b
+          /93/3f/c/93/3P/c/9z/3P/c/9r/2v/Z/9n/1//Y/9j/2P/X/9b/1v/V/9X/1P/U/9T/1f/U/9X/
+          1P/W/9X/1f/V/9X/1v/X/9b/1v/X/9b/1//X/9f/1//Z/9n/2f/a/9v/2//b/9v/3P/c/9v/2v/b
+          /9v/2//b/9v/3P/e/97/3f/e/93/3f/c/93/3f/c/93/3v/f/93/3v/g/+D/3v/e/9//4P/h/+H/
+          4f/i/+P/4//j/+T/5//o/+r/6//s/+z/6v/r/+z/7P/t/+3/7v/u/+//8P/x//D/7//w//D/8P/v
+          /+//7//v//D/8f/v/+//8P/w//H/8v/y//L/8f/v/+v/5f/h/9z/1v/S/83/xf/B/77/vP+7/7r/
+          v//L/9j/4f/p/+7/7v/r/+n/5v/l/+P/5f/p/+//8f/0//f/9//3//b/9v/0//P/8v/w/+7/6//p
+          /+f//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="aVL">
+        <pdur>92</pdur>
+        <print>136</print>
+        <qonset>512</qonset>
+        <qrsdur>86</qrsdur>
+        <tonset>676</tonset>
+        <qtint>400</qtint>
+        <waveform duration="2400">
+          +//5//f/+P/4//j/9//2//X/9v/2//b/9//3//b/9v/2//b/9f/2//b/9//3//f/9v/2//f/9v/3
+          //f/9//3//b/9v/2//b/9f/2//X/9f/1//X/9f/0//T/9P/0//X/9P/z//T/8//z//P/8v/y//L/
+          8v/z//H/8v/z//L/8v/y//L/8v/y//L/8v/x//H/8v/y//P/8//z//P/8//z//P/9P/0//X/8//0
+          //X/9f/0//P/9P/0//T/8//z//T/9P/0//T/8//0//T/8//z//L/8//z//P/8v/y//L/8//y//L/
+          8//z//T/8//0//T/9P/0//T/9f/2//b/9v/2//X/9v/2//b/9v/2//b/9v/1//X/9v/2//f/9v/2
+          //X/9f/2//X/9f/2//T/9P/1//T/8//z//T/9P/0//X/9P/1//X/9P/0//X/9f/0//T/9P/1//X/
+          9P/1//X/9f/1//b/9P/1//X/9f/0//T/9v/1//T/9f/1//X/9P/x/+7/6//o/+T/4v/h/9//3v/g
+          /+D/3//g/9//3f/d/9z/2//a/9n/2v/b/9v/3P/c/97/3//h/+T/6P/p/+r/7P/s/+//8f/y//j/
+          +//7//v//P/9//3//P/7//v//P/+//7///8AAAAA/////wAA////////AAAAAAAA//8AAAAAAAAA
+          AAAAAgAIAA8AFQAWABMAEAAMAAcA/f/t/9T/sf+O/27/Vf9G/zv/MP8k/yr/Wv+Y/8H/4P///xoA
+          LQAyADEAMgAuACsAKQAjACEAGgARAAoABwAFAAMAAQD//////v/+//////8AAAAAAAD///7//v/+
+          //////////3//f/+//7//f/8//z//f/9//z//f/8//r/+v/6//n/+f/4//n/+P/3//f/9//3//b/
+          9v/2//X/9f/1//P/9P/z//L/8v/y//L/8v/w/+//7//v/+7/7v/u/+7/7v/t/+z/7f/r/+z/7P/r
+          /+v/6//q/+r/6v/p/+n/6f/p/+r/6v/o/+n/6P/n/+b/5v/l/+b/5f/k/+T/4//i/+H/3//e/97/
+          3f/d/93/3f/c/9//3v/f/+D/4//i/+P/5P/l/+b/5//p/+r/6//s/+z/7f/v/+//8P/w//H/8f/x
+          //H/8P/x//H/8f/x//D/7//v/+//7v/t/+3/7f/s/+z/7P/s/+z/7P/t/+z/7P/s/+z/7f/s/+v/
+          6//s/+3/7f/r/+z/7P/r/+z/6//s/+v/7f/s/+3/7P/s/+7/7v/v/+7/7f/t/+7/7v/u/+7/7f/t
+          /+z/7P/t/+z/7f/s/+z/7v/u/+7/7f/t/+3/7P/t/+v/6//s/+3/7P/s/+3/7f/t/+3/7//w//D/
+          8P/v//D/8f/y//L/8//z//T/9P/0//T/8//0//T/9P/0//P/8//0//X/9f/1//X/9v/1//T/9P/1
+          //X/9f/1//X/9v/1//b/9v/2//f/+f/7//v/+f/6//r/+f/5//b/8v/v/+j/5P/g/9z/2v/Y/9b/
+          1f/Y/+L/5//p/+z/7//v/+//7f/s/+v/6v/v//P/9f/3//b/+P/3//f/9//3//b/9//2//b/9v/0
+          //T//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="aVF">
+        <pdur>92</pdur>
+        <print>136</print>
+        <qonset>516</qonset>
+        <qrsdur>82</qrsdur>
+        <tonset>636</tonset>
+        <qtint>344</qtint>
+        <waveform duration="2400">
+          MwA1ADgAOAA4ADgAOQA5ADkANwA2ADUANQA0ADMAMQAwADAAMQAxADAAMAAvAC8ALwAuAC8AMAAw
+          ADAAMAAwADIAMwA0ADQANAA1ADYANgA4ADkAOQA7ADsAOwA8ADwAPwA/AEAAQQBBAEIAQwBEAEQA
+          RQBEAEYARgBFAEYARgBHAEgASABHAEgASQBJAEcARwBIAEcARwBIAEgASABIAEkASQBIAEgASABJ
+          AEgASABHAEgASABIAEgARwBHAEYARgBGAEUARABDAEIAQQBAAD8APwA9ADwAOwA6ADkANgA1ADQA
+          MwAwAC8ALQArACwAKQAnACcAJQAlACUAJAAkACMAIgAiACEAIgAhACAAIQAhACIAIgAhACAAIAAh
+          ACIAIgAhACIAIwAkACQAJAAkACQAJAAlACQAJQAkACQAIwAjACMAJAAjACMAIwAjACMAIwAkACQA
+          IwAiACIAIgAhACEAIgAhACEAIgAiACIAIgAiACIAIwAiACIAJgArADEAOwBCAEcASwBOAE8ATgBO
+          AE4AUABRAFUAWwBfAGIAYwBkAGQAYwBjAGQAYwBhAGEAYQBeAFgAUABMAEsASgBIAEQAQAA6ACwA
+          HgAUAA0ACQAGAAgACgAKAAkABgAEAAQAAgABAAEAAQABAAAAAQABAAAAAAAAAAAAAAAAAAAAAAAB
+          AP//+v/w/+b/4v/l//L/CAAmAEkAdACkAOAAJQFwAb8B+gEdAi8CNgI0AgICeAHXAGMABgC0/3f/
+          XP9d/2P/bf97/4j/nf+0/8X/2v/r//j/AQAEAAcACwANAA8AEQAPAA8ADgAOAA8ADwAQABIAEwAS
+          ABIAEgAUABYAGAAZABoAHAAdAB0AHQAeACEAIgAkACUAJwApACkAKgAtAC8AMQAzADUANQA4ADgA
+          OgA8AD8AQwBEAEYARwBIAEwATgBRAFQAVQBZAF0AXwBjAGUAZgBqAGwAbwBzAHYAegB/AIEAhACI
+          AIoAjgCTAJYAmgCbAJ8AogCjAKQApwCqAK0ArgCvALEAsQCyALQAtQC1ALUAtQC1ALUAswCyALIA
+          rwCsAKgAogCdAJgAkgCNAIgAgAB7AHUAbgBrAGQAXgBZAFMATwBKAEYARABAADwAOwA4ADYANQAz
+          ADMAMgAxADEAMgAzADMANgA1ADYAOAA4ADkAOgA8ADwAPAA8AD0APgA+AD0APgA+AD4APgA/AEAA
+          PwA+AD0APgA9AD4APQA9AD0APgA9AD4APQA8ADwAOwA6ADoAOQA3ADcANwA3ADUANQA2ADYAOAA4
+          ADgAOAA4ADcANgA1ADUANAA0ADMANQA2ADYANgA3ADYANgA2ADUANAA0ADMAMwA0ADMAMQAvAC8A
+          LwAtACwALAAqACoAKAAlACMAIAAfAB8AIQAhACEAHwAfAB8AHgAcABoAGwAbABoAGwAbABsAHAAb
+          ABsAGwAbABsAGgAbABsAGgAYABYAFAATABIAEwAVABkAHgAlACwAMwA9AEgAUwBdAGUAagBuAHIA
+          cQBkAE0APAAzACsAJQAlACkAKwAtADIALwAnAB4AGAAUABIAEAARABMAEwAUABcAFwAZABwAHgAj
+          ACYA/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="V1">
+        <pdur>100</pdur>
+        <print>144</print>
+        <qonset>512</qonset>
+        <qrsdur>70</qrsdur>
+        <tonset>704</tonset>
+        <qtint>412</qtint>
+        <waveform duration="2400">
+          FAAXABcAFgAWABcAFgAVABQAFAAUABUAFAAUABQAFAAUABQAEwASABMAEgATABIAEgASABIAEQAR
+          ABEAEQASABAAEQAQABEAEAARABEAEAARABAAEQAQABAAEAAQABEAEAAQABAAEAAQABAAEQARABEA
+          EAAQABEAEQARABEAEgASABEAEQARABIAEQASABIAEgATABIAEgATABMAEgATABMAFAAUABQAFAAV
+          ABUAFAAVABUAFgAVABUAFgAVABUAFQAVABUAFQAVABUAFAATABQAEwATABIAEgARABEADwAPAA4A
+          DgAOAAwADAAMAAsACwAKAAoACQAIAAgACAAHAAcACAAHAAcABgAHAAYABgAFAAUABQAFAAQABAAE
+          AAQAAwAEAAQABAADAAMAAwADAAMAAgACAAMAAwACAAIAAwACAAEAAQACAAIAAgABAAIAAQABAAAA
+          AAABAAEAAAAAAAEAAQAAAAAAAAAAAAAAAAAAAAEAAgACAAMABAAHAAkADAAOAA8AEQATABMAFAAU
+          ABUAFwAWABYAEwAPAAkAAgD8//X/8//x//P/9f/0//T/8//y//H/7//v//H/8f/w//H/8f/y//H/
+          9P/2//r//////wAAAAAAAAAA//////7//v/+////////////AAAAAAAA//8AAAAAAAD//wAA//8A
+          AAIABgAMABUAIAAtADoAOgAlAP7/0P+a/1L/9f6G/h3+0/2e/Xn9aP1q/Yv92f02/of+0f4U/0v/
+          cP+Q/7P/0P/p////DQAbACUAIgAaABIADgAPAA8AEAASABIAEQATABQAFQAVABUAFQAVABUAFQAV
+          ABUAFQAVABUAFgAUABQAFAAVABUAFQAVABUAFQAUABQAFAAUABQAFAAUABQAFAAVABUAFQAVABQA
+          FQAWABUAFgAWABYAFgAWABcAFwAXABcAFwAYABcAGAAYABkAGQAaABoAGwAbABsAHAAeAB0AHQAe
+          AB4AIAAgACEAIgAiACIAIwAkACUAJwAmACYAKAAoACkAKQAqACsAKgAqACoAKgAqACkAKAAoACcA
+          JgAmACYAJQAjACMAIwAiACEAIAAgAB4AHQAdABwAGwAZABkAGAAXABYAFQAVABUAFAATABMAEgAR
+          ABAAEAAPAA8ADgAPAA4ADQANAA0ADAAMAAsACwALAAoACgAJAAkACAAIAAgACAAIAAcABwAHAAcA
+          BwAGAAYABgAGAAUABQAFAAUABQAEAAQABAAEAAMAAwADAAQAAwADAAMAAwAEAAMABAAEAAQABQAG
+          AAUABQAGAAcABgAGAAcABwAIAAgACAAHAAYABQAEAAQAAgACAAIAAwADAAIAAgABAAEAAAAAAAAA
+          AAAAAP//AAAAAAAAAAAAAAAAAQABAAAAAQACAAIAAgACAAMAAgACAAMABAAEAAQABAADAAMAAwAB
+          AAAAAQAAAAAAAAAAAAAAAAABAAIAAwAFAAcACgALAAgAAgD7//P/5//Z/8j/tf+n/5//mP+U/4//
+          jv+T/57/p/+r/67/sP+w/7L/t/+9/8L/yP/S/93/5//u//L/9v/5//z/AAADAAYACAAKAA4AEAAQ
+          AA4A/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="V2">
+        <pdur>48</pdur>
+        <print>136</print>
+        <qonset>512</qonset>
+        <qrsdur>72</qrsdur>
+        <tonset>676</tonset>
+        <qtint>368</qtint>
+        <waveform duration="2400">
+          XwBiAGEAYABfAF4AXABaAFgAVgBVAFMAUQBQAE8ATQBNAEwASwBKAEkASABJAEgARwBIAEgASABI
+          AEgASQBJAEkASgBLAEwATABNAE4ATgBPAFAAUQBRAFIAUwBUAFUAVQBWAFcAVgBXAFgAWQBaAFsA
+          XABcAFwAXQBeAF0AXgBfAF8AYABhAGEAYwBjAGMAZQBlAGYAZwBnAGgAaQBpAGoAbABsAGwAbQBt
+          AG4AbQBtAG4AbQBtAGwAawBqAGkAZwBlAGQAYgBhAF4AXABZAFcAVABSAE0ASwBHAEUAQgA/ADwA
+          OQA2ADMAMgAvAC0AKwAoACYAJAAjACIAIAAfAB4AHQAcABwAGgAZABkAGAAXABgAFwAXABYAFgAW
+          ABYAFgAWABUAFQAVABUAFQAUABQAEwATABMAEwATABMAEgASABIAEQARABEAEgARABEAEAAQABAA
+          EAAPAA8ADgAOAA0ADgANAA0ADQANAAwADAANAA0ADQANAA0ADwATABcAGgAeAB4AIAAgACAAIAAi
+          ACQAJwApACkAKQAkABsAEgALAAYABAAFAAkACgAKAAoADAAKAAcABAAFAAYABwAHAAYABgAGAAUA
+          BAACAAMAAgABAAIAAwADAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB
+          AAQACwAYAC4ASwBsAIwAlwB6ADkA6v+D//H+Of5w/cr8WvwD/MH7o/uh+877O/y0/CP9kv0A/mX+
+          vP4H/0v/gv+v/9j/+/8dADkAPAA0ACwAJwAnACkAKwAvAC8AMQAzADQANgA3ADcAOAA4ADkAOQA5
+          ADsAOwA7ADwAPQA9AD8AQABBAEIAQwBEAEUARwBIAEkASwBNAE4AUQBRAFQAVABWAFkAWgBdAF4A
+          YABjAGUAaABqAGwAcABzAHYAeQB8AH8AgwCHAIsAkACUAJgAnQCiAKgArgCzALkAvwDEAMsA0ADW
+          AN0A4gDoAO0A8gD3APwAAAEEAQcBCgEOAQ8BEgETARMBFAEUARQBEgEQAQ4BCgEFAQAB+gD0AO0A
+          5gDfANgAzwDGAL4AtgCtAKUAnQCVAI0AhQB9AHQAbgBoAGIAXQBYAFIATgBKAEYAQwBBAD4APAA6
+          ADgANwA2ADQAMwAzADMAMgAxADAALwAvAC8ALwAuAC4ALgAuAC0ALQAsACwALAAsACsAKwAqACkA
+          KQApACkAKAAnACcAJgAlACUAJAAjACIAIgAiACEAIAAfAB8AHgAdAB0AHQAcABwAGwAbABsAGwAb
+          ABoAGgAbABoAGgAZABkAGgAaABoAGgAZABkAFgAVABMAEgASABIAEgATABMAEgASABEADgANAA0A
+          DQANAAwADAAMAA0ADAAMAAwACwALAAoACwAMAAwACwALAAwACwALAAsACwALAAsADAALAAsACgAJ
+          AAcABwAHAAcABwAIAAcACAAJAAoADQAPABQAGgAfAB0AFAAGAPj/4f/E/6L/g/9v/2D/Vv9P/0n/
+          RP9I/1X/Xf9g/2H/Zv9s/3P/fP+F/47/mf+p/7z/zP/Y/+D/6P/w//f///8GAAsAEAAVABwAIQAk
+          ACQA/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="V3">
+        <pdur>100</pdur>
+        <print>144</print>
+        <qonset>512</qonset>
+        <qrsdur>88</qrsdur>
+        <tonset>672</tonset>
+        <qtint>448</qtint>
+        <waveform duration="2400">
+          gACHAIsAjgCRAJIAkwCSAJAAjgCLAIkAiACGAIUAhACCAIIAgAB/AH4AfQB+AH4AfwB/AIAAgACA
+          AIEAggCEAIUAhgCIAIgAigCLAIwAjgCQAJEAkgCUAJUAlwCYAJkAmgCbAJ0AnwCgAKEAowCjAKQA
+          pQCmAKcAqACpAKoAqgCrAKwArACuAK8AsACyALIAtAC0ALQAtgC3ALgAugC6ALsAvAC8ALwAvAC8
+          ALwAuwC6ALkAuAC2ALQAsgCvAK0AqgCoAKUAoACcAJkAkwCPAIsAhgCBAHsAdwBxAGwAZwBjAF4A
+          WQBUAFEATgBKAEYAQwBAAD0AOgA4ADcANQAzADEALwAuAC4ALAArACoAKgApACkAKQApACgAKAAn
+          ACcAJwAnACcAJwAnACcAJwAnACYAJQAmACYAJgAlACUAJQAkACQAJAAjACQAIgAiACMAIgAiACAA
+          IAAgACAAHwAeAB4AHgAdAB0AHQAcABsAGwAbABwAHAAcAB0AHwAkACoAMAA0ADYAOAA4ADgAOAA5
+          ADsAPQBAAEMARgBFAEEAOwA3ADUANAA1ADYANgA0ADYANgAyACsAJgAlACcAKAAnACYAJgAiABkA
+          EQAMAAkABwAFAAYABwAFAAQAAQAAAAAAAAAAAAAAAAD/////AAAAAAAAAAAAAAAAAAAAAAAAAAAC
+          AAUACQAWADUAZwCnAPAAGQH9AKwAQgCv/8L+lP1t/J/7KfvG+m36MvoZ+kb6tvor+4779ftk/OH8
+          Y/3d/Uj+oP7u/jf/ev+3/+T//P8NABoAIgAtADYAPgBGAEoATQBPAFEAUgBXAFoAXgBiAGMAZQBl
+          AGYAaABrAG8AcgB0AHYAeAB5AHsAfQCAAIUAiQCLAI0AjwCRAJUAmgCeAKIApgCpAKsArwCzALgA
+          vgDEAMoAzQDRANYA3ADiAOgA8QD3AP0ABAEKAREBGgEkASwBNwFAAUkBUQFaAWQBbwF7AYYBjwGY
+          AaEBqQGwAbkBwQHKAdEB1QHZAdwB3wHiAeUB6AHpAekB5wHkAeAB2wHVAc4ByAG9AbMBpwGZAYwB
+          fgFwAWIBUwFDATMBIgESAQMB9ADnANoAzAC/ALIApwCdAJMAigCDAHsAdABuAGgAYwBfAFwAWgBY
+          AFUAVABSAFAAUABPAE8ATwBOAE4ATgBOAE4ATgBOAE4ATgBNAE0ATQBNAE0ATABMAEwASwBLAEsA
+          SgBJAEkASABHAEcARQBEAEMAQgBBAEAAPwA9AD0APAA7ADkANwA2ADUANAAzADIAMgAxADEAMQAw
+          AC8ALwAvAC8ALwAtACwALAArACoAKwArACsAKQAoACcAJgAkACQAJAAkACMAIwAjACIAHwAcABwA
+          HAAbABsAGgAaABoAGQAWABQAEwASABIAEgATABIAEgARABEADwAPAA4ADgANAA4ADQANAA0ADQAM
+          AAwACwALAAoACwAKAAsACgALAAwADQASABoAJgAxADMAKAAZAAUA5v+3/4P/V/8+/zD/J/8f/xX/
+          Df8Q/xr/HP8T/wv/C/8Y/yb/NP9C/0//X/91/4z/nv+s/7j/xv/U/+L/7v/5/wEACgATAB0AJwAw
+          ADYA/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="V4">
+        <pdur>104</pdur>
+        <print>144</print>
+        <qonset>512</qonset>
+        <qrsdur>76</qrsdur>
+        <tonset>668</tonset>
+        <qtint>352</qtint>
+        <waveform duration="2400">
+          YQBpAG0AcABzAHQAdQB0AHMAcgBxAHAAbwBuAGwAawBrAGoAagBqAGkAagBpAGoAagBrAGwAbABt
+          AG4AbwBwAHEAcgBzAHQAdgB2AHgAeQB5AHoAewB8AH0AfwCAAIEAggCCAIMAhACFAIcAhwCIAIkA
+          igCKAIoAjACNAIwAjQCOAI4AjwCPAJAAkQCTAJMAlACTAJQAlQCVAJYAlgCYAJgAmACYAJcAlwCW
+          AJYAlQCUAJIAkgCQAI8AjACLAIgAhgCEAIEAfQB6AHgAdABwAG0AagBmAGIAXwBcAFgAVABRAE4A
+          SgBGAEMAQQA+ADwAOQA3ADUAMwAyADAALgAtACsAKwAqACkAKAAnACcAJwAmACYAJgAlACUAJQAm
+          ACYAJQAmACYAJQAlACUAJQAlACUAJAAlACUAJQAlACQAJAAkACQAJAAkACMAIwAjACMAIgAiACEA
+          IQAgACAAHwAfAB8AHwAeAB4AHQAcABwAHAAdABwAHQAdAB4AIwAqADAANAA3ADgAOQA6ADkAOQA6
+          ADwAPgBBAEUARwBEAEEAQABAAD8APwBBAEEAQABAAEEAPwA6ADMAMQAxADIAMQAvAC8ALQAiABcA
+          DwAKAAcABQAGAAcABwAFAAEAAAAAAP//AAAAAP/////+//7///////////8AAAAAAQABAAEAAwAD
+          AAQACwAdADwAaQCnAOcAEwEkASQBCgG7ADkArP9C/wX/yf57/iz+5f23/Z/9hf1d/TT9Kv1X/bP9
+          GP51/sX+C/9I/4H/s//Z//P/BgAWACIAKwAyADUAOAA6AD4AQQBEAEcASgBLAEwATQBPAFEAUwBW
+          AFcAWQBaAFsAXgBfAGIAZQBmAGgAagBqAG0AbwByAHUAeQB8AH4AgACCAIUAiQCOAJEAlACYAJsA
+          nwCkAKcArACxALcAvADBAMUAywDQANYA3gDkAOsA8gD3AP4ABQEMARUBHQElAS0BNQE8AUMBSgFS
+          AVkBYAFlAWsBbgFzAXYBegF+AYABgQGDAYMBggGBAYABfQF7AXcBcgFsAWUBXwFXAU8BRgE9ATIB
+          JwEcAREBBAH4AOwA4QDVAMkAvQCyAKgAnwCWAI0AhQB9AHUAbwBpAGIAXwBbAFgAVQBRAE4ATQBL
+          AEoASQBJAEkARwBHAEgASABIAEgASABKAEkASwBKAEsASwBLAEsASwBLAEsASwBLAEsASgBKAEsA
+          SgBKAEkASABJAEcARgBFAEUARABDAEIAQQBAAD8APgA9ADwAOgA5ADkANwA2ADUANQA0ADUANAAz
+          ADMAMgAyADEAMAAvAC8ALgAtAC0ALgAvAC4ALQArACsAKgApACkAKAAoACgAJwAmACYAJAAhACEA
+          IQAgAB8AHwAfAB4AHAAaABgAFgAVABUAEwAVABQAEwATABMAEgAQABAADwAOAA4ADgAPAA8ADgAN
+          AA4ADQAMAAwADQAOAA0ADQAOAA0ADQAPABQAHAAmAC4AMQAxAC8AJgARAPj/4v/Y/9T/zv/J/8D/
+          t/+y/6//o/+Q/33/d/+C/5H/nf+o/6//tv/A/8n/zf/O/8//1//i/+7/+P8AAAcADQAUABsAIwAr
+          ADIA/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="V5">
+        <pdur>92</pdur>
+        <print>144</print>
+        <qonset>520</qonset>
+        <qrsdur>70</qrsdur>
+        <tonset>656</tonset>
+        <qtint>348</qtint>
+        <waveform duration="2400">
+          TABPAFMAVABVAFcAVgBWAFUAUwBSAFEAUABQAE4ATABMAEsASwBKAEoASgBKAEoASgBLAEsATABN
+          AE0ATgBOAE8AUABRAFIAUwBUAFUAVgBWAFgAWQBZAFkAWgBcAF0AXQBeAF8AXwBhAGEAYQBjAGQA
+          ZABlAGUAZQBmAGYAZwBoAGgAaABoAGkAawBqAGoAbABsAGsAbABsAGwAbQBtAG4AbgBtAG4AbQBt
+          AGwAagBpAGkAaABnAGYAZABkAGEAYABfAF0AWwBZAFcAVQBSAFAATQBLAEgARwBEAEEAPwA8ADkA
+          NwA1ADMAMQAvAC4AKwApACgAJwAmACQAJAAjACEAIAAfAB8AHgAeAB0AHQAeAB0AHQAdAB0AHQAe
+          AB4AHQAdAB0AHQAeAB4AHQAdAB0AHQAdAB0AHQAeAB4AHQAdAB4AHgAcABwAHAAcABwAHAAcABsA
+          GgAaABoAGgAZABkAGQAZABgAGAAZABgAGAAYABgAGAAYABkAGwAgACYAKQAtAC8AMAAxADEAMAAx
+          ADEAMgA0ADcAOwA7ADkAOQA5ADgAOQA6ADsAOwA6ADwAOwA4ADMALwAuADAALwAuAC0ALAAnABwA
+          EwAMAAcABAADAAUABgAFAAMAAAAAAAAAAAAAAP/////+//7//////wAAAAAAAAAAAQABAAIAAgAC
+          AAAAAAAAAAkAHAA4AGgAogDZAAoBPgFrAX0BgQGPAbcB4QHlAckBkAE5Ac4AUQDC/yb/hP4q/j7+
+          gP7E/vv+LP9d/4b/sv/X/+v//P8GAAwAFgAbAB8AJQAkACUAJgAlACYAKAAqACwALgAuADAAMQAx
+          ADIANAA2ADgAOQA7ADwAPQA/AEEAQwBFAEYARwBJAEsATQBQAFIAVABWAFcAWQBcAF4AYQBlAGcA
+          awBtAHAAcwB1AHkAfQCBAIYAiQCMAI8AlACZAJ4AogCnAKwAsQC1ALsAwADHAMwA0wDYAN0A4gDn
+          AOwA8gD3APwA/wACAQUBCAELAQ0BDwEQAREBEQERARABEAEOAQ4BDAEHAQQBAQH8APgA8gDsAOYA
+          3wDXANEAyAC/ALcArQClAJ0AlACNAIYAfQB2AG4AZwBiAFwAVwBSAEwASABFAEEAPwA8ADoAOQA3
+          ADYANQAzADQAMwAzADQANQA1ADUANAA2ADYANwA3ADcAOAA4ADkAOAA5ADkAOQA5ADkAOQA5ADkA
+          OQA5ADkAOAA5ADgANwA2ADYANQA1ADQAMwAyADIAMQAxADEALwAtAC0ALQAsACsAKgAqACsAKwAq
+          ACoAKQApACgAJwAmACUAJQAkACQAJAAkACQAIwAjACIAIQAhACEAIAAfAB8AHwAgAB4AHAAbABoA
+          GgAZABgAGAAZABYAFQATABEAEAAOAA0ADwAPAA4ADgANAA0ADAAKAAoACQAJAAkACQAJAAkACQAI
+          AAgACAAIAAgACAAIAAgABwAGAAYABwAHAAoADwAXAB8AJgAuADYAOAA3ADcAPABFAEkASgBKAEQA
+          OQApABcAAQDo/9P/0//h/+7/+f8AAAQAAwABAP7/9v/s/+T/4//p//H/9v/9/wIABQAKAA4AEwAZ
+          AB4A/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+      <repbeat leadname="V6">
+        <pdur>92</pdur>
+        <print>136</print>
+        <qonset>512</qonset>
+        <qrsdur>80</qrsdur>
+        <tonset>664</tonset>
+        <qtint>348</qtint>
+        <waveform duration="2400">
+          OQA6ADsAPAA8ADsAPAA8ADsAOgA5ADgANwA2ADUAMwAyADIAMgAxADEAMAAwADAAMAAwADAAMQAy
+          ADIAMgAzADQANAA1ADUANgA3ADcAOAA5ADkAOgA6ADsAPAA9AD4APgA/AD8APwBAAEEAQgBCAEMA
+          RABEAEQARQBFAEUARgBGAEYARgBGAEcASABHAEcASABIAEcARwBIAEkASABJAEkASQBJAEkASQBJ
+          AEgARwBHAEYARQBFAEUARABEAEMAQgBCAEEAQAA9AD0APAA6ADkANwA1ADMAMgAxAC8ALQAsACoA
+          KAAmACUAJAAjACIAIAAeAB0AHAAcABsAGgAaABkAGAAYABgAFwAWABYAFgAXABYAFgAVABUAFgAX
+          ABcAFwAXABYAFwAXABcAFwAYABcAFwAXABcAGAAYABgAFwAXABcAGAAXABgAFwAYABcAGAAXABcA
+          FgAWABUAFQAVABQAFQAUABQAFAAVABQAEwAUABQAEwAUABYAFwAbAB8AIwAmACgAKwArACsAKwAr
+          ACwALAAtADAAMgA0ADUANQA1ADUANQA2ADcAOAA3ADgAOQA3ADIALwAuAC8ALgAtACwAKwAmABwA
+          FAANAAYAAgABAAMABgAFAAQAAgACAAEAAAAAAAAA/////wAAAAAAAP//AAAAAAAAAAAAAAAAAAAA
+          AP//+//4//f/+f8BABgAPABrAJ4A1QAUAU4BiAHPARsCXQKGApIChgJVAvUBbgHbAEsAvf9N/yv/
+          N/9K/2H/d/+M/6b/wP/a/+3/9v8AAAQABwAMAA8AEQAVABQAFAATABEAEgATABMAFAAVABYAFwAX
+          ABcAGQAZABoAGwAcAB4AHwAhACEAIgAjACQAJgAoACkAKwArACwALgAwADAAMwA0ADUAOAA6ADsA
+          PQA/AEEAQwBFAEcASQBMAE4AUQBTAFYAWABbAF8AYgBlAGgAawBuAHEAdQB4AH0AggCFAIgAjACP
+          AJIAlwCaAJ0AnwCiAKUApwCqAKsArgCwALEAswCzALMAtACzALQAswCyALEArgCuAKwAqQCmAKIA
+          nQCZAJUAjwCJAIQAfgB3AHEAawBkAF8AWQBVAE8ASQBEAD8AOwA4ADQAMQAvACwAKQAnACUAIwAj
+          ACIAIgAiACEAIQAhACIAIgAiACMAIgAjACQAJQAlACUAJgAmACcAJwAnACYAJwAoACcAKAAoACgA
+          KAAoACgAJwAnACcAJwAmACYAJgAlACUAJQAkACMAIwAjACMAIgAhACEAIAAgAB8AHwAeAB8AIAAe
+          AB8AHgAdAB4AHQAcABwAGwAbABoAGgAbABoAGwAaABoAGQAZABkAGQAYABcAGAAYABcAFgAVABUA
+          FAAUABMAEwATABIAEAAOAAwACwAKAAkACwAKAAkACQAJAAkACAAHAAYABQAFAAUABgAGAAYABgAF
+          AAQABQAFAAQABQAFAAUABQAEAAMAAgABAAEABAAIAA4AFgAdACcAMQA4AEMAUABbAGMAZwBrAGoA
+          YQBSAD8AKwAYAAkABwAPABcAHQAiACQAIQAcABQACwACAPn/9v/3//n//P///wAAAgAFAAgACgAN
+          ABAA/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//
+          f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/
+          /3//f/9/
+        </waveform>
+      </repbeat>
+    </repbeats>
+  </waveforms>
+
+</restingecgdata>
