@@ -12,6 +12,7 @@ Currently there are sample libraries for:
 - C/C++
 - C#
 - Java
+- NodeJS
 
 ## Examples
 There are currently integration examples for:
