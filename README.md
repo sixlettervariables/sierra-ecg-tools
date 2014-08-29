@@ -26,8 +26,10 @@ There are currently integration examples for:
 There are no required compilers for these projects, however, currently only the following has been tested:
 
 - C/C++: Visual Studio 2010, Visual Studio 2012, clang (LLVM 5.1)
-- C# (.Net 2.0+): Visual Studio 2010, Visual Studio 2012, 
+- C# (.Net 2.0, .Net 4.0/4.5): Visual Studio 2010, Visual Studio 2012, Visual Studio 2013
 - Java: JDK 1.6+ with JAXB support
+- Node.js: node v0.10.29+
+- Octave: 3.6.0+
 
 ## Contributing
 Sample XML files from various Philips devices would help ensure robustness of the underlying API. To contribute source code please review `CONTRIBUTING.md`.
