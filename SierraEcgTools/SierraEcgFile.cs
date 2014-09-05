@@ -56,8 +56,6 @@ namespace SierraEcg
         /// Sierra ECG XML.
         /// </summary>
         /// <param name="stream"><see cref="Stream"/> with a Sierra ECG XML document.</param>
-        /// <param name="disableVersionCheck"><see langword="true"/> if the preprocessor should
-        /// ignore the version information associated with the XML.</param>
         /// <returns>Preprocessed Sierra ECG XML.</returns>
         public static XDocument Preprocess(Stream stream)
         {
@@ -73,8 +71,6 @@ namespace SierraEcg
         /// Preprocess an <see cref="XDocument"/> containing Sierra ECG XML.
         /// </summary>
         /// <param name="xdoc">Sierra ECG XML document.</param>
-        /// <param name="disableVersionCheck"><see langword="true"/> if the preprocessor should
-        /// ignore the version information associated with the XML.</param>
         /// <returns><paramref name="xdoc"/> with all encoded and compressed data expanded.</returns>
         public static XDocument Preprocess(XDocument xdoc)
         {
@@ -92,8 +88,6 @@ namespace SierraEcg
         /// Preprocess an <see cref="XElement"/> containing Sierra ECG XML.
         /// </summary>
         /// <param name="root">Sierra ECG XML fragment.</param>
-        /// <param name="disableVersionCheck"><see langword="true"/> if the preprocessor should
-        /// ignore the version information associated with the XML.</param>
         /// <returns><paramref name="root"/> with all encoded and compressed data expanded.</returns>
         public static XElement Preprocess(XElement root)
         {
@@ -427,7 +421,7 @@ namespace SierraEcg
         /// </summary>
         /// <param name="root">XML containing a SierraECG compliant schema.</param>
         /// <returns>The version of the file, if it is of a supported version;
-        /// otherwise <see langword="false"/>.</returns>
+        /// otherwise <see langword="null"/>.</returns>
         private static Version DetermineVersion(XElement root)
         {
             Debug.Assert(root != null);
