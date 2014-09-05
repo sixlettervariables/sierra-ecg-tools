@@ -1,4 +1,4 @@
-﻿// <copyright file="SierraEcg.cs">
+// <copyright file="SierraEcg.cs">
 //  Copyright (c) 2011 Christopher A. Watford
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -27,6 +27,7 @@ using System.Text;
 using System.IO;
 using System.Xml.Linq;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace SierraEcg
 {
@@ -48,7 +49,9 @@ namespace SierraEcg
 
         static XName XERepBeat = ns + @"repbeat";
 
-        static string[] validVersions = new[] { "1.03", "1.04" };
+        static Regex removeWhitespace = new Regex(@"[\r\n\s]");
+
+        static HashSet<Version> validVersions = new HashSet<Version>(new[] { new Version("1.03"), new Version("1.04"), new Version("1.04.01") });
 
         #endregion Statics
 
@@ -60,9 +63,14 @@ namespace SierraEcg
         /// <param name="disableVersionCheck"><see langword="true"/> if the preprocessor should
         /// ignore the version information associated with the XML.</param>
         /// <returns>Preprocessed Sierra ECG XML.</returns>
-        public static XDocument Preprocess(Stream stream, bool disableVersionCheck = false)
+        public static XDocument Preprocess(Stream stream)
         {
-            return Preprocess(XDocument.Load(stream), disableVersionCheck);
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
+
+            return Preprocess(XDocument.Load(stream));
         }
 
         /// <summary>
@@ -72,14 +80,14 @@ namespace SierraEcg
         /// <param name="disableVersionCheck"><see langword="true"/> if the preprocessor should
         /// ignore the version information associated with the XML.</param>
         /// <returns><paramref name="xdoc"/> with all encoded and compressed data expanded.</returns>
-        public static XDocument Preprocess(XDocument xdoc, bool disableVersionCheck = false)
+        public static XDocument Preprocess(XDocument xdoc)
         {
             if (xdoc == null)
             {
                 throw new ArgumentNullException("xdoc");
             }
 
-            Preprocess(xdoc.Root, disableVersionCheck);
+            Preprocess(xdoc.Root);
 
             return xdoc;
         }
@@ -91,22 +99,27 @@ namespace SierraEcg
         /// <param name="disableVersionCheck"><see langword="true"/> if the preprocessor should
         /// ignore the version information associated with the XML.</param>
         /// <returns><paramref name="root"/> with all encoded and compressed data expanded.</returns>
-        public static XElement Preprocess(XElement root, bool disableVersionCheck = false)
+        public static XElement Preprocess(XElement root)
         {
-            if (root.Name != XERestingEcgData)
+            if (root == null)
+            {
+                throw new ArgumentNullException("root");
+            }
+            else if (root.Name != XERestingEcgData)
             {
                 throw new ArgumentException("Unknown XML ECG type: " + root.Name);
             }
 
             // check that this is at least Sierra ECG 1.03
-            if (!CheckVersion(root, disableVersionCheck))
+            var version = DetermineVersion(root);
+            if (version == null)
             {
                 throw new ArgumentException("Unknown XML ECG version");
             }
 
-            PreprocessParsedWaveforms(root);
+            PreprocessParsedWaveforms(root, version);
 
-            PreprocessRepresentativeBeats(root);
+            PreprocessRepresentativeBeats(root, version);
 
             return root;
         }
@@ -119,11 +132,18 @@ namespace SierraEcg
         /// acquired leads.</returns>
         public static DecodedLead[] ExtractLeads(XDocument xdoc)
         {
+            if (xdoc == null)
+            {
+                throw new ArgumentNullException("xdoc");
+            }
+
             return ExtractLeads(xdoc.Root);
         }
 
         private static DecodedLead[] ExtractLeads(XElement root)
         {
+            Debug.Assert(root != null);
+
             // Retrieve parsedwaveforms element and check if the data is encoded
             var parsedWaveforms = root.Descendants(XEParsedWaveforms)
                                       .SingleOrDefault();
@@ -151,7 +171,7 @@ namespace SierraEcg
                                               .ToArray();
 
                     case "Base64":
-                        decoded = Convert.FromBase64String(parsedWaveforms.Value);
+                        decoded = Convert.FromBase64String(removeWhitespace.Replace(parsedWaveforms.Value, ""));
                         break;
                     default:
                         // no can decode boss man
@@ -211,7 +231,7 @@ namespace SierraEcg
             throw new NotSupportedException("For whatever reason this format was not supported");
         }
 
-        private static void PreprocessParsedWaveforms(XElement root)
+        private static void PreprocessParsedWaveforms(XElement root, Version schemaVersion)
         {
             // Retrieve parsedwaveforms element and check if the data is encoded
             var parsedWaveforms = root.Descendants(XEParsedWaveforms)
@@ -220,6 +240,9 @@ namespace SierraEcg
             {
                 object decoded = null;
 
+                //SierraECGSchema_1_04_01:
+                // @dataencoding: how the data is encoded: eg., "Base64".
+                // Use "Plain" for sample values in ascii: "10 20 35...." .
                 var encoding = (string)parsedWaveforms.Attribute("dataencoding");
                 switch (encoding)
                 {
@@ -235,8 +258,19 @@ namespace SierraEcg
                         throw new InvalidOperationException("Unknown data encoding: " + encoding);
                 }
                 
-                var isCompressed = (bool)parsedWaveforms.Attribute("compressflag");
-                var compression = (string)parsedWaveforms.Attribute("compressmethod");
+                bool isCompressed;
+                string compression;
+                if (schemaVersion < new Version("1.04"))
+                {
+                    isCompressed = (bool)parsedWaveforms.Attribute("compressflag");
+                    compression = (string)parsedWaveforms.Attribute("compressmethod");
+                }
+                else
+                {
+                    compression = (string)parsedWaveforms.Attribute("compression");
+                    isCompressed = compression == "XLI";
+                }
+
                 if (isCompressed)
                 {
                     var signalCharacteristics = root.Element(ns + "dataacquisition")
@@ -267,8 +301,18 @@ namespace SierraEcg
                             leads = DecodedLead.ReinterpretLeads(leadsUsed, decodedData).ToList();
                         }
 
-                        // CAW: "False" must be used as the "false" is not recognized by many of the tools
-                        parsedWaveforms.SetAttributeValue("compressflag", "False");
+                        if (schemaVersion < new Version("1.04"))
+                        {
+                            // CAW: "False" must be used as the "false" is not recognized by many of the tools
+                            parsedWaveforms.SetAttributeValue("compressflag", "False");
+                        }
+                        else
+                        {
+                            //SierraECGSchema_1_04_01:
+                            // @compression: name the type of compression if the data is compressed
+                            // (e.g., "XLI" for standard Philips cardiograph compression; if not compressed, omit this attribute).
+                            parsedWaveforms.SetAttributeValue("compression", null);
+                        }
 
                         // CAW: the default is 25 data points per line
                         decoded = String.Join(
@@ -302,7 +346,7 @@ namespace SierraEcg
             }
         }
 
-        private static void PreprocessRepresentativeBeats(XElement root)
+        private static void PreprocessRepresentativeBeats(XElement root, Version schemaVersion)
         {
             var repBeats = root.Element(ns + "waveforms")
                                .Element(ns + "repbeats");
@@ -315,13 +359,14 @@ namespace SierraEcg
                 object decoded = null;
 
                 var encoding = (string)repBeats.Attribute("dataencoding");
+                var waveform = repBeat.Element(ns + "waveform"); // CAW: Double check 1.03 support
                 switch (encoding)
                 {
                     case "Plain":
-                        decoded = repBeat.Value;
+                        decoded = waveform.Value;
                         break;
                     case "Base64":
-                        var bytes = Convert.FromBase64String(repBeat.Value);
+                        var bytes = Convert.FromBase64String(waveform.Value);
                         var lead = new short[bytes.Length / 2];
                         Buffer.BlockCopy(bytes, 0, lead, 0, bytes.Length);
                         decoded = String.Join(
@@ -335,7 +380,7 @@ namespace SierraEcg
                         throw new InvalidOperationException("Unknown data encoding: " + encoding);
                 }
 
-                repBeat.SetValue(decoded);
+                waveform.SetValue(decoded);
             }
 
             if (repBeats != null)
@@ -345,14 +390,12 @@ namespace SierraEcg
         }
 
         /// <summary>
-        /// Check to see if this is a SierraECG version 1.03 or 1.04 file.
+        /// Determines the schema version of the file.
         /// </summary>
         /// <param name="root">XML containing a SierraECG compliant schema.</param>
-        /// <param name="disableVersionCheck"><see langword="true"/> if no version check
-        /// should be performed; otherwise <see langword="false"/>.</param>
-        /// <returns><see langword="true"/> if the file is of a supported version;
+        /// <returns>The version of the file, if it is of a supported version;
         /// otherwise <see langword="false"/>.</returns>
-        private static bool CheckVersion(XElement root, bool disableVersionCheck)
+        private static Version DetermineVersion(XElement root)
         {
             //<documentinfo>
             //  <documentname>03d494f0-94f0-13d4-b58f-00095c028bdc.xml</documentname>
@@ -364,23 +407,47 @@ namespace SierraEcg
             var documentInfo = root.Element(XEDocumentInfo);
             if (documentInfo == null)
             {
-                return false;
+                return null;
             }
             else
             {
                 var type = documentInfo.Element(ns + "documenttype");
-                if (type == null || (!disableVersionCheck && (string)type != "SierraECG"))
+                if (type == null)
                 {
-                    return false;
+                    // CAW: even if we're disabling the version check,
+                    // this document is invalid.
+                    return null;
+                }
+                else
+                {
+                    switch ((string)type)
+                    {
+                        case "SierraECG":
+                        case "PhilipsECG":
+                            // go to next check
+                            break;
+                        default:
+                            return null;
+                    }
                 }
 
                 var version = documentInfo.Element(ns + "documentversion");
-                if (version == null || (!disableVersionCheck && !validVersions.Contains((string)version)))
+                if (version == null)
                 {
-                    return false;
+                    return null;
                 }
-
-                return true;
+                else
+                {
+                    var foundVersion = new Version((string)version);
+                    if (validVersions.Contains(foundVersion))
+                    {
+                        return foundVersion;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
             }
         }
     }
