@@ -22,12 +22,10 @@
 // <author>Christopher A. Watford [christopher.watford@gmail.com]</author>
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Xml.Linq;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace SierraEcg
 {
@@ -48,8 +46,6 @@ namespace SierraEcg
         static XName XEDocumentInfo = ns + @"documentinfo";
 
         static XName XERepBeat = ns + @"repbeat";
-
-        static Regex removeWhitespace = new Regex(@"[\r\n\s]");
 
         static HashSet<Version> validVersions = new HashSet<Version>(new[] { new Version("1.03"), new Version("1.04"), new Version("1.04.01") });
 
@@ -171,7 +167,7 @@ namespace SierraEcg
                                               .ToArray();
 
                     case "Base64":
-                        decoded = Convert.FromBase64String(removeWhitespace.Replace(parsedWaveforms.Value, ""));
+                        decoded = Convert.FromBase64String(parsedWaveforms.Value);
                         break;
                     default:
                         // no can decode boss man
