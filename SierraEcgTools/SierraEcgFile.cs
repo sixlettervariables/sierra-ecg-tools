@@ -348,33 +348,70 @@ namespace SierraEcg
 
         private static void PreprocessRepresentativeBeats(XElement root, Version schemaVersion)
         {
+            Debug.Assert(root != null);
+            Debug.Assert(schemaVersion != null);
+
             var repBeats = root.Element(ns + "waveforms")
                                .Element(ns + "repbeats");
 
+            var encoding = (string)repBeats.Attribute("dataencoding");
+            string compression = null;
+            if (schemaVersion >= new Version("1.04"))
+            {
+                // @compression is present if data is compressed, and describes method (eg., "Huffman")
+                compression = repBeats.Attribute("compression") != null
+                            ? (string)repBeats.Attribute("compression")
+                            : null;
+            }
+
             // The representative beats may or may not be present, but we have to decode each one
-            // independently. They will not be compressed.
+            // independently.
             var representativeBeats = root.Descendants(XERepBeat);
             foreach (var repBeat in representativeBeats)
             {
                 object decoded = null;
 
-                var encoding = (string)repBeats.Attribute("dataencoding");
-                var waveform = repBeat.Element(ns + "waveform"); // CAW: Double check 1.03 support
+                XElement waveform;
+                if (schemaVersion < new Version("1.04"))
+                {
+                    //1.03: repBeat itself holds the encoded data
+                    waveform = repBeat;
+                }
+                else
+                {
+                    //1.04+: <waveform> element under the repbeat holds the data
+                    waveform = repBeat.Element(ns + "waveform");
+                }
+
                 switch (encoding)
                 {
                     case "Plain":
                         decoded = waveform.Value;
                         break;
+
                     case "Base64":
-                        var bytes = Convert.FromBase64String(waveform.Value);
-                        var lead = new short[bytes.Length / 2];
-                        Buffer.BlockCopy(bytes, 0, lead, 0, bytes.Length);
-                        decoded = String.Join(
-                            Environment.NewLine,
-                            lead.Select((vv, ix) => new { I = ix, V = vv })
-                                    .GroupBy(xx => xx.I / 25)
-                                    .Select(gg => String.Join(" ", gg.Select(xx => xx.V))));
+                        if (compression == null)
+                        {
+                            var bytes = Convert.FromBase64String(waveform.Value);
+                            var lead = new short[bytes.Length / 2];
+                            Buffer.BlockCopy(bytes, 0, lead, 0, bytes.Length);
+                            decoded = String.Join(
+                                Environment.NewLine,
+                                lead.Select((vv, ix) => new { I = ix, V = vv })
+                                        .GroupBy(xx => xx.I / 25)
+                                        .Select(gg => String.Join(" ", gg.Select(xx => xx.V))));
+                        }
+                        else
+                        {
+                            // we cannot decode these as we're not aware of the compression method
+                            Trace.WriteLine(
+                                "[PreprocessRepresentativeBeats] <repbeats> compressed using "
+                                + compression
+                                + ", aborting.");
+                            return;
+                        }
                         break;
+
                     default:
                         // no can decode boss man
                         throw new InvalidOperationException("Unknown data encoding: " + encoding);
@@ -397,13 +434,24 @@ namespace SierraEcg
         /// otherwise <see langword="false"/>.</returns>
         private static Version DetermineVersion(XElement root)
         {
+            Debug.Assert(root != null);
+
+            //1.03:
             //<documentinfo>
             //  <documentname>03d494f0-94f0-13d4-b58f-00095c028bdc.xml</documentname>
             //  <documenttype>SierraECG</documenttype>
             //  <documentversion>1.03</documentversion>
             //</documentinfo>
-            Debug.Assert(root != null, "Null XElement root");
-
+            //
+            //1.04 / 1.04.01:
+            //<documentinfo>
+            //  <documentname>7eacbc80-0549-11df-4823-000738300029.xml</documentname>
+            //  <filename>\Storage Card\PhilipsArchiveInternal\7eacbc80-0549-11df-4823-000738300029.xml</filename>
+            //  <documenttype>PhilipsECG</documenttype>
+            //  <documentversion>1.04</documentversion>
+            //  <editor />
+            //  <comments />
+            //</documentinfo>
             var documentInfo = root.Element(XEDocumentInfo);
             if (documentInfo == null)
             {
@@ -412,41 +460,32 @@ namespace SierraEcg
             else
             {
                 var type = documentInfo.Element(ns + "documenttype");
-                if (type == null)
+                var version = documentInfo.Element(ns + "documentversion");
+                if (type == null || version == null)
                 {
-                    // CAW: even if we're disabling the version check,
-                    // this document is invalid.
                     return null;
-                }
-                else
-                {
-                    switch ((string)type)
-                    {
-                        case "SierraECG":
-                        case "PhilipsECG":
-                            // go to next check
-                            break;
-                        default:
-                            return null;
-                    }
                 }
 
-                var version = documentInfo.Element(ns + "documentversion");
-                if (version == null)
+                // check schema type
+                switch ((string)type)
                 {
-                    return null;
+                    case "SierraECG":
+                    case "PhilipsECG":
+                        // go to version check
+                        break;
+                    default:
+                        return null;
+                }
+
+                // check schema version
+                var foundVersion = new Version((string)version);
+                if (validVersions.Contains(foundVersion))
+                {
+                    return foundVersion;
                 }
                 else
                 {
-                    var foundVersion = new Version((string)version);
-                    if (validVersions.Contains(foundVersion))
-                    {
-                        return foundVersion;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return null;
                 }
             }
         }
