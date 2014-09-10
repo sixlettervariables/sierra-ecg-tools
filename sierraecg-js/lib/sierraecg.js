@@ -111,15 +111,17 @@ function SierraEcg_ParseXml(xdoc) {
 }
 
 function SierraEcg_DecodeXli(ecg) {
-  return new Promise(function (resolve) {
+  return new Promise(function (resolve, reject) {
     var reader = new XliReader(ecg.parsedWaveforms);
+    reader.extractLeads(function (err, leads) {
+      if (err) return reject(err);
+      ecg.leads = leads;
 
-    ecg.leads = reader.extractLeads();
+      // get rid of our old crap
+      delete ecg.parsedWaveforms;
 
-    // get rid of our old crap
-    delete ecg.parsedWaveforms;
-
-    return resolve(ecg);
+      return resolve(ecg);
+    });
   });
 }
 
