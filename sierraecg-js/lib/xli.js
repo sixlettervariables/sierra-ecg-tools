@@ -37,19 +37,31 @@ var XLI = module.exports = function XliReader(input) {
   debug('initialized XLI encoded data (%d bytes)', this.input.length);
 };
 
-XLI.prototype.extractLeads = function XliReader_ExtractLeads() {
+XLI.prototype.extractLeads = function XliReader_ExtractLeads(cb) {
+  var self = this;
   var leads = [];
-  while (this.offset < this.input.length) {
-    debug('reading chunk %d @%d bytes', leads.length, this.offset);
-    var chunk = this._readChunk();
-    leads.push(chunk.values);
-    this.offset += chunk.size;
+  function next() {
+    if (self.offset < self.input.length) {
+      debug('reading chunk %d @%d bytes', leads.length, self.offset);
+      self._readChunk(function (err, chunk) {
+        leads.push(chunk.values);
+        self.offset += chunk.size;
+
+        setImmediate(next);
+      });
+    }
+    else {
+      process.nextTick(function () {
+        return cb(null, leads);
+      });
+    }
   }
 
-  return leads;
+  return next();
 };
 
-XLI.prototype._readChunk = function XliReader_private_ReadChunk() {
+XLI.prototype._readChunk = function XliReader_private_ReadChunk(cb) {
+  var self = this;
   var header = this.input.slice(this.offset + 0, this.offset + 8);
   var size = header.readInt32LE(0);
   var code = header.readInt16LE(4);
@@ -60,22 +72,42 @@ XLI.prototype._readChunk = function XliReader_private_ReadChunk() {
   debug('compressed size %d', compressedBlock.length);
   var reader = new LzwReader(compressedBlock, { bits: kLzwBitsPerCode });
 
-  var output = reader.decode();
-  debug('decompressed size %d (%d samples)', output.length, output.length / 2);
-  var unpacked = this._unpack(output);
-
-  var values = this._decodeDeltas(unpacked, delta);
-
-  return { size: header.length + compressedBlock.length, values: values };
+  var output = reader.decode(function (err, output) {
+    if (err) {
+      return cb(err);
+    }
+    else {
+      self._unpack(output, function (err, unpacked) {
+        if (err) {
+          return cb(err);
+        }
+        else {
+          var values = self._decodeDeltas(unpacked, delta);
+          process.nextTick(function () {
+            return cb(err, { size: header.length + compressedBlock.length, values: values });
+          });
+        }
+      });
+    }
+  });
 };
 
-XLI.prototype._unpack = function XliReader_private_Unpack(bytes) {
-  var unpacked = new Array(Math.floor(bytes.length / 2));
-  for (var ii = 0; ii < unpacked.length; ++ii) {
-    unpacked[ii] = (((bytes[ii] << 8) | bytes[ii + unpacked.length]) << 16) >> 16;
+XLI.prototype._unpack = function XliReader_private_Unpack(bytes, cb) {
+  function unpack() {
+    var unpacked = new Array(Math.floor(bytes.length / 2));
+    for (var ii = 0; ii < unpacked.length; ++ii) {
+      unpacked[ii] = (((bytes[ii] << 8) | bytes[ii + unpacked.length]) << 16) >> 16;
+    }
+
+    return unpacked;
   }
 
-  return unpacked;
+  process.nextTick(function () {
+    var unpacked = unpack();
+    process.nextTick(function () {
+      return cb(null, unpacked);
+    });
+  });
 };
 
 XLI.prototype._decodeDeltas = function XliReader_private_DecodeDeltas(deltas, lastValue) {

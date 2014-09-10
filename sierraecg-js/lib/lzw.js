@@ -46,6 +46,8 @@ function LzwReader(input, options) {
     this.bits = options.bits || 16;
     this.maxCode = (1 << this.bits) - 2;
 
+    this.chunkSize = Math.floor(8 * 1024 / this.bits);
+
     debug('initialized with %d bits per code-word', this.bits);
 
     this.bitCount = 0;
@@ -93,7 +95,7 @@ LZWP.readCode = function LzwReader_ReadCode() {
     }
 };
 
-LZWP.decode = function LzwReader_Decode() {
+LZWP.decodeSync = function LzwReader_DecodeSync() {
     var code, value, output = [];
     while (-1 !== (code = this.readCode())) {
         if (code > this.maxCode) {
@@ -121,6 +123,57 @@ LZWP.decode = function LzwReader_Decode() {
 
     debug('decompressed %d bytes', output.length);
     return new Buffer(output);
+};
+
+LZWP.decode = function LzwReader_Decode(cb) {
+  var self = this;
+  var code, value, output = [], codesRead = 0, goingNext = false;
+  function next() {
+    goingNext = false;
+    while (-1 !== (code = self.readCode())) {
+      if (code > self.maxCode) {
+        debug('code exceeds max (%d > %d), ending', code, self.maxCode);
+        break;
+      }
+
+      if (!self.strings.hasOwnProperty(code)) {
+        value = self.previous.slice();
+        value.push(self.previous[0]);
+        self.strings[code] = new Code(code, value);
+      }
+
+      output = self.strings[code].appendTo(output);
+
+      if (self.previous.length > 0 && self.nextCode <= self.maxCode) {
+        value = self.previous.slice();
+        value.push(self.strings[code].value[0]);
+        var nc = self.nextCode++;
+        self.strings[nc] = new Code(nc, value);
+      }
+
+      self.previous = self.strings[code].value;
+
+      codesRead++;
+      if (codesRead >= self.chunkSize) {
+        goingNext = true;
+        codesRead = 0;
+        break;
+      }
+    }
+
+    if (!goingNext) {
+      process.nextTick(function () {
+        debug('decompressed %d bytes', output.length);
+        return cb(null, new Buffer(output));
+      });
+    }
+    else {
+      debug('waiting until next tick to decompress');
+      setImmediate(next);
+    }
+  }
+  
+  return next();
 };
 
 function Code(code, value) {
