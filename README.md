@@ -34,5 +34,8 @@ There are no required compilers for these projects, however, currently only the 
 ## Contributing
 Sample XML files from various Philips devices would help ensure robustness of the underlying API. To contribute source code please review `CONTRIBUTING.md`.
 
+## Publications citing Sierra ECG Tools
+1. Khumrin P, Chumpoo P. Implementation of integrated heterogeneous electronic electrocardiography data into Maharaj Nakorn Chiang Mai Hospital Information System. Health Inform J 2014;1(2). ([PubMed](http://www.ncbi.nlm.nih.gov/pubmed/24771629))
+
 ## Contact
 For any questions regarding the library you can contact Christopher at christopher.watford@gmail.com.
