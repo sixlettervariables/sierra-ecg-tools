@@ -54,6 +54,17 @@ function readFile(filename, cb) {
   return deferred.nodeify(cb);
 }
 
+function readString(value, cb) {
+  var deferred = parseXml(value)
+    .then(sierraEcg.parseXml)
+    .then(sierraEcg.decodeXli)
+    .then(sierraEcg.updateLeads)
+    .then(sierraEcg.createObjects);
+    
+  return deferred.nodeify(cb);
+}
+
 module.exports = {
-  readFile: readFile
+  readFile: readFile,
+  readString: readString
 };
