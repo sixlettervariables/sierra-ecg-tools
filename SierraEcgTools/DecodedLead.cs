@@ -1,4 +1,4 @@
-﻿// <copyright file="DecodedLead.cs">
+// <copyright file="DecodedLead.cs">
 //  Copyright (c) 2011 Christopher A. Watford
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -32,6 +32,16 @@ namespace SierraEcg
     /// </summary>
     public sealed class DecodedLead : IEnumerable<int>
     {
+        #region Statics
+
+        private static HashSet<string> supportedLeadSets = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "STD-12",
+                "10-WIRE"
+            };
+
+        #endregion Statics
+
         #region Fields
 
         private int[] data;
@@ -96,7 +106,7 @@ namespace SierraEcg
         /// <returns>An enumeration of <see cref="DecodedLead"/> objects containing the completed lead data.</returns>
         public static IEnumerable<DecodedLead> ReinterpretLeads(string leadSet, IEnumerable<int[]> leadSamples)
         {
-            if (leadSet != "STD-12")
+            if (!supportedLeadSets.Contains(leadSet))
             {
                 throw new ArgumentException("Unsupported lead set: " + leadSet, "leadSet");
             }
@@ -168,7 +178,7 @@ namespace SierraEcg
                 case 12:
                     return "Lead V" + (index - 6);
                 default:
-                    return "Unknown Lead";
+                    return "Channel " + index;
             }
         }
 
