@@ -1,12 +1,16 @@
 {
   "name": "sierraecg",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Philips SierraECG Tools for NodeJS",
   "main": "index.js",
   "scripts": {
     "test": "tape tests/*.js",
     "cover": "istanbul cover tests/sierraecg.test.js",
     "lint": "jshint --verbose -c .jshintrc index.js lib/lzw.js lib/xli.js lib/sierraecg.js"
+  },
+  "directories": {
+    "lib": "./lib",
+    "test": "./tests"
   },
   "repository": {
     "type": "git",
@@ -29,6 +33,9 @@
     "url": "https://github.com/sixlettervariables/sierra-ecg-tools/issues"
   },
   "homepage": "https://github.com/sixlettervariables/sierra-ecg-tools",
+  "engines": {
+    "node": "v0.10.x"
+  },
   "dependencies": {
     "bluebird": "^2.3.0",
     "debug": "^1.0.4",
