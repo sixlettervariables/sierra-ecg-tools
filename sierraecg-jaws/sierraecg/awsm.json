@@ -1,0 +1,14 @@
+{
+  "name": "sierraecg",
+  "version": "0.0.1",
+  "location": "https://github.com/sixlettervariables/sierra-ecg-tools",
+  "author": "Christopher A. Watford (christopher.watford@gmail.com)",
+  "description": "Provides SierraECG and PhilipsECG decoding as a web service",
+  "resources": {
+    "cloudFormation": {
+      "LambdaIamPolicyDocumentStatements": [],
+      "ApiGatewayIamPolicyDocumentStatements": [],
+      "Resources": {}
+    }
+  }
+}
