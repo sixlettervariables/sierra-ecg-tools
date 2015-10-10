@@ -8,15 +8,18 @@
         "minify": true,
         "ignore": [],
         "exclude": [
-          "aws-sdk"
+          "aws-sdk",
+          "sierraecg"
         ],
-        "includePaths": []
+        "includePaths": [
+          "node_modules/awsm-sierraecg/node_modules/sierraecg",
+        ]
       },
       "excludePatterns": []
     },
     "cloudFormation": {
       "Description": "Decodes compressed SierraECG and PhilipsECG XML files",
-      "Handler": "aws_modules/sierraecg/decode/handler.handler",
+      "Handler": "aws_modules/awsm-sierraecg/decode/handler.handler",
       "MemorySize": 1024,
       "Runtime": "nodejs",
       "Timeout": 6
