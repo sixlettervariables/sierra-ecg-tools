@@ -1,0 +1,12 @@
+{
+  "name": "awsm-sierraecg",
+  "version": "0.0.1",
+  "description": "AWSM for SierraECG",
+  "main": "index.js",
+  "scripts": {
+    "postinstall" : "jaws postinstall awsm-sierraecg npm",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christopher A. Watford <christopher.watford@gmail.com>",
+  "license": "MIT"
+}
