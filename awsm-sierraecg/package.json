@@ -8,5 +8,24 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Christopher A. Watford <christopher.watford@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "lib": "./awsm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sixlettervariables/sierra-ecg-tools"
+  },
+  "keywords": [
+    "medical",
+    "ecg",
+    "js",
+    "javascript",
+    "aws",
+    "jaws"
+  ],
+  "bugs": {
+    "url": "https://github.com/sixlettervariables/sierra-ecg-tools/issues"
+  },
+  "homepage": "https://github.com/sixlettervariables/sierra-ecg-tools",
 }
