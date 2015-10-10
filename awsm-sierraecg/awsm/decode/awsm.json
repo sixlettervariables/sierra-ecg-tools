@@ -12,7 +12,7 @@
           "sierraecg"
         ],
         "includePaths": [
-          "node_modules/awsm-sierraecg/node_modules/sierraecg",
+          "node_modules/awsm-sierraecg/node_modules/sierraecg"
         ]
       },
       "excludePatterns": []
