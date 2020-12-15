@@ -35,7 +35,7 @@ var xml2js = require('xml2js'),
 
 var sierraEcg = require('./lib/sierraecg');
 
-function readFile(filename, cb) {
+function readFile(filename, cb, options) {
   var ext = path.extname(filename).toLowerCase();
   switch (ext) {
     case '.xml':
@@ -44,7 +44,7 @@ function readFile(filename, cb) {
       throw new Error('Unsupported file type');
   }
 
-  var deferred = fs.readFileAsync(filename)
+  var deferred = fs.readFileAsync(filename, options)
     .then(parseXml)
     .then(sierraEcg.parseXml)
     .then(sierraEcg.decodeXli)
