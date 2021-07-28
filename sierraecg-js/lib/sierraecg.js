@@ -39,12 +39,12 @@ function Ecg(type, leads) {
 
 function Lead(name, data, enabled) {
   if (!(this instanceof Lead)) {
-    return new Lead(name, enabled, data);
+    return new Lead(name, data, enabled);
   }
 
   this.name = name;
-  this.enabled = enabled;
   this.data = data;
+  this.enabled = enabled;
 }
 
 function SierraEcg_ParseXml(xdoc) {
