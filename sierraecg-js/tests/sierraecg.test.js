@@ -5,8 +5,8 @@ var test = require('tape');
 
 var sierraEcg = require('../');
 
-test('sierraecg', function (t) {
-  t.test('can read SierraECG 1.03 file', function (t) {
+test('sierraecg', function (p) {
+  p.test('can read SierraECG 1.03 file', function (t) {
     var now = new Date().getTime();
     sierraEcg.readFile('./tests/fixtures/129DYPRG.XML', function (err, ecg) {
       console.log('parsed in %d ms', new Date().getTime() - now);
@@ -68,7 +68,7 @@ test('sierraecg', function (t) {
     });
   });
 
-  t.test('can read SierraECG 1.04 file', function (t) {
+  p.test('can read SierraECG 1.04 file', function (t) {
     var now = new Date().getTime();
     sierraEcg.readFile('./tests/fixtures/3191723_ZZDEMOPTONLY_1-04_orig.xml', function (err, ecg) {
       console.log('parsed in %d ms', new Date().getTime() - now);
@@ -130,5 +130,5 @@ test('sierraecg', function (t) {
     });
   });
 
-  t.end();
+  p.end();
 });
