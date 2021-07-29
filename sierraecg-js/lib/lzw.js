@@ -43,7 +43,7 @@ function LzwReader(input, options) {
         throw new Error('Argument out of range: {options.bits} must be at least 10 and no more than 16');
     }
 
-    this.input = Buffer.isBuffer(input) ? input.slice() : new Buffer(input);
+    this.input = Buffer.isBuffer(input) ? input.slice() : Buffer.from(input);
     this.offset = 0;
 
     debug('compressed size %d bytes', this.input.length);
@@ -127,7 +127,7 @@ LZWP.decodeSync = function LzwReader_DecodeSync() {
     }
 
     debug('decompressed %d bytes', output.length);
-    return new Buffer(output);
+    return Buffer.from(output);
 };
 
 LZWP.decode = function LzwReader_Decode(cb) {
@@ -169,7 +169,7 @@ LZWP.decode = function LzwReader_Decode(cb) {
     if (!goingNext) {
       process.nextTick(function () {
         debug('decompressed %d bytes', output.length);
-        return cb(null, new Buffer(output));
+        return cb(null, Buffer.from(output));
       });
     }
     else {
@@ -181,6 +181,12 @@ LZWP.decode = function LzwReader_Decode(cb) {
   return next();
 };
 
+/**
+ * @constructor
+ * @param {*} code 
+ * @param {*} value 
+ * @returns 
+ */
 function Code(code, value) {
     if (!(this instanceof Code)) return new Code(code, value);
     this.code = code;

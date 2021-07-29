@@ -107,7 +107,7 @@ function SierraEcg_ParseXml(xdoc) {
     }
 
     if (isBase64 && isXli) {
-      var b64 = new Buffer(parsedwaveforms._, 'base64');
+      var b64 = Buffer.from(parsedwaveforms._, 'base64');
       return resolve({ xml: xdoc, version: version, numberOfLeads: numberOfLeads, leadLabels: leadLabels, parsedWaveforms: b64 });
     }
     else {

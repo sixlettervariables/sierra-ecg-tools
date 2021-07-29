@@ -35,7 +35,7 @@ var kLzwBitsPerCode = 10;
  * @param {Buffer | String} input 
  */
 function XliReader(input) {
-  this.input = Buffer.isBuffer(input) ? input : new Buffer(input);
+  this.input = Buffer.isBuffer(input) ? input : Buffer.from(input);
   this.offset = 0;
 
   debug('initialized XLI encoded data (%d bytes)', this.input.length);
