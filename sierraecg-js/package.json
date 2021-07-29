@@ -39,6 +39,6 @@
   "devDependencies": {
     "istanbul": "^0.3.22",
     "jshint": "^2.8.0",
-    "tape": "^4.2.1"
+    "tape": "^5.3.0"
   }
 }
