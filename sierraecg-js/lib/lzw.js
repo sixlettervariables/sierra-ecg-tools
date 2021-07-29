@@ -26,6 +26,11 @@
 
 var debug = require('debug')('lzw');
 
+/**
+ * @constructor
+ * @param {Buffer | String} input 
+ * @param {*} options 
+ */
 function LzwReader(input, options) {
     /* jshint -W030 */
     options || (options = {});

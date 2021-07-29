@@ -28,6 +28,9 @@ var Promise = require('bluebird');
 
 var XliReader = require('./xli');
 
+/**
+ * @constructor
+ */
 function Ecg(type, leads) {
   if (!(this instanceof Ecg)) {
     return new Ecg(type, leads);
@@ -37,6 +40,9 @@ function Ecg(type, leads) {
   this.leads = leads;
 }
 
+/**
+ * @constructor
+ */
 function Lead(name, data, enabled) {
   if (!(this instanceof Lead)) {
     return new Lead(name, data, enabled);

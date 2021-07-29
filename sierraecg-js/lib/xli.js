@@ -30,12 +30,18 @@ var LzwReader = require('./lzw');
 
 var kLzwBitsPerCode = 10;
 
-var XLI = module.exports = function XliReader(input) {
+/**
+ * @constructor
+ * @param {Buffer | String} input 
+ */
+function XliReader(input) {
   this.input = Buffer.isBuffer(input) ? input : new Buffer(input);
   this.offset = 0;
 
   debug('initialized XLI encoded data (%d bytes)', this.input.length);
-};
+}
+
+var XLI = module.exports = XliReader;
 
 XLI.prototype.extractLeads = function XliReader_ExtractLeads(cb) {
   var self = this;
@@ -72,7 +78,7 @@ XLI.prototype._readChunk = function XliReader_private_ReadChunk(cb) {
   debug('compressed size %d', compressedBlock.length);
   var reader = new LzwReader(compressedBlock, { bits: kLzwBitsPerCode });
 
-  var output = reader.decode(function (err, output) {
+  reader.decode(function (err, output) {
     if (err) {
       return cb(err);
     }
