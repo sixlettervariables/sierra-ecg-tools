@@ -1,0 +1,14 @@
+*.egg-info
+.tox
+.idea
+__pycache__
+.coverage
+.coverage.*
+htmlcov
+*.pyc
+venv
+dist
+.pytest_cache
+.mypy_cache
+build
+site
