@@ -1,5 +1,3 @@
-import pprint
-
 import pytest
 
 from sierraecg.lib import UnsupportedXmlFileError, read_file

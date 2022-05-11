@@ -90,7 +90,7 @@ def get_waveform_data(
 ) -> List[npt.NDArray]:
     sampling_freq = int(get_text(get_node(signal_details, "samplingrate")))
     duration = int(get_attr(parsed_waveforms, "durationperchannel"))
-    sample_count = duration * (sampling_freq / 1000)
+    sample_count = int(duration * (sampling_freq / 1000))
 
     encoding = get_attr(parsed_waveforms, "dataencoding")
     waveform_data = None
@@ -116,12 +116,18 @@ def read_base64_encoding(text: str) -> bytes:
 
 
 def infer_compression(parsed_waveforms: Document) -> str:
-    return get_attr(parsed_waveforms, "compressmethod", "Uncompressed")
+    return get_attr(
+        parsed_waveforms,
+        "compressmethod",
+        get_attr(parsed_waveforms, "compression", "Uncompressed"),
+    )
 
 
-def split_leads(waveform_data: bytes, lead_count: int, samples: int) -> List[npt.NDArray]:
+def split_leads(
+    waveform_data: bytes, lead_count: int, samples: int
+) -> List[npt.NDArray[np.int16]]:
     all_samples = np.frombuffer(waveform_data, dtype=np.int16)
-    leads: List[npt.NDArray] = []
+    leads: List[npt.NDArray[np.int16]] = []
 
     offset = 0
     while offset < lead_count * samples:
@@ -176,7 +182,7 @@ def get_opt_node(xdoc: Document, tag_name: str) -> Optional[Document]:
     return None
 
 
-def get_attr(xdoc: Document, attr_name: str, default: str = None) -> str:
+def get_attr(xdoc: Document, attr_name: str, default: Optional[str] = None) -> str:
     if attr_name in xdoc.attributes:
         return get_text(xdoc.attributes[attr_name])
     if default is None:
