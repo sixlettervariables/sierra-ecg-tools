@@ -43,7 +43,26 @@ def read_file(filename: str) -> SierraEcgFile:
     root = get_node(xdom, "restingecgdata")
     (doc_type, doc_ver) = assert_version(root)
 
-    (leads) = assert_leads(root)
+    leads = assert_leads(root)
+
+    leadI = leads[0].samples
+    leadII = leads[1].samples
+    leadIII = leads[2].samples
+    leadAVR = leads[3].samples
+    leadAVL = leads[4].samples
+    leadAVF = leads[5].samples
+
+    for i in range(len(leadIII)):
+        leadIII[i] = leadII[i] - leadI[i] - leadIII[i]
+
+    for i in range(len(leadAVR)):
+        leadAVR[i] = -leadAVR[i] - ((leadI[i] + leadII[i]) / 2)
+
+    for i in range(len(leadAVL)):
+        leadAVL[i] = ((leadI[i] - leadIII[i]) / 2) - leadAVL[i]
+
+    for i in range(len(leadAVF)):
+        leadAVF[i] = ((leadII[i] + leadIII[i]) / 2) - leadAVF[i]
 
     sierra_ecg_file = SierraEcgFile()
     sierra_ecg_file.doc_type = doc_type
@@ -158,11 +177,11 @@ def get_lead_name(leads_used: str, index: int) -> str:
         elif index == 3:
             return "III"
         elif index == 4:
-            return "III"
+            return "aVR"
         elif index == 5:
-            return "III"
+            return "aVL"
         elif index == 6:
-            return "III"
+            return "aVF"
         elif index > 6 and index <= 12:
             return f"V{index - 6}"
 

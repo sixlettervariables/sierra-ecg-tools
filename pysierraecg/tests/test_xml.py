@@ -44,3 +44,26 @@ def test_assert_leads(filename: str, expected_leads: int) -> None:
     f = read_file(filename)
     assert len(f.leads) == expected_leads
     assert f.leads[0].label == "I"
+    assert len(f.leads[0].samples) == 5500
+    assert f.leads[1].label == "II"
+    assert len(f.leads[1].samples) == 5500
+    assert f.leads[2].label == "III"
+    assert len(f.leads[2].samples) == 5500
+    assert f.leads[3].label == "aVR"
+    assert len(f.leads[3].samples) == 5500
+    assert f.leads[4].label == "aVL"
+    assert len(f.leads[4].samples) == 5500
+    assert f.leads[5].label == "aVF"
+    assert len(f.leads[5].samples) == 5500
+    assert f.leads[6].label == "V1"
+    assert len(f.leads[6].samples) == 5500
+    assert f.leads[7].label == "V2"
+    assert len(f.leads[7].samples) == 5500
+    assert f.leads[8].label == "V3"
+    assert len(f.leads[8].samples) == 5500
+    assert f.leads[9].label == "V4"
+    assert len(f.leads[9].samples) == 5500
+    assert f.leads[10].label == "V5"
+    assert len(f.leads[10].samples) == 5500
+    assert f.leads[11].label == "V6"
+    assert len(f.leads[11].samples) == 5500
