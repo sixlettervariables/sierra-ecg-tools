@@ -51,7 +51,5 @@ def xli_decode_deltas(buffer: List[int], first: int) -> npt.NDArray[np.int16]:
 def xli_unpack(buffer: List[int]) -> npt.NDArray[np.int16]:
     unpacked: npt.NDArray = np.array([0 for _ in range(int(len(buffer) / 2))], dtype=np.int16)
     for i in range(len(unpacked)):
-        hi = (buffer[i] << 8) & 0xFFFF
-        lo = buffer[len(unpacked) + i] & 0xFF
-        unpacked[i] = hi | lo
+        unpacked[i] = (((buffer[i] << 8) | buffer[len(unpacked) + i]) << 16) >> 16
     return unpacked

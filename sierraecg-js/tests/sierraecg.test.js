@@ -57,6 +57,8 @@ test('sierraecg', function (p) {
       t.equal(ecg.leads[11].data.length, 5500, 'Lead V6 should have 5500 samples');
       t.equal(ecg.leads[11].enabled, true, 'Lead V6 should be enabled');
 
+      t.equal(ecg.leads.map(l => l.data[l.data.length / 2]).join(', '), '1')
+
       t.equal(ecg.leads[12].enabled, false, 'Channel 13 should NOT be enabled');
       t.equal(ecg.leads[13].enabled, false, 'Channel 14 should NOT be enabled');
       t.equal(ecg.leads[14].enabled, false, 'Channel 15 should NOT be enabled');
@@ -118,6 +120,8 @@ test('sierraecg', function (p) {
       t.equal(ecg.leads[11].name, 'V6', 'leads[11] should be "V6"');
       t.equal(ecg.leads[11].data.length, 5500, 'Lead V6 should have 5500 samples');
       t.equal(ecg.leads[11].enabled, true, 'Lead V6 should be enabled');
+      
+      t.equal(ecg.leads.map(l => l.data[l.data.length / 2]).join(', '), '1')
 
       t.equal(ecg.leads[12].enabled, false, 'Channel 13 should NOT be enabled');
       t.equal(ecg.leads[13].enabled, false, 'Channel 14 should NOT be enabled');
@@ -180,6 +184,8 @@ test('sierraecg', function (p) {
       t.equal(ecg.leads[11].name, 'V6', 'leads[11] should be "V6"');
       t.equal(ecg.leads[11].data.length, 5500, 'Lead V6 should have 5500 samples');
       t.equal(ecg.leads[11].enabled, true, 'Lead V6 should be enabled');
+
+      t.equal(ecg.leads.map(l => l.data[l.data.length / 2]).join(', '), '1')
 
       t.equal(ecg.leads[12].enabled, false, 'Channel 13 should NOT be enabled');
       t.equal(ecg.leads[13].enabled, false, 'Channel 14 should NOT be enabled');

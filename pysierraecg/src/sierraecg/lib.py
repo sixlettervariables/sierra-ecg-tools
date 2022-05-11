@@ -27,7 +27,7 @@ class EcgLead:
     label = ""
     sampling_freq = 0
     duration = 0
-    samples: npt.NDArray = np.array([], dtype=int)
+    samples: npt.NDArray[np.int16] = np.array([], dtype=np.int16)
 
 
 class SierraEcgFile:
@@ -45,24 +45,24 @@ def read_file(filename: str) -> SierraEcgFile:
 
     leads = assert_leads(root)
 
-    leadI = leads[0].samples
-    leadII = leads[1].samples
-    leadIII = leads[2].samples
-    leadAVR = leads[3].samples
-    leadAVL = leads[4].samples
-    leadAVF = leads[5].samples
+    lead_i = leads[0].samples
+    lead_ii = leads[1].samples
+    lead_iii = leads[2].samples
+    lead_avr = leads[3].samples
+    lead_avl = leads[4].samples
+    lead_avf = leads[5].samples
 
-    for i in range(len(leadIII)):
-        leadIII[i] = leadII[i] - leadI[i] - leadIII[i]
+    for i in range(len(lead_iii)):
+        lead_iii[i] = lead_ii[i] - lead_i[i] - lead_iii[i]
 
-    for i in range(len(leadAVR)):
-        leadAVR[i] = -leadAVR[i] - ((leadI[i] + leadII[i]) / 2)
+    for i in range(len(lead_avr)):
+        lead_avr[i] = -lead_avr[i] - int((lead_i[i] + lead_ii[i]) // 2)
 
-    for i in range(len(leadAVL)):
-        leadAVL[i] = ((leadI[i] - leadIII[i]) / 2) - leadAVL[i]
+    for i in range(len(lead_avl)):
+        lead_avl[i] = int((lead_i[i] - lead_iii[i]) // 2) - lead_avl[i]
 
-    for i in range(len(leadAVF)):
-        leadAVF[i] = ((leadII[i] + leadIII[i]) / 2) - leadAVF[i]
+    for i in range(len(lead_avf)):
+        lead_avf[i] = int((lead_ii[i] + lead_iii[i]) // 2) - lead_avf[i]
 
     sierra_ecg_file = SierraEcgFile()
     sierra_ecg_file.doc_type = doc_type
@@ -150,7 +150,7 @@ def split_leads(
 
     offset = 0
     while offset < lead_count * samples:
-        lead = all_samples[offset:samples]
+        lead = all_samples[offset:offset+samples]
         leads.append(lead)
         offset += samples
 
