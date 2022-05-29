@@ -1,4 +1,5 @@
 from base64 import b64decode
+from math import floor
 from typing import List, Optional, Tuple, Union
 from xml.dom.minidom import Attr, Document
 
@@ -56,13 +57,13 @@ def read_file(filename: str) -> SierraEcgFile:
         lead_iii[i] = lead_ii[i] - lead_i[i] - lead_iii[i]
 
     for i in range(len(lead_avr)):
-        lead_avr[i] = -lead_avr[i] - int((lead_i[i] + lead_ii[i]) // 2)
+        lead_avr[i] = -lead_avr[i] - floor((lead_i[i] + lead_ii[i]) / 2)
 
     for i in range(len(lead_avl)):
-        lead_avl[i] = int((lead_i[i] - lead_iii[i]) // 2) - lead_avl[i]
+        lead_avl[i] = floor((lead_i[i] - lead_iii[i]) / 2) - lead_avl[i]
 
     for i in range(len(lead_avf)):
-        lead_avf[i] = int((lead_ii[i] + lead_iii[i]) // 2) - lead_avf[i]
+        lead_avf[i] = floor((lead_ii[i] + lead_iii[i]) / 2) - lead_avf[i]
 
     sierra_ecg_file = SierraEcgFile()
     sierra_ecg_file.doc_type = doc_type

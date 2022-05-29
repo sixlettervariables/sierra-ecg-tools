@@ -149,17 +149,17 @@ function SierraEcg_UpdateLeads(ecg) {
 
     // lead aVR
     for (ii = 0; ii < leadAVR.length; ++ii) {
-      leadAVR[ii] = -leadAVR[ii] - ((leadI[ii] + leadII[ii]) / 2);
+      leadAVR[ii] = -leadAVR[ii] - Math.floor((leadI[ii] + leadII[ii]) / 2);
     }
 
     // lead aVL
     for (ii = 0; ii < leadAVL.length; ++ii) {
-      leadAVL[ii] = ((leadI[ii] - leadIII[ii]) / 2) - leadAVL[ii];
+      leadAVL[ii] = Math.floor((leadI[ii] - leadIII[ii]) / 2) - leadAVL[ii];
     }
 
     // lead aVF
     for (ii = 0; ii < leadAVF.length; ++ii) {
-      leadAVF[ii] = ((leadII[ii] + leadIII[ii]) / 2) - leadAVF[ii];
+      leadAVF[ii] = Math.floor((leadII[ii] + leadIII[ii]) / 2) - leadAVF[ii];
     }
 
     return resolve(ecg);

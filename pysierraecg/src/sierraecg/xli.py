@@ -15,7 +15,6 @@ def xli_decode(data: bytes, labels: List[str]) -> List[npt.NDArray[np.int16]]:
 
         size = int.from_bytes(header[0:4], byteorder="little", signed=True)
         start = int.from_bytes(header[6:], byteorder="little", signed=True)
-
         chunk = data[offset : offset + size]
         offset += size
 

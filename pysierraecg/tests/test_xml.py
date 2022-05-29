@@ -36,8 +36,8 @@ def test_assert_version(filename: str, expected_message: str) -> None:
     "filename, expected_leads, expected_midpoints",
     [
         ("tests/fixtures/1_03/129DYPRG.XML", 12, [-9, -17, -7, 13, -1, -12, 0, -1, -3, -4, -7, -6]),
-        ("tests/fixtures/1_04/3191723_ZZDEMOPTONLY_1-04_orig.xml", 12, [-11, -54, -43, 32.5, 16, -49.5, 7, -4, -14, -41, -35, -33]),
-        ("tests/fixtures/1_04/ad4d3d80-d165_1-04_orig.xml", 12, [0,0,0,0,0,0,0,0,0,0,0,0]),
+        ("tests/fixtures/1_04/3191723_ZZDEMOPTONLY_1-04_orig.xml", 12, [-11, -54, -43, 33, 16, -50, 7, -4, -14, -41, -35, -33]),
+        ("tests/fixtures/1_04/ad4d3d80-d165_1-04_orig.xml", 12, [32, 46, 14, -39, 9, 30, -74, 320, -1633, 197, 26, 55]),
         ("tests/fixtures/1_04_01/2020-5-18_15-48-11.xml", 12, [-12, 78, 90, -33, -51, 84, 14, 3, -24, -20, -13, -21]),
     ],
 )
@@ -79,4 +79,4 @@ def test_assert_leads(filename: str, expected_leads: int, expected_midpoints: Li
     assert f.leads[10].samples[2750] == expected_midpoints[10]
     assert f.leads[11].label == "V6"
     assert len(f.leads[11].samples) == 5500
-    assert f.leads[11].samples[2750] == expected_midpoints[10]
+    assert f.leads[11].samples[2750] == expected_midpoints[11]

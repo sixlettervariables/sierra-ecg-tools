@@ -109,7 +109,7 @@ XLI.prototype._unpack = function XliReader_private_Unpack(bytes, cb) {
   }
 
   process.nextTick(function () {
-    var unpacked = unpack();
+    var unpacked = unpack(bytes);
     process.nextTick(function () {
       return cb(null, unpacked);
     });
