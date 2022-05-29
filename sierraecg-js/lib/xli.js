@@ -99,7 +99,7 @@ XLI.prototype._readChunk = function XliReader_private_ReadChunk(cb) {
 };
 
 XLI.prototype._unpack = function XliReader_private_Unpack(bytes, cb) {
-  function unpack() {
+  function unpack(bytes) {
     var unpacked = new Array(Math.floor(bytes.length / 2));
     for (var ii = 0; ii < unpacked.length; ++ii) {
       unpacked[ii] = (((bytes[ii] << 8) | bytes[ii + unpacked.length]) << 16) >> 16;
@@ -109,7 +109,7 @@ XLI.prototype._unpack = function XliReader_private_Unpack(bytes, cb) {
   }
 
   process.nextTick(function () {
-    var unpacked = unpack();
+    var unpacked = unpack(bytes);
     process.nextTick(function () {
       return cb(null, unpacked);
     });

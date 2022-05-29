@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.mypy]
+ignore_missing_imports = true
+strict = true
+# If certain strict config options are too pedantic for a project,
+# disable them selectively here by setting to false.
+
+[tool.black]
+# Use the more relaxed max line length permitted in PEP 8.
+line-length = 99
+target-version = ["py38", "py39", "py310"]
+# black will automatically exclude all files listed in .gitignore
+# If you need to exclude additional folders, consider using extend-exclude to avoid disabling the
+# default .gitignore behaviour.
+
+[tool.isort]
+profile = "black"
+line_length = 99
+force_sort_within_sections = true
+# Inform isort of paths to import names that should be considered part of the "First Party" group.
+src_paths = ["src/sierraecg"]
+skip_gitignore = true
+# If you need to skip/exclude folders, consider using skip_glob as that will allow the
+# isort defaults for skip to remain without the need to duplicate them.
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    # When running tests, treat warnings as errors (e.g. -Werror).
+    # See: https://docs.pytest.org/en/latest/reference/reference.html#confval-filterwarnings
+    "error",
+    # Add additional warning supressions as needed here. For example, if a third-party library
+    # is throwing a deprecation warning that needs to be fixed upstream:
+    # "ignore::DeprecationWarning:typer",
+]
+
+[tool.coverage.run]
+branch = true

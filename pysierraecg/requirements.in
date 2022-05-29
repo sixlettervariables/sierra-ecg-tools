@@ -1,0 +1,4 @@
+colorama
+typer
+defusedxml
+numpy
