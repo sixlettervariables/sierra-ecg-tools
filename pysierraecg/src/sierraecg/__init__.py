@@ -4,6 +4,7 @@ from .lib import (
     MissingXmlElementError,
     SierraEcgFile,
     UnsupportedXmlFileError,
+    read_file,
 )
 
 __all__ = [
@@ -12,6 +13,7 @@ __all__ = [
     "MissingXmlAttributeError",
     "SierraEcgFile",
     "UnsupportedXmlFileError",
+    "read_file",
 ]
 
 __version__ = "0.1.0"

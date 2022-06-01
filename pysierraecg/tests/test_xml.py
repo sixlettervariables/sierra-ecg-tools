@@ -2,8 +2,7 @@ from typing import List
 
 import pytest
 
-from sierraecg import UnsupportedXmlFileError
-from sierraecg.lib import read_file
+from sierraecg import UnsupportedXmlFileError, read_file
 
 
 @pytest.mark.parametrize(
