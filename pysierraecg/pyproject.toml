@@ -2,6 +2,73 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "sierraecg"
+version = "0.1.0"
+description = "Sierra ECG Tools for Python"
+readme = "README.md"
+authors = [{ name = "Christopher Watford", email = "christopher.watford@gmail.com" }]
+license = { file = "LICENSE.txt" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+keywords = ["ecg", "sierraecg", "xml"]
+dependencies = [
+    "defusedxml",
+    "numpy",
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/sixlettervariables/sierra-ecg-tools"
+
+[project.optional-dependencies]
+dev = [
+    # Testing.
+    "tox",
+
+    "pytest",
+    "pytest-cov",
+
+    # Type checking.
+    "mypy",
+    # As of mypy 0.900, mypy no longer bundles the stubs for third-party libraries that reside
+    # in the typeshed project. Add these "types-" packages here if you depend on them in
+    # requirements.in (e.g. types-requests).
+    # See: http://mypy-lang.blogspot.com/2021/06/mypy-0900-released.html
+    #      https://github.com/python/typeshed/tree/master/stubs
+
+    # Linting.
+    "flake8", 
+    "flake8-bugbear",
+    "flake8-broken-line",
+    "flake8-comprehensions",
+    "pep8-naming",
+
+    # Formatting.
+    "black",
+    "isort",
+
+    # Setup
+    "pip-tools",
+    "bumpver",
+
+    # Documentation.
+    "mkdocs-material",
+    "mkdocs-htmlproofer-plugin",
+    "mkdocstrings[python]",
+
+    ## Autodoc.
+    "mkdocs-gen-files",
+    "mkdocs-literate-nav",
+]
+
 [tool.mypy]
 ignore_missing_imports = true
 strict = true
@@ -38,3 +105,18 @@ filterwarnings = [
 
 [tool.coverage.run]
 branch = true
+
+[tool.check-manifest]
+ignore = [".dockerignore", ".editorconfig", "Dockerfile"]
+
+[tool.bumpver]
+current_version = "0.1.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message  = "Bump version {old_version} -> {new_version}"
+commit          = true
+tag             = true
+push            = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
+"src/reader/__init__.py" = ["{version}"]

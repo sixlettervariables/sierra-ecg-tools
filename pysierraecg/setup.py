@@ -36,7 +36,7 @@ setuptools.setup(
     # For VCS dependencies, use pip >= 19 and the PEP 508 syntax.
     #   Example: requests @ git+https://github.com/requests/requests.git@branch_or_tag
     #   See: https://github.com/pypa/pip/issues/6162
-    install_requires=project_dir.joinpath("requirements.txt").read_text().split("\n"),
+    install_requires=["defusedxml", "numpy"],
     zip_safe=False,
     license="MIT",
     classifiers=[
@@ -52,5 +52,4 @@ setuptools.setup(
         "Programming Language :: Python :: 3.10",
         "Typing :: Typed",
     ],
-    entry_points={"console_scripts": ["sierraecg=sierraecg.cli:main"]},
 )

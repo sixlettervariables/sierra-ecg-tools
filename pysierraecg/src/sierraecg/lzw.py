@@ -1,30 +1,30 @@
-import array
-from typing import Dict, Literal, Optional
+from array import array
+from typing import Dict, MutableSequence, Optional
 
 
 class LzwDecoder(object):
     """Provides a decoder for LZW compression"""
 
     buffer: bytes
-    offset: int = 0
-    bits: int = 0
-    max_code: int = 0
+    offset = 0
+    bits = 0
+    max_code = 0
 
-    bit_count: int = 0
-    bit_buffer: int = 0
+    bit_count = 0
+    bit_buffer = 0
 
-    previous: array.array = array.array("B", [])
-    next_code: int = 256
-    strings: Dict[int, array.array] = {}
+    previous: MutableSequence[int] = array("B", [])
+    next_code = 256
+    strings: Dict[int, MutableSequence[int]] = {}
 
-    current: Optional[array.array] = None
-    position: int = 0
+    current: Optional[MutableSequence[int]] = None
+    position = 0
 
     def __init__(self, buffer: bytes, bits: int):
         self.buffer = buffer
         self.bits = bits
         self.max_code = (1 << bits) - 2
-        self.strings = {code: array.array("B", [code]) for code in range(256)}
+        self.strings = {code: array("B", [code]) for code in range(256)}
 
     def read(self) -> int:
         if self.current is None or self.position == len(self.current):
@@ -38,13 +38,13 @@ class LzwDecoder(object):
 
         return -1
 
-    def read_bytes(self, count: int) -> array.array:
-        return array.array("B", [self.read() for _ in range(count)])
+    def read_bytes(self, count: int) -> MutableSequence[int]:
+        return array("B", [self.read() for _ in range(count)])
 
-    def _read_next_string(self) -> array.array:
+    def _read_next_string(self) -> MutableSequence[int]:
         code = self._read_codepoint()
         if code >= 0 and code <= self.max_code:
-            data: array.array
+            data: Optional[MutableSequence[int]] = None
             if code not in self.strings:
                 data = self.previous[:]
                 data.append(self.previous[0])
@@ -61,7 +61,7 @@ class LzwDecoder(object):
             self.previous = data
             return data
 
-        return array.array("B", [])
+        return array("B", [])
 
     def _read_codepoint(self) -> int:
         code = 0

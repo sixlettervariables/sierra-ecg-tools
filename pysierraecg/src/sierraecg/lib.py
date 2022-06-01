@@ -1,6 +1,6 @@
 from base64 import b64decode
 from math import floor
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union, cast
 from xml.dom.minidom import Attr, Document
 
 from defusedxml import minidom
@@ -107,7 +107,7 @@ def assert_leads(elt: Document) -> List[EcgLead]:
 
 def get_waveform_data(
     signal_details: Document, parsed_waveforms: Document, labels: List[str]
-) -> List[npt.NDArray]:
+) -> List[npt.NDArray[np.int16]]:
     sampling_freq = int(get_text(get_node(signal_details, "samplingrate")))
     duration = int(get_attr(parsed_waveforms, "durationperchannel"))
     sample_count = int(duration * (sampling_freq / 1000))
@@ -146,12 +146,12 @@ def infer_compression(parsed_waveforms: Document) -> str:
 def split_leads(
     waveform_data: bytes, lead_count: int, samples: int
 ) -> List[npt.NDArray[np.int16]]:
-    all_samples = np.frombuffer(waveform_data, dtype=np.int16)
+    all_samples: npt.NDArray[np.int16] = np.frombuffer(waveform_data, dtype=np.int16)
     leads: List[npt.NDArray[np.int16]] = []
 
     offset = 0
     while offset < lead_count * samples:
-        lead = all_samples[offset:offset+samples]
+        lead = all_samples[offset : offset + samples]
         leads.append(lead)
         offset += samples
 
@@ -198,7 +198,7 @@ def get_node(xdoc: Document, tag_name: str) -> Document:
 
 def get_opt_node(xdoc: Document, tag_name: str) -> Optional[Document]:
     for xelt in xdoc.getElementsByTagName(tag_name):
-        return xelt
+        return cast(Document, xelt)
     return None
 
 

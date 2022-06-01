@@ -1,5 +1,5 @@
 include README.md
 include LICENSE.txt
-include requirements.txt
+include pyproject.toml
 include src/sierraecg/py.typed
 recursive-exclude tests *
