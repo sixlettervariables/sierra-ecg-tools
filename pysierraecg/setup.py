@@ -8,7 +8,7 @@ project_dir = Path(__file__).parent
 
 setuptools.setup(
     name="sierraecg",
-    version="0.1.0",
+    version="0.2.0",
     description="Sierra ECG Tools for Python",
     # Use UTF-8 encoding for README even on Windows by using the encoding argument.
     long_description=project_dir.joinpath("README.md").read_text(encoding="utf-8"),
