@@ -77,7 +77,12 @@ def assert_version(elt: Document) -> Tuple[str, str]:
     doc_info = get_node(elt, "documentinfo")
     doc_type = get_text(get_node(doc_info, "documenttype"))
     doc_ver = get_text(get_node(doc_info, "documentversion"))
-    if doc_type not in ["SierraECG", "PhilipsECG"] or doc_ver not in ["1.03", "1.04", "1.04.01"]:
+    if doc_type not in ["SierraECG", "PhilipsECG"] or doc_ver not in [
+        "1.03",
+        "1.04",
+        "1.04.01",
+        "1.04.02",
+    ]:
         raise UnsupportedXmlFileError(f"Files of type {doc_type} {doc_ver} are unsupported")
 
     return (doc_type, doc_ver)

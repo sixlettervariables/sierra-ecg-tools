@@ -35,12 +35,12 @@ def xli_decode(data: bytes, labels: List[str]) -> List[npt.NDArray[np.int16]]:
 
 def xli_decode_deltas(buffer: List[int], first: int) -> npt.NDArray[np.int16]:
     deltas = xli_unpack(buffer)
-    x = deltas[0]
-    y = deltas[1]
+    x = int(deltas[0])
+    y = int(deltas[1])
     last = first
     for i in range(2, len(deltas)):
         z = (y + y) - x - last
-        last = deltas[i] - 64
+        last = int(deltas[i]) - 64
         deltas[i] = z
         x = y
         y = z

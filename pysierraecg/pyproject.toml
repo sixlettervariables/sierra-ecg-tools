@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sierraecg"
-version = "0.2.0"
+version = "0.2.1"
 description = "Sierra ECG Tools for Python"
 readme = "README.md"
 authors = [{ name = "Christopher Watford", email = "christopher.watford@gmail.com" }]
@@ -110,7 +110,7 @@ branch = true
 ignore = [".dockerignore", ".editorconfig", "Dockerfile"]
 
 [tool.bumpver]
-current_version = "0.1.0"
+current_version = "0.2.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message  = "Bump version {old_version} -> {new_version}"
 commit          = true
