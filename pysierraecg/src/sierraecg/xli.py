@@ -52,5 +52,6 @@ def xli_unpack(buffer: List[int]) -> npt.NDArray[np.int16]:
         [0 for _ in range(int(len(buffer) / 2))], dtype=np.int16
     )
     for i in range(len(unpacked)):
-        unpacked[i] = (((buffer[i] << 8) | buffer[len(unpacked) + i]) << 16) >> 16
+        joined_bytes = (((buffer[i] << 8) | buffer[len(unpacked) + i]) << 16) >> 16
+        unpacked[i] = np.array(joined_bytes).astype(np.int16)
     return unpacked
