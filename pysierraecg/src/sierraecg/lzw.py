@@ -71,8 +71,10 @@ class LzwDecoder(object):
                 self.offset += 1
                 self.bit_buffer |= ((next_byte & 0xFF) << (24 - self.bit_count)) & 0xFFFFFFFF
                 self.bit_count += 8
-            else:
+            elif self.bit_count < self.bits:
                 return -1
+            else:
+                break
 
         code = (self.bit_buffer >> (32 - self.bits)) & 0x0000FFFF
         self.bit_buffer = ((self.bit_buffer & 0xFFFFFFFF) << self.bits) & 0xFFFFFFFF
