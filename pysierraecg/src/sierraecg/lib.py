@@ -9,6 +9,8 @@ import numpy.typing as npt
 
 from sierraecg.xli import xli_decode
 
+import matplotlib.pyplot as plt
+from array import array
 
 class UnsupportedXmlFileError(RuntimeError):
     """Raised when the XML file format is unsupported"""
@@ -29,6 +31,16 @@ class EcgLead:
     sampling_freq = 0
     duration = 0
     samples: npt.NDArray[np.int16] = np.array([], dtype=np.int16)
+    
+class EcgRepbeat:
+    """Represents an ECG Representive Beat"""
+
+    label = ""
+    sampling_freq = 0
+    duration = 0
+    resolution = 0
+    method = ""
+    samples: npt.NDArray[np.int16] = np.array([], dtype=np.int16)
 
 
 class SierraEcgFile:
@@ -37,6 +49,7 @@ class SierraEcgFile:
     doc_type = ""
     doc_ver = ""
     leads: List[EcgLead] = []
+    repbeats: List[EcgRepbeat] = []
 
 
 def read_file(filename: str) -> SierraEcgFile:
@@ -44,7 +57,7 @@ def read_file(filename: str) -> SierraEcgFile:
     root = get_node(xdom, "restingecgdata")
     (doc_type, doc_ver) = assert_version(root)
 
-    leads = assert_leads(root)
+    leads, labels = assert_leads(root)
 
     lead_i = leads[0].samples
     lead_ii = leads[1].samples
@@ -69,6 +82,9 @@ def read_file(filename: str) -> SierraEcgFile:
     sierra_ecg_file.doc_type = doc_type
     sierra_ecg_file.doc_ver = doc_ver
     sierra_ecg_file.leads = leads
+    
+    repbeats = assert_reps(root, labels)
+    sierra_ecg_file.repbeats = repbeats
 
     return sierra_ecg_file
 
@@ -107,7 +123,38 @@ def assert_leads(elt: Document) -> List[EcgLead]:
         lead.samples = waveform_data[index]
         leads.append(lead)
 
-    return leads
+    return leads, labels
+    
+def assert_reps(elt, labels):
+    
+    # get repbeats dataencoding
+    rep_encoding = get_attr(get_node(elt, "repbeats"), "dataencoding")
+    rep_sampleingrate = get_attr(get_node(elt, "repbeats"), "samplespersec")
+    rep_resolution = get_attr(get_node(elt, "repbeats"), "resolution")
+    rep_method = get_attr(get_node(elt, "repbeats"), "repbeatmethod")
+    # not using get_nodes becuase cast only returns one waveform
+    rep_repbeats = elt.getElementsByTagName("repbeat")
+    rep_waveforms = elt.getElementsByTagName("waveform")
+    # check leads in same order as parsedwaveform
+    rep_labels = [get_attr(item, "leadname") for item in rep_repbeats]
+    if rep_labels != labels:
+        raise ValueError("Ordering of Leads not same for parsedwaveform and repbeats")
+    repbeats: List[EcgRepbeat] = []
+    for idx, item in enumerate(rep_waveforms):
+        repbeat = EcgRepbeat()
+        duration = get_attr(item, "duration")
+        if rep_encoding == "Base64":
+            rep_waveform_data = read_base64_encoding(get_text(item))
+        rep_waveform_data = np.frombuffer(rep_waveform_data, dtype= np.uint16)
+        repbeat.label = rep_labels[idx]
+        repbeat.sampling_freq = rep_sampleingrate
+        repbeat.duration = duration
+        repbeat.resolution = rep_resolution
+        repbeat.method = rep_method
+        repbeat.samples = rep_waveform_data
+        repbeats.append(repbeat)
+        
+    return repbeats
 
 
 def get_waveform_data(
