@@ -9,8 +9,6 @@ import numpy.typing as npt
 
 from sierraecg.xli import xli_decode
 
-import matplotlib.pyplot as plt
-from array import array
 
 class UnsupportedXmlFileError(RuntimeError):
     """Raised when the XML file format is unsupported"""
