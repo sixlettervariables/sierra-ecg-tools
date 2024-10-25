@@ -145,7 +145,7 @@ def assert_reps(elt, labels):
         duration = get_attr(item, "duration")
         if rep_encoding == "Base64":
             rep_waveform_data = read_base64_encoding(get_text(item))
-        rep_waveform_data = np.frombuffer(rep_waveform_data, dtype= np.uint16)
+        rep_waveform_data = np.frombuffer(rep_waveform_data, dtype= np.int16)
         repbeat.label = rep_labels[idx]
         repbeat.sampling_freq = rep_sampleingrate
         repbeat.duration = duration
