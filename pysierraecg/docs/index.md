@@ -5,13 +5,33 @@
     For more information on how this was built and deployed, as well as other Python best
     practices, see [`python-blueprint`](https://github.com/johnthagen/python-blueprint).
 
-!!! info
-
-    This user guide is purely an illustrative example that shows off several features of MkDocs
-    and included Markdown extensions.
-
 ## Installation
 
+Install the `sierraecg` package using pip:
+
+```bash
+pip install sierraecg
+```
+
+## Quick Start
+
+To use `sierraecg` within your project, import the `read_file` function and execute it like:
+
+```python
+from sierraecg import read_file
+
+# (1)
+f = read_file("path/to/file.xml")
+assert f is not None
+```
+
+1. This assertion will be `True`
+
+!!! tip
+
+    Within PyCharm, use ++tab++ to auto-complete suggested imports while typing.
+
+## Contributing
 First, create and activate a Python virtual environment:
 
 === "Linux/macOS"
@@ -28,29 +48,32 @@ First, create and activate a Python virtual environment:
     venv\Scripts\activate
     ```
 
-Then install the `sierraecg` package:
+Next install the bootstrap requirements:
 
-```bash
-pip install .
-```
+=== "Linux/macOS"
 
-## Quick Start
+    ```bash
+    pip install -r bootstrap-requirements.txt
+    ```
 
-To use `sierraecg` within your project, import the `read_file` function and execute it like:
+=== "Windows"
 
-```python
-from sierraecg.lib import read_file
+    ```powershell
+    pip install -r bootstrap-requirements.txt
+    ```
 
-# (1)
-f = read_file("path/to/file.xml")
-assert f is not None
-```
+Next create local requirements files:
 
-1. This assertion will be `True`
+=== "Linux/macOS"
 
-!!! tip
+    ```bash
+    pip-compile --extra=dev --output-file=dev-requirements.txt pyproject.toml
+    pip-compile --output-file=requirements.txt pyproject.toml
+    ```
 
-    Within PyCharm, use ++tab++ to auto-complete suggested imports while typing.
+=== "Windows"
 
-### Expected Results
-
+    ```powershell
+    pip-compile --extra=dev --output-file=dev-requirements.txt pyproject.toml
+    pip-compile --output-file=requirements.txt pyproject.toml
+    ```
