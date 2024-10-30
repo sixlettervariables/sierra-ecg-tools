@@ -1,5 +1,6 @@
 from .lib import (
     EcgLead,
+    EcgRepbeat,
     MissingXmlAttributeError,
     MissingXmlElementError,
     SierraEcgFile,
@@ -9,6 +10,7 @@ from .lib import (
 
 __all__ = [
     "EcgLead",
+    "EcgRepbeat",
     "MissingXmlElementError",
     "MissingXmlAttributeError",
     "SierraEcgFile",
@@ -16,4 +18,4 @@ __all__ = [
     "read_file",
 ]
 
-__version__ = "0.2.1"
+__version__ = "0.3.1"

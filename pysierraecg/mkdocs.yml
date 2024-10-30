@@ -35,6 +35,8 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/sixlettervariables/sierra-ecg-tools
+watch:
+  - src
 # This is needed to allow links to work when opened from the file system.
 use_directory_urls: false
 plugins:
@@ -45,8 +47,6 @@ plugins:
           rendering:
             show_if_no_docstring: true
             show_signature_annotations: true
-      watch:
-        - src
   # Autodoc configuration.
   # https://mkdocstrings.github.io/recipes/#automatic-code-reference-pages
   - gen-files:

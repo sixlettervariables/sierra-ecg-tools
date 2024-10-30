@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sierraecg"
-version = "0.2.1"
+version = "0.3.1"
 description = "Sierra ECG Tools for Python"
 readme = "README.md"
 authors = [{ name = "Christopher Watford", email = "christopher.watford@gmail.com" }]
@@ -14,16 +14,18 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 keywords = ["ecg", "sierraecg", "xml"]
 dependencies = [
     "defusedxml",
     "numpy",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 
 [project.urls]
 Homepage = "https://github.com/sixlettervariables/sierra-ecg-tools"
@@ -78,7 +80,7 @@ strict = true
 [tool.black]
 # Use the more relaxed max line length permitted in PEP 8.
 line-length = 99
-target-version = ["py38", "py39", "py310"]
+target-version = ["py39", "py310", "py311", "py312", "py313"]
 # black will automatically exclude all files listed in .gitignore
 # If you need to exclude additional folders, consider using extend-exclude to avoid disabling the
 # default .gitignore behaviour.
@@ -110,7 +112,7 @@ branch = true
 ignore = [".dockerignore", ".editorconfig", "Dockerfile"]
 
 [tool.bumpver]
-current_version = "0.2.1"
+current_version = "0.3.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message  = "Bump version {old_version} -> {new_version}"
 commit          = true

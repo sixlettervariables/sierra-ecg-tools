@@ -8,7 +8,7 @@ project_dir = Path(__file__).parent
 
 setuptools.setup(
     name="sierraecg",
-    version="0.2.1",
+    version="0.3.1",
     description="Sierra ECG Tools for Python",
     # Use UTF-8 encoding for README even on Windows by using the encoding argument.
     long_description=project_dir.joinpath("README.md").read_text(encoding="utf-8"),
@@ -20,7 +20,7 @@ setuptools.setup(
     package_dir={"": "src"},
     # pip 9.0+ will inspect this field when installing to help users install a
     # compatible version of the library for their Python version.
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     # There are some peculiarities on how to include package data for source
     # distributions using setuptools. You also need to add entries for package
     # data to MANIFEST.in.
@@ -47,9 +47,11 @@ setuptools.setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Typing :: Typed",
     ],
 )

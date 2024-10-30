@@ -4,7 +4,7 @@ Sierra ECG Tools for Python.
 
 # Requirements
 
-Python 3.8+.
+Python 3.9+.
 
 # Dependencies
 
