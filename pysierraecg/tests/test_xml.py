@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 import pytest
 
@@ -97,3 +97,57 @@ def test_assert_leads(filename: str, expected_leads: int, expected_midpoints: Li
     assert f.leads[11].label == "V6"
     assert len(f.leads[11].samples) == 5500
     assert f.leads[11].samples[2750] == expected_midpoints[11]
+
+
+@pytest.mark.parametrize(
+    "filename, expected_labels, expected_samples, expected_duration, expected_midpoints",
+    [
+        (
+            "tests/fixtures/1_03/129DYPRG.XML",
+            [],
+            None,
+            None,
+            [],
+        ),
+        (
+            "tests/fixtures/1_04/3191723_ZZDEMOPTONLY_1-04_orig.xml",
+            ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
+            1200,
+            2400,
+            # CAW: this seems off
+            [32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767],
+        ),
+        (
+            "tests/fixtures/1_04/ad4d3d80-d165_1-04_orig.xml",
+            ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
+            1200,
+            2400,
+            # CAW: this seems off
+            [32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767],
+        ),
+        (
+            "tests/fixtures/1_04_01/2020-5-18_15-48-11.xml",
+            ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
+            1200,
+            1200,
+            [-11, -36, -32, 25, 5, -29, 12, 1, -20, -51, -58, -52],
+        ),
+    ],
+)
+def test_assert_repbeats(
+    filename: str,
+    expected_labels: List[str],
+    expected_samples: Optional[int],
+    expected_duration: Optional[int],
+    expected_midpoints: List[int],
+) -> None:
+    f = read_file(filename)
+    assert len(f.repbeats) == len(expected_labels)
+    for i, expected_label in enumerate(expected_labels):
+        repbeat = f.repbeats[expected_label]
+        assert repbeat is not None
+        assert repbeat.label == expected_label
+        if expected_samples is not None and expected_duration is not None:
+            assert repbeat.duration == expected_duration
+            assert len(repbeat.samples) == expected_samples
+            assert repbeat.samples[int(expected_samples / 2)] == expected_midpoints[i]
