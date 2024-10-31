@@ -51,7 +51,24 @@ class SierraEcgFile:
     repbeats: Dict[str, EcgRepbeat] = {}
 
 
-def read_file(filename: str) -> SierraEcgFile:
+def read_file(filename: str, include_repbeats: bool = False) -> SierraEcgFile:
+    """
+    Read a Philips Sierra ECG file.
+    
+    Parameters
+    ----------
+    filename : str
+        Path to the Philips Sierra ECG file.
+
+    include_repbeats : bool
+        Indicates whether to include representative beats.
+        Default is False.
+
+    Returns
+    -------
+    SierraEcgFile
+        The parsed Philips Sierra ECG file.
+    """
     xdom = minidom.parse(filename)
     root = get_node(xdom, "restingecgdata")
     (doc_type, doc_ver) = assert_version(root)
@@ -82,8 +99,9 @@ def read_file(filename: str) -> SierraEcgFile:
     sierra_ecg_file.doc_ver = doc_ver
     sierra_ecg_file.leads = leads
 
-    repbeats = assert_reps(root)
-    sierra_ecg_file.repbeats = repbeats
+    if include_repbeats:
+        repbeats = assert_reps(root)
+        sierra_ecg_file.repbeats = repbeats
 
     return sierra_ecg_file
 
@@ -132,9 +150,11 @@ def assert_reps(elt: Document) -> Dict[str, EcgRepbeat]:
 
     # get repbeats dataencoding
     encoding = get_attr(elt_repbeats, "dataencoding")
-    samplingrate = int(get_attr(elt_repbeats, "samplespersec"))
-    resolution = float(get_attr(elt_repbeats, "resolution"))
-    method = get_attr(elt_repbeats, "repbeatmethod")
+
+    # Optional in 1.03 files
+    samplingrate = int(get_attr(elt_repbeats, "samplespersec", "0"))
+    resolution = float(get_attr(elt_repbeats, "resolution", "0"))
+    method = get_attr(elt_repbeats, "repbeatmethod", "")
 
     repbeats: Dict[str, EcgRepbeat] = {}
     for item in get_nodes(elt_repbeats, "repbeat"):
@@ -144,18 +164,32 @@ def assert_reps(elt: Document) -> Dict[str, EcgRepbeat]:
         repbeat.resolution = resolution
         repbeat.method = method
 
-        waveform = get_node(item, "waveform")
-        duration = int(get_attr(waveform, "duration"))
-        repbeat.duration = duration
+        waveform = get_opt_node(item, "waveform")
+        if waveform is not None:
+            duration = int(get_attr(waveform, "duration"))
+            repbeat.duration = duration
 
-        if encoding == "Base64":
-            decoded_waveform_data = read_base64_encoding(get_text(waveform))
+            if encoding == "Base64":
+                decoded_waveform_data = read_base64_encoding(get_text(waveform))
+            else:
+                raise UnsupportedXmlFileError(
+                    f"Representative beat waveform data encoding unsupported: {encoding}"
+                )
+
+            repbeat.samples = np.frombuffer(decoded_waveform_data, dtype=np.int16)
         else:
-            raise UnsupportedXmlFileError(
-                f"Representative beat waveform data encoding unspported: {encoding}"
-            )
+            duration = int(get_attr(item, "duration"))
+            repbeat.duration = duration
 
-        repbeat.samples = np.frombuffer(decoded_waveform_data, dtype=np.int16)
+            # 1.03 schema included waveform data directly within the <repbeat> element
+            if encoding == "Base64":
+                decoded_waveform_data = read_base64_encoding(get_text(item))
+            else:
+                raise UnsupportedXmlFileError(
+                    f"Representative beat waveform data encoding unsupported: {encoding}"
+                )
+
+            repbeat.samples = np.frombuffer(decoded_waveform_data, dtype=np.int16)
 
         repbeats[repbeat.label] = repbeat
 
@@ -174,7 +208,7 @@ def get_waveform_data(
     if encoding == "Base64":
         waveform_data = read_base64_encoding(get_text(parsed_waveforms))
     else:
-        raise UnsupportedXmlFileError(f"Waveform data encoding unspported: {encoding}")
+        raise UnsupportedXmlFileError(f"Waveform data encoding unsupported: {encoding}")
 
     compression_method = infer_compression(parsed_waveforms)
     if compression_method != "Uncompressed":
@@ -182,7 +216,7 @@ def get_waveform_data(
             return xli_decode(waveform_data, labels)
         else:
             raise UnsupportedXmlFileError(
-                f"Waveform data compression algorithm unspported: {compression_method}"
+                f"Waveform data compression algorithm unsupported: {compression_method}"
             )
 
     return split_leads(waveform_data, len(labels), sample_count)

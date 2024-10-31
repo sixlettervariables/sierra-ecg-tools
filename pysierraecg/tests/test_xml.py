@@ -110,6 +110,13 @@ def test_assert_leads(filename: str, expected_leads: int, expected_midpoints: Li
             [],
         ),
         (
+            "tests/fixtures/1_03/repbeats_example.xml",
+            ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
+            1200,
+            1200,
+            [-11, -36, -32, 25, 5, -29, 12, 1, -20, -51, -58, -52],
+        ),
+        (
             "tests/fixtures/1_04/3191723_ZZDEMOPTONLY_1-04_orig.xml",
             ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
             1200,
@@ -141,7 +148,7 @@ def test_assert_repbeats(
     expected_duration: Optional[int],
     expected_midpoints: List[int],
 ) -> None:
-    f = read_file(filename)
+    f = read_file(filename, include_repbeats=True)
     assert len(f.repbeats) == len(expected_labels)
     for i, expected_label in enumerate(expected_labels):
         repbeat = f.repbeats[expected_label]
@@ -151,3 +158,11 @@ def test_assert_repbeats(
             assert repbeat.duration == expected_duration
             assert len(repbeat.samples) == expected_samples
             assert repbeat.samples[int(expected_samples / 2)] == expected_midpoints[i]
+
+
+def test_no_repbeats() -> None:
+    f = read_file("tests/fixtures/1_04_01/2020-5-18_15-48-11.xml")
+    assert len(f.repbeats) == 0
+
+    f = read_file("tests/fixtures/1_04_01/2020-5-18_15-48-11.xml", include_repbeats=False)
+    assert len(f.repbeats) == 0
