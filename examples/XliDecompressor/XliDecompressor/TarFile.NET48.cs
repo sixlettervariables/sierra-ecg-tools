@@ -20,10 +20,7 @@
 //  SOFTWARE.
 // </copyright>
 // <author>Christopher A. Watford [christopher.watford@gmail.com]</author>
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
+#if NET48_OR_GREATER
 
 namespace SierraEcg.IO
 {
@@ -39,18 +36,14 @@ namespace SierraEcg.IO
         /// </summary>
         private const int blockSize = 512;
 
-        private Stream innerStream;
+        private readonly Stream _innerStream;
 
         #endregion
 
         /// <summary>
         /// Gets the <see cref="Stream"/> associated with the current entry.
         /// </summary>
-        public Stream Current
-        {
-            get;
-            private set;
-        }
+        private Stream? _currentDataStream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TarFile"/> class from
@@ -59,7 +52,7 @@ namespace SierraEcg.IO
         /// <param name="path">Path to a valid TAR file.</param>
         public TarFile(string path)
         {
-            this.innerStream = File.OpenRead(path);
+            _innerStream = File.OpenRead(path ?? throw new ArgumentNullException(nameof(path)));
         }
 
         /// <summary>
@@ -69,7 +62,7 @@ namespace SierraEcg.IO
         /// <param name="stream"><see cref="Stream"/> containing a TAR file.</param>
         public TarFile(Stream stream)
         {
-            this.innerStream = stream;
+            _innerStream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
         /// <summary>
@@ -80,33 +73,34 @@ namespace SierraEcg.IO
         public IEnumerable<TarEntry> EnumerateEntries(Func<TarEntry, bool>? predicate = null)
         {
             byte[] block = new byte[blockSize];
-            while (this.innerStream.Read(block, 0, blockSize) > 0)
+            while (_innerStream.Read(block, 0, blockSize) > 0)
             {
                 if (block[0] == 0)
                     break;
 
-                this.Current = null;
-                var entry = TarEntry.FromBlock(block);
+                _currentDataStream = null;
+                TarEntry entry = TarEntry.FromBlock(block);
                 if (predicate == null || predicate(entry))
                 {
-                    this.Current = new MemoryStream(entry.Size);
+                    _currentDataStream = new MemoryStream(entry.Size);
                 }
 
                 long position = 0;
                 while (position < entry.Size)
                 {
-                    this.innerStream.Read(block, 0, blockSize);
-                    if (this.Current != null)
+                    _innerStream.Read(block, 0, blockSize);
+                    if (_currentDataStream is not null)
                     {
-                        this.Current.Write(block, 0, (int)Math.Min(entry.Size - this.Current.Position, blockSize));
+                        _currentDataStream.Write(block, 0, (int)Math.Min(entry.Size - _currentDataStream.Position, blockSize));
                     }
 
                     position += blockSize;
                 }
 
-                if (this.Current != null)
+                if (_currentDataStream is not null)
                 {
-                    this.Current.Seek(0, SeekOrigin.Begin);
+                    _currentDataStream.Seek(0, SeekOrigin.Begin);
+                    entry.DataStream = _currentDataStream;
                     yield return entry;
                 }
             }
@@ -117,7 +111,13 @@ namespace SierraEcg.IO
         /// </summary>
         public void Dispose()
         {
-            this.innerStream.Dispose();
+            try
+            {
+                _innerStream.Dispose();
+            }
+            catch { /* CAW: Ignored */ }
         }
     }
 }
+
+#endif

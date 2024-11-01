@@ -21,7 +21,6 @@
 // </copyright>
 // <author>Christopher A. Watford [christopher.watford@gmail.com]</author>
 using System.Diagnostics;
-using System.Runtime.Serialization;
 using System.Xml.Linq;
 
 namespace SierraEcg

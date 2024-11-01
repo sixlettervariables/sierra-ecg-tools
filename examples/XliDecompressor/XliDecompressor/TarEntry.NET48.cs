@@ -20,8 +20,8 @@
 //  SOFTWARE.
 // </copyright>
 // <author>Christopher A. Watford [christopher.watford@gmail.com]</author>
-using System;
-using System.Linq;
+#if NET48_OR_GREATER
+
 using System.Text;
 
 namespace SierraEcg.IO
@@ -29,113 +29,57 @@ namespace SierraEcg.IO
     public class TarEntry
     {
         private static readonly char[] s_trim = [' ', '\0'];
-        private static readonly DateTime epoch
-#if NET8_0_OR_GREATER
-            = DateTime.UnixEpoch
-#else
-            = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-#endif
-            ;
+        private static readonly DateTime s_epoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        public Stream? DataStream { get; internal set; }
 
         //100	 name	 name of file
-        public string? Name
-        {
-            get;
-            private set;
-        }
+        public string? Name { get; private set; }
 
         //8	 mode	 file mode
-        public int Mode
-        {
-            get;
-            private set;
-        }
+        public int Mode { get; private set; }
 
         //8	 uid	 owner user ID	
-        public int UserId
-        {
-            get;
-            private set;
-        }
+        public int UserId { get; private set; }
 
         //8	 gid	 owner group ID
-        public int GroupId
-        {
-            get;
-            private set;
-        }
+        public int GroupId { get; private set; }
 
         //12	 size	 length of file in bytes
-        public int Size
-        {
-            get;
-            private set;
-        }
+        public int Size { get; private set; }
 
         //12	 mtime	 modify time of file
-        public DateTime LastModified
-        {
-            get;
-            private set;
-        }
+        public DateTime LastModified { get; private set; }
 
         //8	 chksum	 checksum for header
-        private int checksum;
+        public int Checksum { get; private set; }
 
         //1	 link	 indicator for links
-        public char Type
-        {
-            get;
-            private set;
-        }
+        public char Type { get; private set; }
 
         //100	 linkname	 name of linked file
-        public string? LinkedName
-        {
-            get;
-            private set;
-        }
+        public string? LinkedName { get; private set; }
 
         //6	 magic	 USTAR indicator
         private string? magic;
 
         //2	 version	 USTAR version
-        private string? version;
+        public string? Version { get; private set; }
 
         //32	 uname	 owner user name
-        public string? UserName
-        {
-            get;
-            private set;
-        }
+        public string? UserName { get; private set; }
 
         //32	 gname	 owner group name
-        public string? GroupName
-        {
-            get;
-            private set;
-        }
+        public string? GroupName { get; private set; }
 
         //8	 devmajor	 device major number
-        public string? DeviceVersionMajor
-        {
-            get;
-            private set;
-        }
+        public string? DeviceVersionMajor { get; private set; }
 
         //8	 devminor	 device minor number
-        public string? DeviceVersionMinor
-        {
-            get;
-            private set;
-        }
+        public string? DeviceVersionMinor { get; private set; }
 
         //155	 prefix	 prefix for file name
-        public string? Prefix
-        {
-            get;
-            private set;
-        }
+        public string? Prefix { get; private set; }
 
         private TarEntry()
         {
@@ -143,39 +87,41 @@ namespace SierraEcg.IO
 
         static string GetString(byte[] block, int start, int count)
         {
-            var debug = Encoding.ASCII.GetString(block, start, count).TrimEnd(s_trim);
+            string debug = Encoding.ASCII.GetString(block, start, count).TrimEnd(s_trim);
             return debug;
         }
 
         static int GetInt32(byte[] block, int start, int count, int @base = 8)
         {
-            var debug = GetString(block, start, count);
+            string debug = GetString(block, start, count);
             return Convert.ToInt32(debug, @base);
         }
 
-        static long GetLong(byte[] block, int start, int count)
+        static DateTime GetTimestamp(byte[] block, int start, int count)
         {
-            var debug = GetString(block, start, count);
-            return Convert.ToInt64(debug);
+            int debug = GetInt32(block, start, count);
+            return s_epoch.AddSeconds(debug);
         }
 
         internal static TarEntry FromBlock(byte[] block)
         {
-            var entry = new TarEntry();
-            entry.Name = GetString(block, 0, 100);
-            entry.Mode = GetInt32(block, 100, 8, @base: 8);
-            entry.UserId = GetInt32(block, 108, 8);
-            entry.GroupId = GetInt32(block, 116, 8);
-            entry.Size = GetInt32(block, 124, 12);
-            int mtime = GetInt32(block, 136, 12);
-            entry.LastModified = epoch.AddSeconds(mtime);
-            int checksum = GetInt32(block, 148, 8);
-            entry.Type = GetString(block, 156, 1)[0];
-            entry.LinkedName = GetString(block, 157, 100);
-            entry.magic = GetString(block, 257, 6);
+            TarEntry entry = new()
+            {
+                Name = GetString(block, 0, 100),
+                Mode = GetInt32(block, 100, 8, @base: 8),
+                UserId = GetInt32(block, 108, 8),
+                GroupId = GetInt32(block, 116, 8),
+                Size = GetInt32(block, 124, 12),
+                LastModified = GetTimestamp(block, 136, 12),
+                Checksum = GetInt32(block, 148, 8),
+                Type = GetString(block, 156, 1)[0],
+                LinkedName = GetString(block, 157, 100),
+                magic = GetString(block, 257, 6)
+            };
+
             if (entry.magic == "ustar")
             {
-                entry.version = GetString(block, 263, 2);
+                entry.Version = GetString(block, 263, 2);
                 entry.UserName = GetString(block, 265, 32);
                 entry.GroupName = GetString(block, 297, 32);
                 entry.DeviceVersionMajor = GetString(block, 329, 8);
@@ -188,3 +134,5 @@ namespace SierraEcg.IO
         }
     }
 }
+
+#endif

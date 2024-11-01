@@ -28,7 +28,7 @@ There are currently integration examples for:
 There are no required compilers for these projects, however, currently only the following has been tested:
 
 - Python: 3.9+
-- C# (.Net 2.0, .Net 4.0/4.5): Visual Studio 2010, Visual Studio 2012, Visual Studio 2013
+- C# (.NET Framework 4.8, .NET 8.0): Visual Studio 2019+, Visual Studio Code
 - Node.js: node v6.0.0+
 - C/C++: Visual Studio 2010, Visual Studio 2012, clang (LLVM 5.1)
 - Java: JDK 1.6+ with JAXB support
