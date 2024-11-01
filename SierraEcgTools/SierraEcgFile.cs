@@ -20,11 +20,8 @@
 //  SOFTWARE.
 // </copyright>
 // <author>Christopher A. Watford [christopher.watford@gmail.com]</author>
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
+using System.Runtime.Serialization;
 using System.Xml.Linq;
 
 namespace SierraEcg
@@ -37,17 +34,17 @@ namespace SierraEcg
     {
         #region Statics
 
-        static XNamespace ns = @"http://www3.medical.philips.com";
+        private static readonly XNamespace ns = @"http://www3.medical.philips.com";
 
-        static XName XERestingEcgData = ns + @"restingecgdata";
+        private static readonly XName XERestingEcgData = ns + @"restingecgdata";
 
-        static XName XEParsedWaveforms = ns + @"parsedwaveforms";
+        private static readonly XName XEParsedWaveforms = ns + @"parsedwaveforms";
 
-        static XName XEDocumentInfo = ns + @"documentinfo";
+        private static readonly XName XEDocumentInfo = ns + @"documentinfo";
 
-        static XName XERepBeat = ns + @"repbeat";
+        private static readonly XName XERepBeat = ns + @"repbeat";
 
-        static HashSet<Version> validVersions = new HashSet<Version>(new[] { new Version("1.03"), new Version("1.04"), new Version("1.04.01") });
+        private static readonly HashSet<Version> s_validVersions = [new Version("1.03"), new Version("1.04"), new Version("1.04.01")];
 
         #endregion Statics
 
@@ -59,9 +56,9 @@ namespace SierraEcg
         /// <returns>Preprocessed Sierra ECG XML.</returns>
         public static XDocument Preprocess(Stream stream)
         {
-            if (stream == null)
+            if (stream is null)
             {
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
             }
 
             return Preprocess(XDocument.Load(stream));
@@ -74,12 +71,12 @@ namespace SierraEcg
         /// <returns><paramref name="xdoc"/> with all encoded and compressed data expanded.</returns>
         public static XDocument Preprocess(XDocument xdoc)
         {
-            if (xdoc == null)
+            if (xdoc is null)
             {
-                throw new ArgumentNullException("xdoc");
+                throw new ArgumentNullException(nameof(xdoc));
             }
 
-            Preprocess(xdoc.Root);
+            Preprocess(xdoc.Root ?? throw new InvalidSierraEcgFileException("Missing root element"));
 
             return xdoc;
         }
@@ -91,21 +88,18 @@ namespace SierraEcg
         /// <returns><paramref name="root"/> with all encoded and compressed data expanded.</returns>
         public static XElement Preprocess(XElement root)
         {
-            if (root == null)
+            if (root is null)
             {
-                throw new ArgumentNullException("root");
+                throw new ArgumentNullException(nameof(root));
             }
             else if (root.Name != XERestingEcgData)
             {
-                throw new ArgumentException("Unknown XML ECG type: " + root.Name);
+                throw new ArgumentException("Unknown XML ECG type: " + root.Name, nameof(root));
             }
 
             // check that this is at least Sierra ECG 1.03
-            var version = DetermineVersion(root);
-            if (version == null)
-            {
-                throw new ArgumentException("Unknown XML ECG version");
-            }
+            Version version = DetermineVersion(root)
+                ?? throw new ArgumentException("Unknown XML ECG version", nameof(root));
 
             PreprocessParsedWaveforms(root, version);
 
@@ -122,40 +116,38 @@ namespace SierraEcg
         /// acquired leads.</returns>
         public static DecodedLead[] ExtractLeads(XDocument xdoc)
         {
-            if (xdoc == null)
+            if (xdoc is null)
             {
-                throw new ArgumentNullException("xdoc");
+                throw new ArgumentNullException(nameof(xdoc));
             }
 
-            return ExtractLeads(xdoc.Root);
+            return ExtractLeads(xdoc.Root ?? throw new InvalidSierraEcgFileException("Missing root element"));
         }
 
         private static DecodedLead[] ExtractLeads(XElement root)
         {
-            Debug.Assert(root != null);
-
             // Retrieve parsedwaveforms element and check if the data is encoded
-            var parsedWaveforms = root.Descendants(XEParsedWaveforms)
-                                      .SingleOrDefault();
-            if (parsedWaveforms != null)
+            XElement? parsedWaveforms = root.Descendants(XEParsedWaveforms)
+                                            .SingleOrDefault();
+            if (parsedWaveforms is not null)
             {
-                var signalCharacteristics = root.Element(ns + "dataacquisition")
-                                                .Element(ns + "signalcharacteristics");
-                var leadsUsed = (string)signalCharacteristics.Element(ns + "acquisitiontype");
-                var goodChannels = (int)signalCharacteristics.Element(ns + "numberchannelsallocated");
-                var sampleRate = (int)signalCharacteristics.Element(ns + "samplerate");
-                var duration = (int)parsedWaveforms.Element(ns + "durationperchannel");
+                XElement signalCharacteristics = root.ElementOrThrow(ns + "dataacquisition", ns + "signalcharacteristics");
+                string leadsUsed = (string)signalCharacteristics.ElementOrThrow(ns + "acquisitiontype");
+                int goodChannels = (int)signalCharacteristics.ElementOrThrow(ns + "numberchannelsallocated");
+                int sampleRate = (int)signalCharacteristics.ElementOrThrow(ns + "samplerate");
+                int duration = (int)parsedWaveforms.ElementOrThrow(ns + "durationperchannel");
 
-                var samples = duration * (sampleRate / 1000);
+                int samples = duration * (sampleRate / 1000);
 
-                object decoded = null;
-                var encoding = (string)parsedWaveforms.Attribute("dataencoding");
+                object? decoded = null;
+                string encoding = (string?)parsedWaveforms.Attribute("dataencoding")
+                    ?? throw new InvalidSierraEcgFileException("Missing required //parsedwaveforms[@dataencoding] attribute");
                 switch (encoding)
                 {
                     case "Plain":
                         return parsedWaveforms.Value
-                                              .Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                                              .Select((vv, ix) => new { I = ix, V = Int32.Parse(vv) })
+                                              .Split([' ', '\t', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
+                                              .Select((vv, ix) => new { I = ix, V = int.Parse(vv) })
                                               .GroupBy(xx => xx.I / samples)
                                               .Select(gg => new DecodedLead(gg.Key + 1, gg.Select(xx => xx.V).ToArray()))
                                               .ToArray();
@@ -168,53 +160,50 @@ namespace SierraEcg
                         throw new InvalidOperationException("Unknown data encoding: " + encoding);
                 }
 
-                var isCompressed = (bool)parsedWaveforms.Attribute("compressflag");
-                var compression = (string)parsedWaveforms.Attribute("compressmethod");
+                bool isCompressed = (bool)parsedWaveforms.AttributeOrThrow("compressflag");
+                string compression = (string)parsedWaveforms.AttributeOrThrow("compressmethod");
                 if (isCompressed)
                 {
-                    if (compression == "XLI" && decoded is byte[])
+                    if (compression == "XLI" && decoded is byte[] v)
                     {
-                        using (var xli = new XliDecompressor((byte[])decoded))
+                        using XliDecompressor xli = new(v);
+                        List<int[]> decodedData = [];
+
+                        int[] payload;
+                        while (null != (payload = xli.ReadLeadPayload()))
                         {
-                            var decodedData = new List<int[]>();
+                            decodedData.Add(payload);
 
-                            int[] payload;
-                            while (null != (payload = xli.ReadLeadPayload()))
-                            {
-                                decodedData.Add(payload);
-
-                                // the DXL algorithm can interpret 16 channels, so often all 16
-                                // will be in the file, but the last 4 will be 0's besides
-                                // their calibration marks at the end. This is a quick check to skip
-                                // what we don't care about.
-                                if (decodedData.Count >= goodChannels)
-                                    break;
-                            }
-
-                            return DecodedLead.ReinterpretLeads(leadsUsed, decodedData).ToArray();
+                            // the DXL algorithm can interpret 16 channels, so often all 16
+                            // will be in the file, but the last 4 will be 0's besides
+                            // their calibration marks at the end. This is a quick check to skip
+                            // what we don't care about.
+                            if (decodedData.Count >= goodChannels)
+                                break;
                         }
+
+                        return DecodedLead.ReinterpretLeads(leadsUsed, decodedData).ToArray();
                     }
                     else
                     {
                         // no can decompress boss man
-                        throw new InvalidOperationException("Unknown compression method: " + compression);
+                        throw new InvalidSierraEcgFileException("Unknown compression method: " + compression);
                     }
                 }
 
                 // handle the case where we've decoded Base64 only data
-                if (decoded is byte[])
+                if (decoded is byte[] bytes)
                 {
-                    var bytes = (byte[])decoded;
-                    var leads = new List<DecodedLead>();
+                    List<DecodedLead> leads = [];
                     for (int offset = 0, lead = 0; offset < bytes.Length; offset += samples * 2)
                     {
-                        var data = new short[samples];
+                        short[] data = new short[samples];
                         Buffer.BlockCopy(bytes, offset, data, 0, samples * 2);
 
                         leads.Add(new DecodedLead(++lead, data.Select(dd => (int)dd).ToArray()));
                     }
 
-                    return leads.ToArray();
+                    return [.. leads];
                 }
             }
 
@@ -224,16 +213,16 @@ namespace SierraEcg
         private static void PreprocessParsedWaveforms(XElement root, Version schemaVersion)
         {
             // Retrieve parsedwaveforms element and check if the data is encoded
-            var parsedWaveforms = root.Descendants(XEParsedWaveforms)
-                                      .SingleOrDefault();
-            if (parsedWaveforms != null)
+            XElement? parsedWaveforms = root.Descendants(XEParsedWaveforms)
+                                            .SingleOrDefault();
+            if (parsedWaveforms is not null)
             {
-                object decoded = null;
+                object? decoded = null;
 
                 //SierraECGSchema_1_04_01:
                 // @dataencoding: how the data is encoded: eg., "Base64".
                 // Use "Plain" for sample values in ascii: "10 20 35...." .
-                var encoding = (string)parsedWaveforms.Attribute("dataencoding");
+                string encoding = (string)parsedWaveforms.AttributeOrThrow("dataencoding");
                 switch (encoding)
                 {
                     case "Plain":
@@ -245,35 +234,35 @@ namespace SierraEcg
                         break;
                     default:
                         // no can decode boss man
-                        throw new InvalidOperationException("Unknown data encoding: " + encoding);
+                        throw new InvalidSierraEcgFileException("Unknown data encoding: " + encoding);
                 }
                 
                 bool isCompressed;
                 string compression;
                 if (schemaVersion < new Version("1.04"))
                 {
-                    isCompressed = (bool)parsedWaveforms.Attribute("compressflag");
-                    compression = (string)parsedWaveforms.Attribute("compressmethod");
+                    isCompressed = (bool)parsedWaveforms.AttributeOrThrow("compressflag");
+                    compression = (string)parsedWaveforms.AttributeOrThrow("compressmethod");
                 }
                 else
                 {
-                    compression = (string)parsedWaveforms.Attribute("compression");
+                    compression = (string)parsedWaveforms.AttributeOrThrow("compression");
                     isCompressed = compression == "XLI";
                 }
 
                 if (isCompressed)
                 {
-                    var signalCharacteristics = root.Element(ns + "dataacquisition")
-                                                    .Element(ns + "signalcharacteristics");
-                    var leadsUsed = (string)signalCharacteristics.Element(ns + "acquisitiontype");
-                    var goodChannels = (int)signalCharacteristics.Element(ns + "numberchannelsallocated");
+                    XElement signalCharacteristics = root.ElementOrThrow(ns + "dataacquisition", ns + "signalcharacteristics");
 
-                    if (compression == "XLI" && decoded is byte[])
+                    string leadsUsed = (string)signalCharacteristics.ElementOrThrow(ns + "acquisitiontype");
+                    int goodChannels = (int)signalCharacteristics.ElementOrThrow(ns + "numberchannelsallocated");
+
+                    if (compression == "XLI" && decoded is byte[] v)
                     {
                         List<DecodedLead> leads;
-                        using (var xli = new XliDecompressor((byte[])decoded))
+                        using (XliDecompressor xli = new(v))
                         {
-                            var decodedData = new List<int[]>();
+                            List<int[]> decodedData = [];
 
                             int[] payload;
                             while (null != (payload = xli.ReadLeadPayload()))
@@ -285,10 +274,12 @@ namespace SierraEcg
                                 // their calibration marks at the end. This is a quick check to skip
                                 // what we don't care about.
                                 if (decodedData.Count >= goodChannels)
+                                {
                                     break;
+                                }
                             }
 
-                            leads = DecodedLead.ReinterpretLeads(leadsUsed, decodedData).ToList();
+                            leads = [ ..DecodedLead.ReinterpretLeads(leadsUsed, decodedData) ];
                         }
 
                         if (schemaVersion < new Version("1.04"))
@@ -305,31 +296,30 @@ namespace SierraEcg
                         }
 
                         // CAW: the default is 25 data points per line
-                        decoded = String.Join(
+                        decoded = string.Join(
                             Environment.NewLine,
                             leads.SelectMany(
                                 lead => lead.Select((vv, ix) => new { I = ix, V = vv })
                                             .GroupBy(xx => xx.I / 25)
-                                            .Select(gg => String.Join(" ", gg.Select(xx => xx.V)))));
+                                            .Select(gg => string.Join(" ", gg.Select(xx => xx.V)))));
                     }
                     else
                     {
                         // no can decompress boss man
-                        throw new InvalidOperationException("Unknown compression method: " + compression);
+                        throw new InvalidSierraEcgFileException("Unknown compression method: " + compression);
                     }
                 }
 
                 // handle the case where we've decoded Base64 only data
-                if (decoded is byte[])
+                if (decoded is byte[] bytes)
                 {
-                    var bytes = (byte[])decoded;
-                    var lead = new short[bytes.Length / 2];
+                    short[] lead = new short[bytes.Length / 2];
                     Buffer.BlockCopy(bytes, 0, lead, 0, bytes.Length);
-                    decoded = String.Join(
+                    decoded = string.Join(
                         Environment.NewLine,
                         lead.Select((vv, ix) => new { I = ix, V = vv })
                                 .GroupBy(xx => xx.I / 25)
-                                .Select(gg => String.Join(" ", gg.Select(xx => xx.V))));
+                                .Select(gg => string.Join(" ", gg.Select(xx => xx.V))));
                 }
 
                 parsedWaveforms.SetValue(decoded);
@@ -338,28 +328,30 @@ namespace SierraEcg
 
         private static void PreprocessRepresentativeBeats(XElement root, Version schemaVersion)
         {
-            Debug.Assert(root != null);
-            Debug.Assert(schemaVersion != null);
+            XElement? repBeats = root.Element(ns + "waveforms")
+                                     ?.Element(ns + "repbeats");
+            if (repBeats is null)
+            {
+                return;
+            }
 
-            var repBeats = root.Element(ns + "waveforms")
-                               .Element(ns + "repbeats");
-
-            var encoding = (string)repBeats.Attribute("dataencoding");
-            string compression = null;
+            string encoding = (string)repBeats.AttributeOrThrow("dataencoding");
+            string? compression = null;
             if (schemaVersion >= new Version("1.04"))
             {
                 // @compression is present if data is compressed, and describes method (eg., "Huffman")
-                compression = repBeats.Attribute("compression") != null
-                            ? (string)repBeats.Attribute("compression")
+                XAttribute? compressionAttr = repBeats.Attribute("compression");
+                compression = compressionAttr is not null
+                            ? (string)compressionAttr
                             : null;
             }
 
             // The representative beats may or may not be present, but we have to decode each one
             // independently.
-            var representativeBeats = root.Descendants(XERepBeat);
-            foreach (var repBeat in representativeBeats)
+            IEnumerable<XElement> representativeBeats = root.Descendants(XERepBeat);
+            foreach (XElement repBeat in representativeBeats)
             {
-                object decoded = null;
+                object? decoded = null;
 
                 XElement waveform;
                 if (schemaVersion < new Version("1.04"))
@@ -370,7 +362,7 @@ namespace SierraEcg
                 else
                 {
                     //1.04+: <waveform> element under the repbeat holds the data
-                    waveform = repBeat.Element(ns + "waveform");
+                    waveform = repBeat.ElementOrThrow(ns + "waveform");
                 }
 
                 switch (encoding)
@@ -380,16 +372,16 @@ namespace SierraEcg
                         break;
 
                     case "Base64":
-                        if (compression == null)
+                        if (compression is null)
                         {
-                            var bytes = Convert.FromBase64String(waveform.Value);
-                            var lead = new short[bytes.Length / 2];
+                            byte[] bytes = Convert.FromBase64String(waveform.Value);
+                            short[] lead = new short[bytes.Length / 2];
                             Buffer.BlockCopy(bytes, 0, lead, 0, bytes.Length);
-                            decoded = String.Join(
+                            decoded = string.Join(
                                 Environment.NewLine,
                                 lead.Select((vv, ix) => new { I = ix, V = vv })
                                         .GroupBy(xx => xx.I / 25)
-                                        .Select(gg => String.Join(" ", gg.Select(xx => xx.V))));
+                                        .Select(gg => string.Join(" ", gg.Select(xx => xx.V))));
                         }
                         else
                         {
@@ -404,16 +396,13 @@ namespace SierraEcg
 
                     default:
                         // no can decode boss man
-                        throw new InvalidOperationException("Unknown data encoding: " + encoding);
+                        throw new InvalidSierraEcgFileException("Unknown data encoding: " + encoding);
                 }
 
                 waveform.SetValue(decoded);
             }
 
-            if (repBeats != null)
-            {
-                repBeats.SetAttributeValue("dataencoding", "Plain");
-            }
+            repBeats?.SetAttributeValue("dataencoding", "Plain");
         }
 
         /// <summary>
@@ -422,10 +411,8 @@ namespace SierraEcg
         /// <param name="root">XML containing a SierraECG compliant schema.</param>
         /// <returns>The version of the file, if it is of a supported version;
         /// otherwise <see langword="null"/>.</returns>
-        private static Version DetermineVersion(XElement root)
+        private static Version? DetermineVersion(XElement root)
         {
-            Debug.Assert(root != null);
-
             //1.03:
             //<documentinfo>
             //  <documentname>03d494f0-94f0-13d4-b58f-00095c028bdc.xml</documentname>
@@ -442,16 +429,16 @@ namespace SierraEcg
             //  <editor />
             //  <comments />
             //</documentinfo>
-            var documentInfo = root.Element(XEDocumentInfo);
-            if (documentInfo == null)
+            XElement? documentInfo = root.Element(XEDocumentInfo);
+            if (documentInfo is null)
             {
                 return null;
             }
             else
             {
-                var type = documentInfo.Element(ns + "documenttype");
-                var version = documentInfo.Element(ns + "documentversion");
-                if (type == null || version == null)
+                XElement? type = documentInfo.Element(ns + "documenttype");
+                XElement? version = documentInfo.Element(ns + "documentversion");
+                if (type is null || version is null)
                 {
                     return null;
                 }
@@ -468,8 +455,8 @@ namespace SierraEcg
                 }
 
                 // check schema version
-                var foundVersion = new Version((string)version);
-                if (validVersions.Contains(foundVersion))
+                Version foundVersion = new((string)version);
+                if (s_validVersions.Contains(foundVersion))
                 {
                     return foundVersion;
                 }

@@ -77,7 +77,7 @@ namespace SierraEcg.IO
         /// </summary>
         /// <param name="predicate">Optional predicate dictating which entries to read.</param>
         /// <returns>An enumeration of <see cref="TarEntry"/>s from the TAR file.</returns>
-        public IEnumerable<TarEntry> EnumerateEntries(Func<TarEntry, bool> predicate = null)
+        public IEnumerable<TarEntry> EnumerateEntries(Func<TarEntry, bool>? predicate = null)
         {
             byte[] block = new byte[blockSize];
             while (this.innerStream.Read(block, 0, blockSize) > 0)

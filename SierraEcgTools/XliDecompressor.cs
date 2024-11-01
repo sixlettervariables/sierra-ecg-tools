@@ -20,11 +20,6 @@
 //  SOFTWARE.
 // </copyright>
 // <author>Christopher A. Watford [christopher.watford@gmail.com]</author>
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-
 using SierraEcg.Compression;
 
 namespace SierraEcg
@@ -37,7 +32,7 @@ namespace SierraEcg
         /// <summary>
         /// <see cref="Stream"/> containing XLI compressed data.
         /// </summary>
-        private Stream stream;
+        private readonly Stream _stream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XliDecompressor"/> class
@@ -46,12 +41,12 @@ namespace SierraEcg
         /// <param name="buffer">An array of bytes containing XLI compressed data.</param>
         public XliDecompressor(byte[] buffer)
         {
-            if (buffer == null)
+            if (buffer is null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
 
-            this.stream = new MemoryStream(buffer, writable: false);
+            _stream = new MemoryStream(buffer, writable: false);
         }
 
         /// <summary>
@@ -63,24 +58,24 @@ namespace SierraEcg
         /// <param name="count">The length of <paramref name="buffer"/> in bytes. </param>
         public XliDecompressor(byte[] buffer, int offset, int count)
         {
-            if (buffer == null)
+            if (buffer is null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
             else if (offset < 0)
             {
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset), offset, "Offset must be non-negative");
             }
             else if (count < 0)
             {
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be non-negative");
             }
             else if (buffer.Length - offset < count)
             {
-                throw new ArgumentException("The buffer length minus offset is less than count.", "count");
+                throw new ArgumentException("The buffer length minus offset is less than count.", nameof(count));
             }
 
-            this.stream = new MemoryStream(buffer, offset, count, writable: false);
+            _stream = new MemoryStream(buffer, offset, count, writable: false);
         }
 
         /// <summary>
@@ -90,12 +85,7 @@ namespace SierraEcg
         /// <param name="stream"><see cref="Stream"/> containing XLI compressed data.</param>
         public XliDecompressor(Stream stream)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
-
-            this.stream = stream;
+            _stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
         /// <summary>
@@ -104,8 +94,8 @@ namespace SierraEcg
         /// <returns>Uncompressed lead data.</returns>
         public int[] ReadLeadPayload()
         {
-            var chunkHeader = new byte[8];
-            if (chunkHeader.Length != this.stream.Read(chunkHeader, 0, chunkHeader.Length))
+            byte[] chunkHeader = new byte[8];
+            if (chunkHeader.Length != _stream.Read(chunkHeader, 0, chunkHeader.Length))
             {
                 throw new InvalidOperationException("Not enough data to read header from the stream");
             }
@@ -123,28 +113,25 @@ namespace SierraEcg
             // | ...                                                               [Size bytes] |
             // +--------+--------+--------+--------+--------+--------+--------+--------+--------+
 
-            var size = BitConverter.ToInt32(chunkHeader, 0);
+            int size = BitConverter.ToInt32(chunkHeader, 0);
             // CAW: var unknown = BitConverter.ToInt16(chunkHeader, 4);
-            var start = BitConverter.ToInt16(chunkHeader, 6);
+            short start = BitConverter.ToInt16(chunkHeader, 6);
 
-            var chunk = new byte[size];
-            if (chunk.Length != this.stream.Read(chunk, 0, size))
+            byte[] chunk = new byte[size];
+            if (chunk.Length != _stream.Read(chunk, 0, size))
             {
                 throw new InvalidOperationException("Not enough data in the compressed chunk");
             }
 
             // LZW 10-bit codes
-            using (var decompressor = new LzwDecompressor(chunk, 10))
-            {
-                var output = decompressor.Decompress()
-                                         .ToArray();
+            using LzwDecompressor decompressor = new(chunk, 10);
+            byte[] output = [..decompressor.Decompress()];
 
-                // Once the data is decompressed it is packed [HIWORDS...LOWORDS]
-                // and needs to be reconstituted.
-                var deltas = Unpack(output);
+            // Once the data is decompressed it is packed [HIWORDS...LOWORDS]
+            // and needs to be reconstituted.
+            short[] deltas = Unpack(output);
 
-                return DecodeDeltas(deltas, start);
-            }
+            return DecodeDeltas(deltas, start);
         }
 
         /// <summary>
@@ -158,8 +145,6 @@ namespace SierraEcg
         /// <returns>Array of 16-bit interleaved delta codes.</returns>
         static short[] Unpack(byte[] bytes)
         {
-            Debug.Assert(bytes != null);
-
             short[] output = new short[(bytes.Length + 1) / 2];
             for (int ii = 0, jj = output.Length; ii < output.Length; ++ii, ++jj)
             {
@@ -177,14 +162,8 @@ namespace SierraEcg
         /// <returns>32-bit integer array of decoded values.</returns>
         static int[] DecodeDeltas(short[] input, short initialValue)
         {
-            Debug.Assert(input != null);
-
             // we are using 32-bit integers to avoid .Net unsigned/signed problems
-            var output = new int[input.Length];
-            for (int ii = 0; ii < input.Length; ++ii)
-            {
-                output[ii] = input[ii];
-            }
+            int[] output = [..input];
 
             // delta codes are a linear combination of the previous two values
             int x = output[0];
@@ -207,10 +186,11 @@ namespace SierraEcg
         /// </summary>
         public void Dispose()
         {
-            if (this.stream != null)
+            try
             {
-                this.stream.Dispose();
+                _stream?.Dispose();
             }
+            catch { /* CAW: Ignored */ }
         }
     }
 }

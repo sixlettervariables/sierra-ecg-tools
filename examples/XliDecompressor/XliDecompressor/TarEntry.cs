@@ -28,11 +28,17 @@ namespace SierraEcg.IO
 {
     public class TarEntry
     {
-        private static char[] trim = new[] { ' ', '\0' };
-        private static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly char[] s_trim = [' ', '\0'];
+        private static readonly DateTime epoch
+#if NET8_0_OR_GREATER
+            = DateTime.UnixEpoch
+#else
+            = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+#endif
+            ;
 
         //100	 name	 name of file
-        public string Name
+        public string? Name
         {
             get;
             private set;
@@ -84,48 +90,48 @@ namespace SierraEcg.IO
         }
 
         //100	 linkname	 name of linked file
-        public string LinkedName
+        public string? LinkedName
         {
             get;
             private set;
         }
 
         //6	 magic	 USTAR indicator
-        private string magic;
+        private string? magic;
 
         //2	 version	 USTAR version
-        private string version;
+        private string? version;
 
         //32	 uname	 owner user name
-        public string UserName
+        public string? UserName
         {
             get;
             private set;
         }
 
         //32	 gname	 owner group name
-        public string GroupName
+        public string? GroupName
         {
             get;
             private set;
         }
 
         //8	 devmajor	 device major number
-        public string DeviceVersionMajor
+        public string? DeviceVersionMajor
         {
             get;
             private set;
         }
 
         //8	 devminor	 device minor number
-        public string DeviceVersionMinor
+        public string? DeviceVersionMinor
         {
             get;
             private set;
         }
 
         //155	 prefix	 prefix for file name
-        public string Prefix
+        public string? Prefix
         {
             get;
             private set;
@@ -137,7 +143,7 @@ namespace SierraEcg.IO
 
         static string GetString(byte[] block, int start, int count)
         {
-            var debug = Encoding.ASCII.GetString(block, start, count).TrimEnd(trim);
+            var debug = Encoding.ASCII.GetString(block, start, count).TrimEnd(s_trim);
             return debug;
         }
 

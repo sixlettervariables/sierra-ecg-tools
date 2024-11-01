@@ -20,10 +20,6 @@
 //  SOFTWARE.
 // </copyright>
 // <author>Christopher A. Watford [christopher.watford@gmail.com]</author>
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace SierraEcg.Compression
 {
@@ -41,27 +37,27 @@ namespace SierraEcg.Compression
         /// <summary>
         /// Number of bits in a code word.
         /// </summary>
-        private readonly int bits;
+        private readonly int _bits;
 
         /// <summary>
         /// Maximum code word.
         /// </summary>
-        private readonly int maxCode;
+        private readonly int _maxCode;
 
         /// <summary>
         /// Compressed input stream.
         /// </summary>
-        private Stream input;
+        private readonly Stream _input;
 
         /// <summary>
         /// Number of bits currently in the buffer.
         /// </summary>
-        private int bitsRead;
+        private int _bitsRead;
 
         /// <summary>
         /// Code word input buffer.
         /// </summary>
-        private uint buffer;
+        private uint _buffer;
 
         #endregion Fields
 
@@ -76,18 +72,18 @@ namespace SierraEcg.Compression
         /// <param name="bits">Number of bits per code.</param>
         public LzwDecompressor(byte[] buffer, int bits)
         {
-            if (buffer == null)
+            if (buffer is null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
             else if (bits < 4 || bits > 16)
             {
-                throw new ArgumentOutOfRangeException("bits", bits, "Code word size must be at least 4 and less than or equal to 16");
+                throw new ArgumentOutOfRangeException(nameof(bits), bits, "Code word size must be at least 4 and less than or equal to 16");
             }
 
-            this.bits = bits;
-            this.input = new MemoryStream(buffer);
-            this.maxCode = (1 << bits) - 2;
+            _bits = bits;
+            _input = new MemoryStream(buffer);
+            _maxCode = (1 << bits) - 2;
         }
 
         /// <summary>
@@ -99,36 +95,21 @@ namespace SierraEcg.Compression
         /// <param name="bits">Number of bits per code.</param>
         public LzwDecompressor(Stream stream, int bits)
         {
-            if (stream == null)
+            if (stream is null)
             {
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
             }
             else if (bits < 4 || bits > 16)
             {
-                throw new ArgumentOutOfRangeException("bits", bits, "Code word size must be at least 4 and less than or equal to 16");
+                throw new ArgumentOutOfRangeException(nameof(bits), bits, "Code word size must be at least 4 and less than or equal to 16");
             }
 
-            this.bits = bits;
-            this.input = stream;
-            this.maxCode = (1 << bits) - 2;
+            _bits = bits;
+            _input = stream;
+            _maxCode = (1 << bits) - 2;
         }
 
         #endregion ctors
-
-        /// <summary>
-        /// Appends an item onto the end of an array.
-        /// </summary>
-        /// <param name="left">Array, may be empty.</param>
-        /// <param name="item">Item to append to the end of the array.</param>
-        /// <returns>Concatenation of <paramref name="left"/> with <paramref name="item"/>.</returns>
-        static T[] Append<T>(T[] left, T item)
-        {
-            var bytes = new T[left.Length + 1];
-            Buffer.BlockCopy(left, 0, bytes, 0, left.Length);
-            bytes[left.Length] = item;
-
-            return bytes;
-        }
 
         /// <summary>
         /// Decompress the underyling <see cref="Stream"/>.
@@ -136,29 +117,33 @@ namespace SierraEcg.Compression
         /// <returns>An enumeration of bytes corresponding to the decompressed data.</returns>
         public IEnumerable<byte> Decompress()
         {
-            var strings = Enumerable.Range(0, 256)
-                                    .ToDictionary(xx => (uint)xx, xx => new[] { (byte)xx });
+            Dictionary<uint, byte[]> strings = Enumerable.Range(0, 256)
+                                                         .ToDictionary(xx => (uint)xx, xx => new[] { (byte)xx });
 
-            byte[] previous = new byte[0];
-            uint code;
+            byte[] previous = [];
             uint nextCode = 256;
 
-            while (this.Read(out code))
+            while (Read(out uint code))
             {
-                if (code >= this.maxCode + 1) break;
+                if (code >= _maxCode + 1)
+                {
+                    break;
+                }
 
                 // helps handle string+character+string+character+string
                 if (!strings.ContainsKey(code))
                 {
-                    strings[code] = Append(previous, previous[0]);
+                    strings[code] = [..previous, previous[0]];
                 }
 
-                foreach (var chr in strings[code])
-                    yield return chr;
-
-                if (previous.Length > 0 && nextCode <= this.maxCode)
+                foreach (byte chr in strings[code])
                 {
-                    strings[nextCode++] = Append(previous, strings[code][0]);
+                    yield return chr;
+                }
+
+                if (previous.Length > 0 && nextCode <= _maxCode)
+                {
+                    strings[nextCode++] = [..previous, strings[code][0]];
                 }
 
                 previous = strings[code];
@@ -172,17 +157,17 @@ namespace SierraEcg.Compression
         /// <returns><see langword="true"/> if the data is valid; otherwise <see langword="false"/>.</returns>
         private bool Read(out uint code)
         {
-            while (bitsRead <= 24)
+            while (_bitsRead <= 24)
             {
-                buffer |= (uint)(this.input.ReadByte() << (24 - bitsRead));
-                bitsRead += 8;
+                _buffer |= (uint)(_input.ReadByte() << (24 - _bitsRead));
+                _bitsRead += 8;
             }
 
-            code = (buffer >> (32 - this.bits)) & 0x0000FFFF;
-            buffer <<= this.bits;
-            bitsRead -= this.bits;
+            code = (_buffer >> (32 - _bits)) & 0x0000FFFF;
+            _buffer <<= _bits;
+            _bitsRead -= _bits;
 
-            return this.input.Position < this.input.Length;
+            return _input.Position < _input.Length;
         }
 
         #region IDisposable members
@@ -192,8 +177,11 @@ namespace SierraEcg.Compression
         /// </summary>
         public void Dispose()
         {
-            if (this.input != null)
-                this.input.Dispose();
+            try
+            {
+                _input?.Dispose();
+            }
+            catch { /* CAW: ignored */ }
         }
 
         #endregion IDisposable members
