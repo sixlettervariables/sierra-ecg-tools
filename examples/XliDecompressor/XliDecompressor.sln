@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XliDecompressor", "XliDecompressor\XliDecompressor.csproj", "{2A8E54ED-3D6E-4AA9-873E-62C68CB3A3CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SierraEcgTools", "..\SierraEcgTools\SierraEcgTools.csproj", "{6E467147-1682-404B-B553-E5A1481AAC77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SierraEcgTools", "..\..\SierraEcgTools\SierraEcgTools.csproj", "{6E467147-1682-404B-B553-E5A1481AAC77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
