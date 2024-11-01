@@ -24,9 +24,9 @@
  */
 'use strict';
 
-var Promise = require('bluebird');
+const Promise = require('bluebird');
 
-var XliReader = require('./xli');
+const XliReader = require('./xli');
 
 /**
  * @constructor
@@ -55,7 +55,7 @@ function Lead(name, data, enabled) {
 
 function SierraEcg_ParseXml(xdoc) {
   return new Promise(function (resolve, reject) {
-    var version, type;
+    let version, type;
 
     if (xdoc.restingecgdata.documentinfo[0].documenttype[0]) {
       type = xdoc.restingecgdata.documentinfo[0].documenttype[0];
@@ -78,12 +78,12 @@ function SierraEcg_ParseXml(xdoc) {
       }
     }
 
-    var parsedwaveforms = xdoc.restingecgdata.waveforms[0].parsedwaveforms[0];
+    const parsedwaveforms = xdoc.restingecgdata.waveforms[0].parsedwaveforms[0];
     if (!parsedwaveforms) {
       throw new Error('Invalid Sierra ECG XML document');
     }
 
-    var isBase64, isXli, leadLabels, numberOfLeads;
+    let isBase64, isXli, leadLabels, numberOfLeads;
 
     // 1. determine encoding
     isBase64 = parsedwaveforms.$.dataencoding === 'Base64';
@@ -93,7 +93,7 @@ function SierraEcg_ParseXml(xdoc) {
       isXli = (parsedwaveforms.$.compressflag === 'True') &&
               (parsedwaveforms.$.compressmethod === 'XLI');
 
-      var signalCharacteristics = xdoc.restingecgdata.dataacquisition[0].signalcharacteristics[0];
+      const signalCharacteristics = xdoc.restingecgdata.dataacquisition[0].signalcharacteristics[0];
       if (signalCharacteristics.leadset[0] === 'STD-12') {
         leadLabels = kStd12Leads.slice();
       }
@@ -107,8 +107,8 @@ function SierraEcg_ParseXml(xdoc) {
     }
 
     if (isBase64 && isXli) {
-      var b64 = Buffer.from(parsedwaveforms._, 'base64');
-      return resolve({ xml: xdoc, version: version, numberOfLeads: numberOfLeads, leadLabels: leadLabels, parsedWaveforms: b64 });
+      const b64 = Buffer.from(parsedwaveforms._, 'base64');
+      return resolve({ xml: xdoc, version, numberOfLeads, leadLabels, parsedWaveforms: b64 });
     }
     else {
       return reject(new Error('Unsupported compression method on XML'));
@@ -118,7 +118,7 @@ function SierraEcg_ParseXml(xdoc) {
 
 function SierraEcg_DecodeXli(ecg) {
   return new Promise(function (resolve, reject) {
-    var reader = new XliReader(ecg.parsedWaveforms);
+    const reader = new XliReader(ecg.parsedWaveforms);
     reader.extractLeads(function (err, leads) {
       if (err) return reject(err);
       ecg.leads = leads;
@@ -133,14 +133,14 @@ function SierraEcg_DecodeXli(ecg) {
 
 function SierraEcg_UpdateLeads(ecg) {
   return new Promise(function (resolve) {
-    var ii;
+    let ii;
 
-    var leadI = ecg.leads[0];
-    var leadII = ecg.leads[1];
-    var leadIII = ecg.leads[2];
-    var leadAVR = ecg.leads[3];
-    var leadAVL = ecg.leads[4];
-    var leadAVF = ecg.leads[5];
+    const leadI = ecg.leads[0];
+    const leadII = ecg.leads[1];
+    const leadIII = ecg.leads[2];
+    const leadAVR = ecg.leads[3];
+    const leadAVL = ecg.leads[4];
+    const leadAVF = ecg.leads[5];
 
     // lead III
     for (ii = 0; ii < leadIII.length; ++ii) {
@@ -166,7 +166,7 @@ function SierraEcg_UpdateLeads(ecg) {
   });
 }
 
-var kStd12Leads = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'];
+const kStd12Leads = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'];
 function nameifyLead(index, leads) {
   /* jshint -W030 */
   leads || (leads = kStd12Leads);
@@ -178,12 +178,12 @@ function nameifyLead(index, leads) {
 
 function SierraEcg_CreateObjects(ecg) {
   return new Promise(function (resolve) {
-    var leads = ecg.leads.map(function (lead, index) {
-      var enabled = index < ecg.numberOfLeads;
+    const leads = ecg.leads.map(function (lead, index) {
+      const enabled = index < ecg.numberOfLeads;
       return new Lead(nameifyLead(index, ecg.leadLabels), lead, enabled);
     });
 
-    var obj = new Ecg('12-Lead', leads);
+    const obj = new Ecg('12-Lead', leads);
     obj.version = ecg.version;
     obj.originalXml = ecg.xml;
 

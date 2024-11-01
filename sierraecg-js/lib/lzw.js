@@ -24,7 +24,7 @@
  */
 'use strict';
 
-var debug = require('debug')('lzw');
+const debug = require('debug')('lzw');
 
 /**
  * @constructor
@@ -69,10 +69,10 @@ function LzwReader(input, options) {
 
 module.exports = LzwReader;
 
-var LZWP = LzwReader.prototype;
+let LZWP = LzwReader.prototype;
 
 LZWP.readCode = function LzwReader_ReadCode() {
-    var EOF = false;
+    let EOF = false;
     while (this.bitCount <= 24) {
         if (this.offset >= this.input.length) {
             debug('EOF found @%d', this.offset);
@@ -80,7 +80,7 @@ LZWP.readCode = function LzwReader_ReadCode() {
             break;
         }
 
-        var next = this.input[this.offset++];
+        const next = this.input[this.offset++];
         this.buffer |= ((next & 0xFF) << (24 - this.bitCount)) & 0xFFFFFFFF;
         this.bitCount += 8;
     }
@@ -92,7 +92,7 @@ LZWP.readCode = function LzwReader_ReadCode() {
     else {
         // CAW: the most important thing you'll ever do in life is use the
         //      Zero-fill right shift operator.
-        var code = ((this.buffer >>> (32 - this.bits)) & 0x0000FFFF);
+        const code = ((this.buffer >>> (32 - this.bits)) & 0x0000FFFF);
         this.buffer = (((this.buffer & 0xFFFFFFFF) << this.bits) & 0xFFFFFFFF);
         this.bitCount -= this.bits;
         debug('code [%d]', code);
@@ -101,14 +101,14 @@ LZWP.readCode = function LzwReader_ReadCode() {
 };
 
 LZWP.decodeSync = function LzwReader_DecodeSync() {
-    var code, value, output = [];
+    let code, value, output = [];
     while (-1 !== (code = this.readCode())) {
         if (code > this.maxCode) {
             debug('code exceeds max (%d > %d), ending', code, this.maxCode);
             break;
         }
 
-        if (!this.strings.hasOwnProperty(code)) {
+        if (!Object.prototype.hasOwnProperty.call(this.strings, code)) {
             value = this.previous.slice();
             value.push(this.previous[0]);
             this.strings[code] = new Code(code, value);
@@ -131,8 +131,8 @@ LZWP.decodeSync = function LzwReader_DecodeSync() {
 };
 
 LZWP.decode = function LzwReader_Decode(cb) {
-  var self = this;
-  var code, value, output = [], codesRead = 0, goingNext = false;
+  const self = this;
+  let code, value, output = [], codesRead = 0, goingNext = false;
   function next() {
     goingNext = false;
     while (-1 !== (code = self.readCode())) {
@@ -141,7 +141,7 @@ LZWP.decode = function LzwReader_Decode(cb) {
         break;
       }
 
-      if (!self.strings.hasOwnProperty(code)) {
+      if (!Object.prototype.hasOwnProperty.call(self.strings, code)) {
         value = self.previous.slice();
         value.push(self.previous[0]);
         self.strings[code] = new Code(code, value);
@@ -192,7 +192,8 @@ function Code(code, value) {
     this.code = code;
     this.value = Array.isArray(value) ? value.slice() : [value];
 }
-var CP = Code.prototype;
+
+let CP = Code.prototype;
 
 CP.appendTo = function Code_AppendTo(output) {
     for (var ii = 0; ii < this.value.length; ++ii) {

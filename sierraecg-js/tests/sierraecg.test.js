@@ -1,15 +1,17 @@
 /** sierraecg.js: Tests for sierraecg.js
  *
  */
-var test = require('tape');
+"use strict";
 
-var sierraEcg = require('../');
+const test = require('tape');
+
+const sierraEcg = require('../');
 
 test('sierraecg', function (p) {
   p.test('can read SierraECG 1.03 file', function (t) {
-    var now = new Date().getTime();
+    const now = new Date().getTime();
     sierraEcg.readFile('./tests/fixtures/129DYPRG.XML', function (err, ecg) {
-      console.log('parsed in %d ms', new Date().getTime() - now);
+      t.comment(`parsed in ${new Date().getTime() - now} ms`);
 
       t.error(err, 'Should not throw an error');
       t.ok(ecg, 'ECG should exist');
@@ -71,9 +73,9 @@ test('sierraecg', function (p) {
   });
 
   p.test('can read SierraECG 1.04 file', function (t) {
-    var now = new Date().getTime();
+    const now = new Date().getTime();
     sierraEcg.readFile('./tests/fixtures/3191723_ZZDEMOPTONLY_1-04_orig.xml', function (err, ecg) {
-      console.log('parsed in %d ms', new Date().getTime() - now);
+      t.comment(`parsed in ${new Date().getTime() - now} ms`);
 
       t.error(err, 'Should not throw an error');
       t.ok(ecg, 'ECG should exist');
@@ -135,9 +137,9 @@ test('sierraecg', function (p) {
   });
 
   p.test('can read SierraECG 1.04 file with UTF-16LE BOM', function (t) {
-    var now = new Date().getTime();
+    const now = new Date().getTime();
     sierraEcg.readFile('./tests/fixtures/ad4d3d80-d165_1-04_orig.xml', function (err, ecg) {
-      console.log('parsed in %d ms', new Date().getTime() - now);
+      t.comment(`parsed in ${new Date().getTime() - now} ms`);
 
       t.error(err, 'Should not throw an error');
       t.ok(ecg, 'ECG should exist');
@@ -199,9 +201,9 @@ test('sierraecg', function (p) {
   });
 
   p.test('can read SierraECG 1.04.01 file with UTF-16LE BOM', function (t) {
-    var now = new Date().getTime();
+    const now = new Date().getTime();
     sierraEcg.readFile('./tests/fixtures/2020-5-18_15-48-11.xml', function (err, ecg) {
-      console.log('parsed in %d ms', new Date().getTime() - now);
+      t.comment(`parsed in ${new Date().getTime() - now} ms`);
 
       t.error(err, 'Should not throw an error');
       t.ok(ecg, 'ECG should exist');

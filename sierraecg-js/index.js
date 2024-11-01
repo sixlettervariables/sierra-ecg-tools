@@ -24,16 +24,16 @@
  */
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs'));
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'));
 
-var xml2js = require('xml2js'),
-    _xparser = new xml2js.Parser(),
-    parseXml = Promise.promisify(_xparser.parseString);
+const xml2js = require('xml2js');
+const _xparser = new xml2js.Parser();
+const parseXml = Promise.promisify(_xparser.parseString);
 
-var sierraEcg = require('./lib/sierraecg');
+const sierraEcg = require('./lib/sierraecg');
 
 function readFile(filename, cb, options) {
   var ext = path.extname(filename).toLowerCase();
@@ -44,7 +44,7 @@ function readFile(filename, cb, options) {
       throw new Error('Unsupported file type');
   }
 
-  var deferred = fs.readFileAsync(filename, options)
+  const deferred = fs.readFileAsync(filename, options)
     .then(parseXml)
     .then(sierraEcg.parseXml)
     .then(sierraEcg.decodeXli)
@@ -55,7 +55,7 @@ function readFile(filename, cb, options) {
 }
 
 function readString(value, cb) {
-  var deferred = parseXml(value)
+  const deferred = parseXml(value)
     .then(sierraEcg.parseXml)
     .then(sierraEcg.decodeXli)
     .then(sierraEcg.updateLeads)
