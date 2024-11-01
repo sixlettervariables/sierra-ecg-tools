@@ -9,27 +9,29 @@ This project provides reference implementations of readers for the Philips Sierr
 ## API
 Currently there are sample libraries for:
 
-- C/C++
+- Python
 - C#
-- Java
+- C/C++
 - NodeJS
-- Amazon AWS Lambda + API Gateway (via JAWS)
+- Java
 
 ## Examples
 There are currently integration examples for:
 
-- C/C++
+- Python
 - C#
+- C/C++
 - Java
 - Matlab/Octave
 
 ## Building
 There are no required compilers for these projects, however, currently only the following has been tested:
 
-- C/C++: Visual Studio 2010, Visual Studio 2012, clang (LLVM 5.1)
+- Python: 3.9+
 - C# (.Net 2.0, .Net 4.0/4.5): Visual Studio 2010, Visual Studio 2012, Visual Studio 2013
-- Java: JDK 1.6+ with JAXB support
 - Node.js: node v6.0.0+
+- C/C++: Visual Studio 2010, Visual Studio 2012, clang (LLVM 5.1)
+- Java: JDK 1.6+ with JAXB support
 - Octave: 3.6.0+
 
 ## Contributing
