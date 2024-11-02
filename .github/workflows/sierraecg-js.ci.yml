@@ -20,11 +20,14 @@ jobs:
         node-version: ['18.x', '20.x', '22.0']
 
     steps:
-    - uses: actions/checkout@v4    
+    - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       name: Use Node.js ${{ matrix.node-version }}
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
+      working-directory: sierraecg-js
     - run: npm run-script lint
+      working-directory: sierraecg-js
     - run: npm run-script ci
+      working-directory: sierraecg-js
