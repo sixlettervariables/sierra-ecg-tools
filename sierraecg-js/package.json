@@ -1,6 +1,6 @@
 {
   "name": "sierraecg",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Philips SierraECG Tools for NodeJS",
   "license": "MIT",
   "main": "index.js",
@@ -8,10 +8,6 @@
     "test": "tape tests/*.js",
     "cover": "nyc ./node_modules/.bin/tape tests/sierraecg.test.js",
     "lint": "eslint"
-  },
-  "directories": {
-    "lib": "./lib",
-    "test": "./tests"
   },
   "repository": {
     "type": "git",

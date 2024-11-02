@@ -4,26 +4,20 @@ Sierra ECG tools for NodeJS.
 ## Example
 
 ```javascript
-var sierraEcg = require('sierraecg');
+const sierraEcg = require('sierraecg');
 
-sierraEcg.readFile('129DYPRG.XML', function (err, ecg) {
-  if (err) {
-    console.error(err);
-  }
-  else {
-    console.log('Found %d leads', ecg.leads.length);
-    ecg.leads
-      .filter(function (lead) {
-        return lead.enabled;
-      }).forEach(function (lead) {
-        console.log(
-          '    %s: %s ... (%d samples)',
-          lead.name,
-          lead.data.slice(0, 10).join(' '),
-          lead.data.length);
-      });
-  }
-});
+const ecg = await sierraEcg.readFileAsync('129DYPRG.XML');
+console.log('Found %d leads', ecg.leads.length);
+ecg.leads
+  .filter(function (lead) {
+    return lead.enabled;
+  }).forEach(function (lead) {
+    console.log(
+      '    %s: %s ... (%d samples)',
+      lead.name,
+      lead.data.slice(0, 10).join(' '),
+      lead.data.length);
+  });
 ```
 
 ## Getting Started
@@ -36,27 +30,27 @@ $ npm install sierraecg
 Include the module in your project:
 
 ```javascript
-var sierraEcg = require('sierraecg');
+const sierraEcg = require('sierraecg');
 ```
 
 That's it!
 
 ## API
 
-### sierraEcg.readFile(filename [, callback])
+### sierraEcg.readFileAsync(filename [, options])
 Reads a Sierra ECG XML file from the location `filename`.
 
 #### filename {String}
 **required** Path to the Sierra ECG XML file.
 
-#### callback {Function}
-*optional* Node-style callback like `function (err, ecg)`. `ecg` contains the parsed ECG data.
+#### options {Object}
+*optional* Options object to pass to `fs.readFile`
 
 #### Returns
-If `callback` is not passed, `sierraEcg.readFile` returns a [Promise](https://github.com/petkaantonov/bluebird).
+Returns a Promise of an `Ecg` object.
 
 ## Linting
-Linting is provided via `jshint`:
+Linting is provided via `eslint`:
 
 ```bash
 $ npm run lint
@@ -82,7 +76,7 @@ $ npm run cover
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2014 Christopher A. Watford
+Copyright (c) 2014-2024 Christopher A. Watford
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
