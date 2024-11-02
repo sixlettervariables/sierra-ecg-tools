@@ -53,7 +53,7 @@ class XliReader {
     const self = this;
     const header = this.input.subarray(this.offset + 0, this.offset + 8);
     const size = header.readInt32LE(0);
-    const code = header.readInt16LE(4);
+    // const code = header.readInt16LE(4); // unused, unknown
     const delta = header.readInt16LE(6);
     // console.debug('chunk-header: { size: %d, code: %d, delta: %d }', size, code, delta);
   

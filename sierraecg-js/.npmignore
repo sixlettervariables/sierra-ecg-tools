@@ -1,5 +1,6 @@
 .nyc_output/
 tests/
+.npmrc
 .nvmrc
 .nycrc
 eslint.config.mjs

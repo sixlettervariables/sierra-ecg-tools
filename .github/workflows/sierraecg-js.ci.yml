@@ -3,7 +3,6 @@
 #
 on:
   pull_request:
-    types: [opened, reopened]
     branches:
       - 'master'
     paths:
@@ -17,14 +16,17 @@ jobs:
     strategy:
       matrix:
         # Cover the supported NodeJS versions
-        node-version: ['18.x', '20.x', '22.0']
+        node-version: ['18.x', '20.x', '22.x']
 
     steps:
-    - uses: actions/checkout@v4    
+    - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       name: Use Node.js ${{ matrix.node-version }}
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
+      working-directory: sierraecg-js
     - run: npm run-script lint
+      working-directory: sierraecg-js
     - run: npm run-script ci
+      working-directory: sierraecg-js

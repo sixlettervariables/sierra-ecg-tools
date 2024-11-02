@@ -4,15 +4,20 @@
 'use strict';
 
 const fs = require('node:fs');
+const path = require('node:path');
 
 const test = require('tape');
 
 const sierraEcg = require('../');
 
+function fixture(filename) {
+  return path.join(__dirname, 'fixtures', filename);
+}
+
 test('sierraecg', function (p) {
   p.test('can read SierraECG 1.03 file', function (t) {
     const now = new Date().getTime();
-    sierraEcg.readFile('./tests/fixtures/129DYPRG.XML', function (err, ecg) {
+    sierraEcg.readFile(fixture('129DYPRG.xml'), function (err, ecg) {
       t.comment(`parsed in ${new Date().getTime() - now} ms`);
 
       t.error(err, 'Should not throw an error');
@@ -76,7 +81,7 @@ test('sierraecg', function (p) {
 
   p.test('can read SierraECG 1.04 file', function (t) {
     const now = new Date().getTime();
-    sierraEcg.readFile('./tests/fixtures/3191723_ZZDEMOPTONLY_1-04_orig.xml', function (err, ecg) {
+    sierraEcg.readFile(fixture('3191723_ZZDEMOPTONLY_1-04_orig.xml'), function (err, ecg) {
       t.comment(`parsed in ${new Date().getTime() - now} ms`);
 
       t.error(err, 'Should not throw an error');
@@ -140,7 +145,7 @@ test('sierraecg', function (p) {
 
   p.test('can read SierraECG 1.04 file with UTF-16LE BOM', function (t) {
     const now = new Date().getTime();
-    sierraEcg.readFile('./tests/fixtures/ad4d3d80-d165_1-04_orig.xml', function (err, ecg) {
+    sierraEcg.readFile(fixture('ad4d3d80-d165_1-04_orig.xml'), function (err, ecg) {
       t.comment(`parsed in ${new Date().getTime() - now} ms`);
 
       t.error(err, 'Should not throw an error');
@@ -204,7 +209,7 @@ test('sierraecg', function (p) {
 
   p.test('can read SierraECG 1.04.01 file with UTF-16LE BOM', function (t) {
     const now = new Date().getTime();
-    sierraEcg.readFile('./tests/fixtures/2020-5-18_15-48-11.xml', function (err, ecg) {
+    sierraEcg.readFile(fixture('2020-5-18_15-48-11.xml'), function (err, ecg) {
       t.comment(`parsed in ${new Date().getTime() - now} ms`);
 
       t.error(err, 'Should not throw an error');
@@ -267,7 +272,7 @@ test('sierraecg', function (p) {
   });
 
   p.test('can read SierraECG file from a string', function (t) {
-    const xml = fs.readFileSync('./tests/fixtures/129DYPRG.XML');
+    const xml = fs.readFileSync(fixture('129DYPRG.xml'));
     const now = new Date().getTime();
     sierraEcg.readString(xml, function (err, ecg) {
       t.comment(`parsed in ${new Date().getTime() - now} ms`);
@@ -332,7 +337,7 @@ test('sierraecg', function (p) {
   });
 
   p.test('can read SierraECG file (UTF-16LE BOM) from a string', function (t) {
-    const xml = fs.readFileSync('./tests/fixtures/ad4d3d80-d165_1-04_orig.xml', 'utf16le');
+    const xml = fs.readFileSync(fixture('ad4d3d80-d165_1-04_orig.xml'), 'utf16le');
     const now = new Date().getTime();
     sierraEcg.readString(xml, function (err, ecg) {
       t.comment(`parsed in ${new Date().getTime() - now} ms`);
