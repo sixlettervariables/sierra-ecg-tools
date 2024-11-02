@@ -35,7 +35,7 @@ const kLzwBitsPerCode = 10;
  * @param {Buffer | String} input 
  */
 function XliReader(input) {
-  this.input = Buffer.isBuffer(input) ? input : Buffer.from(input);
+  this.input = Buffer.from(input);
   this.offset = 0;
 
   debug('initialized XLI encoded data (%d bytes)', this.input.length);
@@ -50,6 +50,11 @@ XLI.prototype.extractLeads = function XliReader_ExtractLeads(cb) {
     if (self.offset < self.input.length) {
       debug('reading chunk %d @%d bytes', leads.length, self.offset);
       self._readChunk(function (err, chunk) {
+        if (err) {
+          cb(err);
+          return;
+        }
+
         leads.push(chunk.values);
         self.offset += chunk.size;
 
@@ -68,13 +73,13 @@ XLI.prototype.extractLeads = function XliReader_ExtractLeads(cb) {
 
 XLI.prototype._readChunk = function XliReader_private_ReadChunk(cb) {
   const self = this;
-  const header = this.input.slice(this.offset + 0, this.offset + 8);
+  const header = this.input.subarray(this.offset + 0, this.offset + 8);
   const size = header.readInt32LE(0);
   const code = header.readInt16LE(4);
   const delta = header.readInt16LE(6);
   debug('chunk-header: { size: %d, code: %d, delta: %d }', size, code, delta);
 
-  const compressedBlock = this.input.slice(this.offset + 8, this.offset + 8 + size);
+  const compressedBlock = this.input.subarray(this.offset + 8, this.offset + 8 + size);
   debug('compressed size %d', compressedBlock.length);
   const reader = new LzwReader(compressedBlock, { bits: kLzwBitsPerCode });
 
@@ -101,7 +106,7 @@ XLI.prototype._readChunk = function XliReader_private_ReadChunk(cb) {
 XLI.prototype._unpack = function XliReader_private_Unpack(bytes, cb) {
   function unpack(bytes) {
     const unpacked = new Array(Math.floor(bytes.length / 2));
-    for (var ii = 0; ii < unpacked.length; ++ii) {
+    for (var ii = 0; ii < unpacked.length; ii++) {
       unpacked[ii] = (((bytes[ii] << 8) | bytes[ii + unpacked.length]) << 16) >> 16;
     }
 
@@ -120,7 +125,7 @@ XLI.prototype._decodeDeltas = function XliReader_private_DecodeDeltas(deltas, la
   const values = deltas.slice();
   let x = values[0],
       y = values[1];
-  for (var ii = 2; ii < values.length; ++ii) {
+  for (var ii = 2; ii < values.length; ii++) {
     const z = (y * 2) - x - lastValue;
     lastValue = values[ii] - 64;
     values[ii] = z;

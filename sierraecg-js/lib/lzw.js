@@ -62,7 +62,7 @@ function LzwReader(input, options) {
 
     this.nextCode = 256;
     this.strings = {};
-    for (var ii = 0; ii < this.nextCode; ++ii) {
+    for (var ii = 0; ii < this.nextCode; ii++) {
         this.strings[ii] = new Code(ii, ii);
     }
 }
@@ -101,7 +101,7 @@ LZWP.readCode = function LzwReader_ReadCode() {
 };
 
 LZWP.decodeSync = function LzwReader_DecodeSync() {
-    let code, value, output = [];
+    let code, output = [];
     while (-1 !== (code = this.readCode())) {
         if (code > this.maxCode) {
             debug('code exceeds max (%d > %d), ending', code, this.maxCode);
@@ -109,17 +109,15 @@ LZWP.decodeSync = function LzwReader_DecodeSync() {
         }
 
         if (!Object.prototype.hasOwnProperty.call(this.strings, code)) {
-            value = this.previous.slice();
-            value.push(this.previous[0]);
+            const value = [ ...this.previous.slice(), this.previous[0] ];
             this.strings[code] = new Code(code, value);
         }
 
         output = this.strings[code].appendTo(output);
 
         if (this.previous.length > 0 && this.nextCode <= this.maxCode) {
-            value = this.previous.slice();
-            value.push(this.strings[code].value[0]);
-            var nc = this.nextCode++;
+            const nc = this.nextCode++;
+            const value = [ ...this.previous, this.strings[code].value[0] ];
             this.strings[nc] = new Code(nc, value);
         }
 
@@ -132,7 +130,7 @@ LZWP.decodeSync = function LzwReader_DecodeSync() {
 
 LZWP.decode = function LzwReader_Decode(cb) {
   const self = this;
-  let code, value, output = [], codesRead = 0, goingNext = false;
+  let code, output = [], codesRead = 0, goingNext = false;
   function next() {
     goingNext = false;
     while (-1 !== (code = self.readCode())) {
@@ -142,17 +140,15 @@ LZWP.decode = function LzwReader_Decode(cb) {
       }
 
       if (!Object.prototype.hasOwnProperty.call(self.strings, code)) {
-        value = self.previous.slice();
-        value.push(self.previous[0]);
+        const value = [ ...self.previous, self.previous[0] ];
         self.strings[code] = new Code(code, value);
       }
 
       output = self.strings[code].appendTo(output);
 
       if (self.previous.length > 0 && self.nextCode <= self.maxCode) {
-        value = self.previous.slice();
-        value.push(self.strings[code].value[0]);
-        var nc = self.nextCode++;
+        const nc = self.nextCode++;
+        const value = [ ...self.previous, self.strings[code].value[0] ];
         self.strings[nc] = new Code(nc, value);
       }
 
@@ -196,9 +192,7 @@ function Code(code, value) {
 let CP = Code.prototype;
 
 CP.appendTo = function Code_AppendTo(output) {
-    for (var ii = 0; ii < this.value.length; ++ii) {
-        output.push(this.value[ii]);
-    }
+    output.push(...this.value);
 
     return output;
 };

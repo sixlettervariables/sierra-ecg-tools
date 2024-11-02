@@ -81,10 +81,10 @@ function SierraEcg_ParseXml(xdoc) {
       throw new Error('Invalid Sierra ECG XML document');
     }
 
-    let isBase64, isXli, leadLabels, numberOfLeads;
+    let isXli, leadLabels, numberOfLeads;
 
     // 1. determine encoding
-    isBase64 = parsedwaveforms.$.dataencoding === 'Base64';
+    const isBase64 = parsedwaveforms.$.dataencoding === 'Base64';
 
     // 2. determine compression and report type
     if (version === '1.03') {
@@ -166,9 +166,7 @@ function SierraEcg_UpdateLeads(ecg) {
 
 const kStd12Leads = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'];
 function nameifyLead(index, leads) {
-  /* jshint -W030 */
   leads || (leads = kStd12Leads);
-  /* jshint +W030 */
 
   if (index < leads.length) return leads[index];
   return 'Channel ' + (index + 1);
