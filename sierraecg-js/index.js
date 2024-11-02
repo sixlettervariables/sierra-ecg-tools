@@ -36,33 +36,55 @@ const xml2js_parseXml = util.promisify(_xparser.parseString);
 
 const sierraEcg = require('./lib/sierraecg');
 
+/**
+ * Read a Philips SierraECG file from disk.
+ * @param {string} filename 
+ * @param {(reason: any, ecg: sierraEcg.Ecg) => void} cb 
+ * @param {*} options 
+ */
 function readFile(filename, cb, options) {
   readFileAsync(filename, options)
     .then(ecg => cb(null, ecg))
     .catch(err => cb(err));
 }
 
+/**
+ * Read a Philips SierraECG file from disk.
+ * @param {string} filename 
+ * @param {*} options 
+ * @returns {Promise<sierraEcg.Ecg>}
+ */
 function readFileAsync(filename, options) {
   return fs_readFileAsync(filename, options)
     .then(xml2js_parseXml)
-    .then(sierraEcg.parseXml)
-    .then(sierraEcg.decodeXli)
-    .then(sierraEcg.updateLeads)
-    .then(sierraEcg.createObjects);
+    .then(xdoc => sierraEcg.parseXml(xdoc))
+    .then(sierraEcg.decodeXliAsync)
+    .then(ecg => sierraEcg.updateLeads(ecg))
+    .then(ecg => sierraEcg.createObjects(ecg));
 }
 
+/**
+ * Read a Philips SierraECG file from an XML string.
+ * @param {string} value 
+ * @param {(reason: any, ecg: sierraEcg.Ecg) => void} cb 
+ */
 function readString(value, cb) {
   readStringAsync(value)
     .then(ecg => cb(null, ecg))
     .catch(err => cb(err));
 }
 
+/**
+ * Read a Philips SierraECG file from an XML string.
+ * @param {string} value 
+ * @returns {Promise<sierraEcg.Ecg>}
+ */
 function readStringAsync(value) {
   return xml2js_parseXml(value)
-    .then(sierraEcg.parseXml)
-    .then(sierraEcg.decodeXli)
-    .then(sierraEcg.updateLeads)
-    .then(sierraEcg.createObjects);
+    .then(xdoc => sierraEcg.parseXml(xdoc))
+    .then(sierraEcg.decodeXliAsync)
+    .then(ecg => sierraEcg.updateLeads(ecg))
+    .then(ecg => sierraEcg.createObjects(ecg));
 }
 
 module.exports = {
