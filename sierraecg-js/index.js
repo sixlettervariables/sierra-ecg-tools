@@ -24,18 +24,26 @@
  */
 'use strict';
 
-const path = require('path');
+const path = require('node:path');
+const fs = require('node:fs');
+const util = require('node:util');
 
-const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('fs'));
+const fs_readFileAsync = util.promisify(fs.readFile);
 
 const xml2js = require('xml2js');
+
 const _xparser = new xml2js.Parser();
-const parseXml = Promise.promisify(_xparser.parseString);
+const xml2js_parseXml = util.promisify(_xparser.parseString);
 
 const sierraEcg = require('./lib/sierraecg');
 
 function readFile(filename, cb, options) {
+  readFileAsync(filename, options)
+    .then(ecg => cb(null, ecg))
+    .catch(err => cb(err));
+}
+
+function readFileAsync(filename, options) {
   var ext = path.extname(filename).toLowerCase();
   switch (ext) {
     case '.xml':
@@ -44,27 +52,31 @@ function readFile(filename, cb, options) {
       throw new Error('Unsupported file type');
   }
 
-  const deferred = fs.readFileAsync(filename, options)
-    .then(parseXml)
+  return fs_readFileAsync(filename, options)
+    .then(xml2js_parseXml)
     .then(sierraEcg.parseXml)
     .then(sierraEcg.decodeXli)
     .then(sierraEcg.updateLeads)
     .then(sierraEcg.createObjects);
-
-  return deferred.nodeify(cb);
 }
 
 function readString(value, cb) {
-  const deferred = parseXml(value)
+  readStringAsync(value)
+    .then(ecg => cb(null, ecg))
+    .catch(err => cb(err));
+}
+
+function readStringAsync(value) {
+  return xml2js_parseXml(value)
     .then(sierraEcg.parseXml)
     .then(sierraEcg.decodeXli)
     .then(sierraEcg.updateLeads)
     .then(sierraEcg.createObjects);
-    
-  return deferred.nodeify(cb);
 }
 
 module.exports = {
-  readFile: readFile,
-  readString: readString
+  readFile,
+  readFileAsync,
+  readString,
+  readStringAsync,
 };
