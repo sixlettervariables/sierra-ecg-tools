@@ -24,7 +24,6 @@
  */
 'use strict';
 
-const path = require('node:path');
 const fs = require('node:fs');
 const util = require('node:util');
 
@@ -44,14 +43,6 @@ function readFile(filename, cb, options) {
 }
 
 function readFileAsync(filename, options) {
-  var ext = path.extname(filename).toLowerCase();
-  switch (ext) {
-    case '.xml':
-      break;
-    default:
-      throw new Error('Unsupported file type');
-  }
-
   return fs_readFileAsync(filename, options)
     .then(xml2js_parseXml)
     .then(sierraEcg.parseXml)
