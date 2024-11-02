@@ -24,10 +24,8 @@
  */
 'use strict';
 
-const fs = require('node:fs');
+const fs = require('node:fs/promises');
 const util = require('node:util');
-
-const fs_readFileAsync = util.promisify(fs.readFile);
 
 const xml2js = require('xml2js');
 
@@ -54,13 +52,13 @@ function readFile(filename, cb, options) {
  * @param {*} options 
  * @returns {Promise<sierraEcg.Ecg>}
  */
-function readFileAsync(filename, options) {
-  return fs_readFileAsync(filename, options)
-    .then(xml2js_parseXml)
-    .then(xdoc => sierraEcg.parseXml(xdoc))
-    .then(ecg => sierraEcg.decodeXli(ecg))
-    .then(ecg => sierraEcg.updateLeads(ecg))
-    .then(ecg => sierraEcg.createObjects(ecg));
+async function readFileAsync(filename, options) {
+  const buffer = await fs.readFile(filename, options);
+  const xdoc = await xml2js_parseXml(buffer);
+  const ecg = sierraEcg.parseXml(xdoc);
+  const ecg_2 = sierraEcg.decodeXli(ecg);
+  const ecg_4 = sierraEcg.updateLeads(ecg_2);
+  return sierraEcg.createObjects(ecg_4);
 }
 
 /**
@@ -79,12 +77,12 @@ function readString(value, cb) {
  * @param {string} value 
  * @returns {Promise<sierraEcg.Ecg>}
  */
-function readStringAsync(value) {
-  return xml2js_parseXml(value)
-    .then(xdoc => sierraEcg.parseXml(xdoc))
-    .then(ecg => sierraEcg.decodeXli(ecg))
-    .then(ecg => sierraEcg.updateLeads(ecg))
-    .then(ecg => sierraEcg.createObjects(ecg));
+async function readStringAsync(value) {
+  const xdoc = await xml2js_parseXml(value);
+  const ecg = sierraEcg.parseXml(xdoc);
+  const ecg_2 = sierraEcg.decodeXli(ecg);
+  const ecg_4 = sierraEcg.updateLeads(ecg_2);
+  return sierraEcg.createObjects(ecg_4);
 }
 
 module.exports = {

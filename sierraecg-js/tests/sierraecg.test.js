@@ -1,7 +1,7 @@
 /** sierraecg.js: Tests for sierraecg.js
  *
  */
-"use strict";
+'use strict';
 
 const test = require('tape');
 
