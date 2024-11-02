@@ -24,109 +24,83 @@
  */
 'use strict';
 
-var debug = require('debug')('xli');
+const LzwReader = require('./lzw');
 
-var LzwReader = require('./lzw');
+const kLzwBitsPerCode = 10;
 
-var kLzwBitsPerCode = 10;
-
-/**
- * @constructor
- * @param {Buffer | String} input 
- */
-function XliReader(input) {
-  this.input = Buffer.isBuffer(input) ? input : Buffer.from(input);
-  this.offset = 0;
-
-  debug('initialized XLI encoded data (%d bytes)', this.input.length);
-}
-
-var XLI = module.exports = XliReader;
-
-XLI.prototype.extractLeads = function XliReader_ExtractLeads(cb) {
-  var self = this;
-  var leads = [];
-  function next() {
-    if (self.offset < self.input.length) {
-      debug('reading chunk %d @%d bytes', leads.length, self.offset);
-      self._readChunk(function (err, chunk) {
-        leads.push(chunk.values);
-        self.offset += chunk.size;
-
-        setImmediate(next);
-      });
-    }
-    else {
-      process.nextTick(function () {
-        return cb(null, leads);
-      });
-    }
+class XliReader {
+  /**
+   * @param {Buffer | String} input 
+   */
+  constructor(input) {
+    this.input = Buffer.from(input);
+    this.offset = 0;
   }
 
-  return next();
-};
+  extractLeads() {
+    const leads = [];
+    while (this.offset < this.input.length) {
+      const chunk = this._readChunk();
+      leads.push(chunk.values);
 
-XLI.prototype._readChunk = function XliReader_private_ReadChunk(cb) {
-  var self = this;
-  var header = this.input.slice(this.offset + 0, this.offset + 8);
-  var size = header.readInt32LE(0);
-  var code = header.readInt16LE(4);
-  var delta = header.readInt16LE(6);
-  debug('chunk-header: { size: %d, code: %d, delta: %d }', size, code, delta);
-
-  var compressedBlock = this.input.slice(this.offset + 8, this.offset + 8 + size);
-  debug('compressed size %d', compressedBlock.length);
-  var reader = new LzwReader(compressedBlock, { bits: kLzwBitsPerCode });
-
-  reader.decode(function (err, output) {
-    if (err) {
-      return cb(err);
+      this.offset += chunk.size;
     }
-    else {
-      self._unpack(output, function (err, unpacked) {
-        if (err) {
-          return cb(err);
-        }
-        else {
-          var values = self._decodeDeltas(unpacked, delta);
-          process.nextTick(function () {
-            return cb(err, { size: header.length + compressedBlock.length, values: values });
-          });
-        }
-      });
-    }
-  });
-};
 
-XLI.prototype._unpack = function XliReader_private_Unpack(bytes, cb) {
-  function unpack(bytes) {
-    var unpacked = new Array(Math.floor(bytes.length / 2));
-    for (var ii = 0; ii < unpacked.length; ++ii) {
+    return leads;
+  }
+
+  _readChunk() {
+    const self = this;
+    const header = this.input.subarray(this.offset + 0, this.offset + 8);
+    const size = header.readInt32LE(0);
+    const code = header.readInt16LE(4);
+    const delta = header.readInt16LE(6);
+    // console.debug('chunk-header: { size: %d, code: %d, delta: %d }', size, code, delta);
+  
+    const compressedBlock = this.input.subarray(this.offset + 8, this.offset + 8 + size);
+    // console.debug('compressed size %d', compressedBlock.length);
+
+    const reader = new LzwReader(compressedBlock, { bits: kLzwBitsPerCode });
+  
+    const output = reader.decode();
+    const unpacked = self._unpack(output);
+    const values = self._decodeDeltas(unpacked, delta);
+    return ({ size: header.length + compressedBlock.length, values });
+  }
+
+  /**
+   * @param {Buffer} bytes 
+   * @returns {number[]}
+   */
+  _unpack(bytes) {
+    const unpacked = new Array(Math.floor(bytes.length / 2));
+    for (var ii = 0; ii < unpacked.length; ii++) {
       unpacked[ii] = (((bytes[ii] << 8) | bytes[ii + unpacked.length]) << 16) >> 16;
     }
 
     return unpacked;
   }
 
-  process.nextTick(function () {
-    var unpacked = unpack(bytes);
-    process.nextTick(function () {
-      return cb(null, unpacked);
-    });
-  });
-};
-
-XLI.prototype._decodeDeltas = function XliReader_private_DecodeDeltas(deltas, lastValue) {
-  var values = deltas.slice();
-  var x = values[0],
-      y = values[1];
-  for (var ii = 2; ii < values.length; ++ii) {
-    var z = (y * 2) - x - lastValue;
-    lastValue = values[ii] - 64;
-    values[ii] = z;
-    x = y;
-    y = z;
+  /**
+   * 
+   * @param {Array<Number>} deltas 
+   * @param {Number} lastValue 
+   * @returns {Array<Number>}
+   */
+  _decodeDeltas(deltas, lastValue) {
+    const values = deltas.slice();
+    let x = values[0],
+        y = values[1];
+    for (var ii = 2; ii < values.length; ii++) {
+      const z = (y * 2) - x - lastValue;
+      lastValue = values[ii] - 64;
+      values[ii] = z;
+      x = y;
+      y = z;
+    }
+  
+    return values;
   }
+}
 
-  return values;
-};
+module.exports = XliReader;

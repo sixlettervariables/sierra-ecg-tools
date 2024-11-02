@@ -24,47 +24,64 @@
  */
 'use strict';
 
-var path = require('path');
+const fs = require('node:fs/promises');
+const util = require('node:util');
 
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs'));
+const xml2js = require('xml2js');
 
-var xml2js = require('xml2js'),
-    _xparser = new xml2js.Parser(),
-    parseXml = Promise.promisify(_xparser.parseString);
+const _xparser = new xml2js.Parser();
+const xml2js_parseXml = util.promisify(_xparser.parseString);
 
-var sierraEcg = require('./lib/sierraecg');
+const { Ecg } = require('./lib/sierraecg');
 
+/**
+ * Read a Philips SierraECG file from disk.
+ * @param {string} filename 
+ * @param {(reason: any, ecg: sierraEcg.Ecg) => void} cb 
+ * @param {*} options 
+ */
 function readFile(filename, cb, options) {
-  var ext = path.extname(filename).toLowerCase();
-  switch (ext) {
-    case '.xml':
-      break;
-    default:
-      throw new Error('Unsupported file type');
-  }
-
-  var deferred = fs.readFileAsync(filename, options)
-    .then(parseXml)
-    .then(sierraEcg.parseXml)
-    .then(sierraEcg.decodeXli)
-    .then(sierraEcg.updateLeads)
-    .then(sierraEcg.createObjects);
-
-  return deferred.nodeify(cb);
+  readFileAsync(filename, options)
+    .then(ecg => cb(null, ecg))
+    .catch(err => cb(err));
 }
 
+/**
+ * Read a Philips SierraECG file from disk.
+ * @param {string} filename 
+ * @param {*} options 
+ * @returns {Promise<sierraEcg.Ecg>}
+ */
+async function readFileAsync(filename, options) {
+  const buffer = await fs.readFile(filename, options);
+  const xdoc = await xml2js_parseXml(buffer);
+  return Ecg.fromXml(xdoc);
+}
+
+/**
+ * Read a Philips SierraECG file from an XML string.
+ * @param {string} value 
+ * @param {(reason: any, ecg: sierraEcg.Ecg) => void} cb 
+ */
 function readString(value, cb) {
-  var deferred = parseXml(value)
-    .then(sierraEcg.parseXml)
-    .then(sierraEcg.decodeXli)
-    .then(sierraEcg.updateLeads)
-    .then(sierraEcg.createObjects);
-    
-  return deferred.nodeify(cb);
+  readStringAsync(value)
+    .then(ecg => cb(null, ecg))
+    .catch(err => cb(err));
+}
+
+/**
+ * Read a Philips SierraECG file from an XML string.
+ * @param {string} value 
+ * @returns {Promise<sierraEcg.Ecg>}
+ */
+async function readStringAsync(value) {
+  const xdoc = await xml2js_parseXml(value);
+  return Ecg.fromXml(xdoc);
 }
 
 module.exports = {
-  readFile: readFile,
-  readString: readString
+  readFile,
+  readFileAsync,
+  readString,
+  readStringAsync,
 };
