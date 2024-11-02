@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "tape tests/*.js",
-    "cover": "nyc ./node_modules/.bin/tape tests/sierraecg.test.js",
+    "cover": "nyc npm test",
+    "ci": "nyc --reporter=lcov npm test",
     "lint": "eslint"
   },
   "repository": {
