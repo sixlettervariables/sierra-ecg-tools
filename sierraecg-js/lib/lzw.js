@@ -43,7 +43,7 @@ function LzwReader(input, options) {
         throw new Error('Argument out of range: {options.bits} must be at least 10 and no more than 16');
     }
 
-    this.input = Buffer.isBuffer(input) ? input.slice() : Buffer.from(input);
+    this.input = Buffer.from(input);
     this.offset = 0;
 
     debug('compressed size %d bytes', this.input.length);
