@@ -24,8 +24,6 @@
  */
 'use strict';
 
-const debug = require('debug')('lzw');
-
 class LzwReader {
   /**
    * @param {Buffer | String} input 
@@ -43,14 +41,14 @@ class LzwReader {
     this.input = Buffer.from(input);
     this.offset = 0;
 
-    debug('compressed size %d bytes', this.input.length);
+    // console.debug('compressed size %d bytes', this.input.length);
 
     this.bits = options.bits || 16;
     this.maxCode = (1 << this.bits) - 2;
 
     this.chunkSize = Math.floor(8 * 1024 / this.bits);
 
-    debug('initialized with %d bits per code-word', this.bits);
+    // console.debug('initialized with %d bits per code-word', this.bits);
 
     this.bitCount = 0;
     this.buffer = 0;
@@ -68,7 +66,7 @@ class LzwReader {
     let code, output = [];
     while (-1 !== (code = this._readCode())) {
       if (code > this.maxCode) {
-        debug('code exceeds max (%d > %d), ending', code, this.maxCode);
+        // console.debug('code exceeds max (%d > %d), ending', code, this.maxCode);
         break;
       }
 
@@ -89,7 +87,7 @@ class LzwReader {
       this.previous = current.value;
     }
 
-    debug('decompressed %d bytes', output.length);
+    // console.debug('decompressed %d bytes', output.length);
     return Buffer.from(output);
   }
 
@@ -97,7 +95,7 @@ class LzwReader {
     let EOF = false;
     while (this.bitCount <= 24) {
       if (this.offset >= this.input.length) {
-        debug('EOF found @%d', this.offset);
+        // console.debug('EOF found @%d', this.offset);
         EOF = true;
         break;
       }
@@ -108,7 +106,7 @@ class LzwReader {
     }
 
     if (EOF && this.bitCount < this.bits) {
-      debug('EOF without enough bits to return a code (%d bits left)', this.bitCount);
+      // console.debug('EOF without enough bits to return a code (%d bits left)', this.bitCount);
       return -1;
     }
     else {
@@ -117,7 +115,7 @@ class LzwReader {
       const code = ((this.buffer >>> (32 - this.bits)) & 0x0000FFFF);
       this.buffer = (((this.buffer & 0xFFFFFFFF) << this.bits) & 0xFFFFFFFF);
       this.bitCount -= this.bits;
-      debug('code [%d]', code);
+      // console.debug('code [%d]', code);
       return code;
     }
   }

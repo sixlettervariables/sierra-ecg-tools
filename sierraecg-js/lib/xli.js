@@ -24,8 +24,6 @@
  */
 'use strict';
 
-const debug = require('debug')('xli');
-
 const LzwReader = require('./lzw');
 
 const kLzwBitsPerCode = 10;
@@ -57,10 +55,10 @@ class XliReader {
     const size = header.readInt32LE(0);
     const code = header.readInt16LE(4);
     const delta = header.readInt16LE(6);
-    debug('chunk-header: { size: %d, code: %d, delta: %d }', size, code, delta);
+    // console.debug('chunk-header: { size: %d, code: %d, delta: %d }', size, code, delta);
   
     const compressedBlock = this.input.subarray(this.offset + 8, this.offset + 8 + size);
-    debug('compressed size %d', compressedBlock.length);
+    // console.debug('compressed size %d', compressedBlock.length);
 
     const reader = new LzwReader(compressedBlock, { bits: kLzwBitsPerCode });
   
