@@ -26,21 +26,20 @@
 
 const debug = require('debug')('lzw');
 
+class LzwReader {
 /**
- * @constructor
  * @param {Buffer | String} input 
- * @param {*} options 
+ * @param {{ bits?: number }} options 
  */
-function LzwReader(input, options) {
+  constructor(input, options) {
     /* jshint -W030 */
     options || (options = {});
     /* jshint +W030 */
-
     if (!input) {
-        throw new Error('Missing required argument {input}');
+      throw new Error('Missing required argument {input}');
     }
     else if (options.bits && (options.bits > 16 || options.bits < 10)) {
-        throw new Error('Argument out of range: {options.bits} must be at least 10 and no more than 16');
+      throw new Error('Argument out of range: {options.bits} must be at least 10 and no more than 16');
     }
 
     this.input = Buffer.from(input);
@@ -61,17 +60,96 @@ function LzwReader(input, options) {
     this.previous = [];
 
     this.nextCode = 256;
-    this.strings = {};
+    this.strings = new Map();
     for (var ii = 0; ii < this.nextCode; ii++) {
-        this.strings[ii] = new Code(ii, ii);
+      this.strings.set(ii, new Code(ii, ii));
     }
-}
+  }
 
-module.exports = LzwReader;
+  decodeSync() {
+    let code, output = [];
+    while (-1 !== (code = this._readCode())) {
+        if (code > this.maxCode) {
+            debug('code exceeds max (%d > %d), ending', code, this.maxCode);
+            break;
+        }
 
-let LZWP = LzwReader.prototype;
+        if (!this.strings.has(code)) {
+            const value = [ ...this.previous.slice(), this.previous[0] ];
+            this.strings.set(code, new Code(code, value));
+        }
 
-LZWP.readCode = function LzwReader_ReadCode() {
+        const current = this.strings.get(code);
+        output = current.appendTo(output);
+
+        if (this.previous.length > 0 && this.nextCode <= this.maxCode) {
+            const nc = this.nextCode++;
+            const value = [ ...this.previous, current.value[0] ];
+            this.strings.set(nc, new Code(nc, value));
+        }
+
+        this.previous = current.value;
+    }
+
+    debug('decompressed %d bytes', output.length);
+    return Buffer.from(output);
+  }
+
+  /**
+   * 
+   * @param {(reason: any, output: Buffer) => void} cb 
+   */
+  decode(cb) {
+    const self = this;
+    let code, output = [], codesRead = 0, goingNext = false;
+    function next() {
+      goingNext = false;
+      while (-1 !== (code = self._readCode())) {
+        if (code > self.maxCode) {
+          debug('code exceeds max (%d > %d), ending', code, self.maxCode);
+          break;
+        }
+  
+        if (!self.strings.has(code)) {
+          const value = [ ...self.previous, self.previous[0] ];
+          self.strings.set(code, new Code(code, value));
+        }
+  
+        const current = self.strings.get(code);
+        output = current.appendTo(output);
+  
+        if (self.previous.length > 0 && self.nextCode <= self.maxCode) {
+          const nc = self.nextCode++;
+          const value = [ ...self.previous, current.value[0] ];
+          self.strings.set(nc, new Code(nc, value));
+        }
+  
+        self.previous = current.value;
+  
+        codesRead++;
+        if (codesRead >= self.chunkSize) {
+          goingNext = true;
+          codesRead = 0;
+          break;
+        }
+      }
+  
+      if (!goingNext) {
+        process.nextTick(function () {
+          debug('decompressed %d bytes', output.length);
+          cb(null, Buffer.from(output));
+        });
+      }
+      else {
+        debug('waiting until next tick to decompress');
+        setImmediate(next);
+      }
+    }
+    
+    next();
+  }
+
+  _readCode() {
     let EOF = false;
     while (this.bitCount <= 24) {
         if (this.offset >= this.input.length) {
@@ -98,101 +176,30 @@ LZWP.readCode = function LzwReader_ReadCode() {
         debug('code [%d]', code);
         return code;
     }
-};
-
-LZWP.decodeSync = function LzwReader_DecodeSync() {
-    let code, output = [];
-    while (-1 !== (code = this.readCode())) {
-        if (code > this.maxCode) {
-            debug('code exceeds max (%d > %d), ending', code, this.maxCode);
-            break;
-        }
-
-        if (!Object.prototype.hasOwnProperty.call(this.strings, code)) {
-            const value = [ ...this.previous.slice(), this.previous[0] ];
-            this.strings[code] = new Code(code, value);
-        }
-
-        output = this.strings[code].appendTo(output);
-
-        if (this.previous.length > 0 && this.nextCode <= this.maxCode) {
-            const nc = this.nextCode++;
-            const value = [ ...this.previous, this.strings[code].value[0] ];
-            this.strings[nc] = new Code(nc, value);
-        }
-
-        this.previous = this.strings[code].value;
-    }
-
-    debug('decompressed %d bytes', output.length);
-    return Buffer.from(output);
-};
-
-LZWP.decode = function LzwReader_Decode(cb) {
-  const self = this;
-  let code, output = [], codesRead = 0, goingNext = false;
-  function next() {
-    goingNext = false;
-    while (-1 !== (code = self.readCode())) {
-      if (code > self.maxCode) {
-        debug('code exceeds max (%d > %d), ending', code, self.maxCode);
-        break;
-      }
-
-      if (!Object.prototype.hasOwnProperty.call(self.strings, code)) {
-        const value = [ ...self.previous, self.previous[0] ];
-        self.strings[code] = new Code(code, value);
-      }
-
-      output = self.strings[code].appendTo(output);
-
-      if (self.previous.length > 0 && self.nextCode <= self.maxCode) {
-        const nc = self.nextCode++;
-        const value = [ ...self.previous, self.strings[code].value[0] ];
-        self.strings[nc] = new Code(nc, value);
-      }
-
-      self.previous = self.strings[code].value;
-
-      codesRead++;
-      if (codesRead >= self.chunkSize) {
-        goingNext = true;
-        codesRead = 0;
-        break;
-      }
-    }
-
-    if (!goingNext) {
-      process.nextTick(function () {
-        debug('decompressed %d bytes', output.length);
-        return cb(null, Buffer.from(output));
-      });
-    }
-    else {
-      debug('waiting until next tick to decompress');
-      setImmediate(next);
-    }
   }
-  
-  return next();
-};
-
-/**
- * @constructor
- * @param {*} code 
- * @param {*} value 
- * @returns 
- */
-function Code(code, value) {
-    if (!(this instanceof Code)) return new Code(code, value);
-    this.code = code;
-    this.value = Array.isArray(value) ? value.slice() : [value];
 }
 
-let CP = Code.prototype;
+module.exports = LzwReader;
 
-CP.appendTo = function Code_AppendTo(output) {
+class Code {
+  /**
+   * 
+   * @param {number} code 
+   * @param {number[] | number} value 
+   */
+  constructor(code, value) {
+    this.code = code;
+    this.value = Array.isArray(value) ? value.slice() : [value];
+  }
+
+  /**
+   * 
+   * @param {number[]} output 
+   * @returns {number[]}
+   */
+  appendTo(output) {
     output.push(...this.value);
 
     return output;
-};
+  }
+}
