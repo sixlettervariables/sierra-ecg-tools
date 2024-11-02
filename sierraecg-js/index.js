@@ -58,7 +58,7 @@ function readFileAsync(filename, options) {
   return fs_readFileAsync(filename, options)
     .then(xml2js_parseXml)
     .then(xdoc => sierraEcg.parseXml(xdoc))
-    .then(sierraEcg.decodeXliAsync)
+    .then(ecg => sierraEcg.decodeXli(ecg))
     .then(ecg => sierraEcg.updateLeads(ecg))
     .then(ecg => sierraEcg.createObjects(ecg));
 }
@@ -82,7 +82,7 @@ function readString(value, cb) {
 function readStringAsync(value) {
   return xml2js_parseXml(value)
     .then(xdoc => sierraEcg.parseXml(xdoc))
-    .then(sierraEcg.decodeXliAsync)
+    .then(ecg => sierraEcg.decodeXli(ecg))
     .then(ecg => sierraEcg.updateLeads(ecg))
     .then(ecg => sierraEcg.createObjects(ecg));
 }

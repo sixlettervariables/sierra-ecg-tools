@@ -30,49 +30,28 @@ const LzwReader = require('./lzw');
 
 const kLzwBitsPerCode = 10;
 
-/**
- * @constructor
- * @param {Buffer | String} input 
- */
 class XliReader {
+  /**
+   * @param {Buffer | String} input 
+   */
   constructor(input) {
     this.input = Buffer.from(input);
     this.offset = 0;
   }
 
-  extractLeads(cb) {
-    const self = this;
+  extractLeads() {
     const leads = [];
-    function next() {
-      if (self.offset < self.input.length) {
-        debug('reading chunk %d @%d bytes', leads.length, self.offset);
-        self._readChunk(function (err, chunk) {
-          if (err) {
-            cb(err);
-            return;
-          }
-  
-          leads.push(chunk.values);
-          self.offset += chunk.size;
-  
-          setImmediate(next);
-        });
-      }
-      else {
-        process.nextTick(function () {
-          return cb(null, leads);
-        });
-      }
+    while (this.offset < this.input.length) {
+      const chunk = this._readChunk();
+      leads.push(chunk.values);
+
+      this.offset += chunk.size;
     }
-  
-    next();
+
+    return leads;
   }
 
-  /**
-   * 
-   * @param {(reason: any, chunk: { size: number, values: number[] }) => void} cb 
-   */
-  _readChunk(cb) {
+  _readChunk() {
     const self = this;
     const header = this.input.subarray(this.offset + 0, this.offset + 8);
     const size = header.readInt32LE(0);
@@ -85,52 +64,23 @@ class XliReader {
 
     const reader = new LzwReader(compressedBlock, { bits: kLzwBitsPerCode });
   
-    reader.decode(function (err, output) {
-      if (err) {
-        return cb(err);
-      }
-      else {
-        self._unpack(output, function (err, unpacked) {
-          if (err) {
-            return cb(err);
-          }
-          else {
-            const values = self._decodeDeltas(unpacked, delta);
-            process.nextTick(function () {
-              cb(null, { size: header.length + compressedBlock.length, values });
-            });
-          }
-        });
-      }
-    });
+    const output = reader.decode();
+    const unpacked = self._unpack(output);
+    const values = self._decodeDeltas(unpacked, delta);
+    return ({ size: header.length + compressedBlock.length, values });
   }
 
   /**
-   * 
    * @param {Buffer} bytes 
-   * @param {(reason: any, unpacked: Array<Number>) => void} cb 
+   * @returns {number[]}
    */
-  _unpack(bytes, cb) {
-    /**
-     * 
-     * @param {Buffer} bytes 
-     * @returns {Array<Number>}
-     */
-    function unpack(bytes) {
-      const unpacked = new Array(Math.floor(bytes.length / 2));
-      for (var ii = 0; ii < unpacked.length; ii++) {
-        unpacked[ii] = (((bytes[ii] << 8) | bytes[ii + unpacked.length]) << 16) >> 16;
-      }
-  
-      return unpacked;
+  _unpack(bytes) {
+    const unpacked = new Array(Math.floor(bytes.length / 2));
+    for (var ii = 0; ii < unpacked.length; ii++) {
+      unpacked[ii] = (((bytes[ii] << 8) | bytes[ii + unpacked.length]) << 16) >> 16;
     }
-  
-    process.nextTick(function () {
-      const unpacked = unpack(bytes);
-      process.nextTick(function () {
-        cb(null, unpacked);
-      });
-    });
+
+    return unpacked;
   }
 
   /**

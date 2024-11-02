@@ -104,19 +104,16 @@ function SierraEcg_ParseXml(xdoc) {
   }
 }
 
-function SierraEcg_DecodeXliAsync(ecg) {
-  return new Promise(function (resolve, reject) {
-    const reader = new XliReader(ecg.parsedWaveforms);
-    reader.extractLeads(function (err, leads) {
-      if (err) return reject(err);
-      ecg.leads = leads;
+function SierraEcg_DecodeXli(ecg) {
+  const reader = new XliReader(ecg.parsedWaveforms);
+  const leads = reader.extractLeads();
 
-      // get rid of our old crap
-      delete ecg.parsedWaveforms;
+  ecg.leads = leads;
 
-      return resolve(ecg);
-    });
-  });
+  // get rid of our old crap
+  delete ecg.parsedWaveforms;
+
+  return ecg;
 }
 
 function SierraEcg_UpdateLeads(ecg) {
@@ -183,7 +180,7 @@ module.exports = {
   Ecg,
   Lead,
   parseXml: SierraEcg_ParseXml,
-  decodeXliAsync: SierraEcg_DecodeXliAsync,
+  decodeXli: SierraEcg_DecodeXli,
   updateLeads: SierraEcg_UpdateLeads,
   createObjects: SierraEcg_CreateObjects
 };
