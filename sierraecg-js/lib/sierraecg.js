@@ -27,15 +27,51 @@
 const XliReader = require('./xli');
 
 class Ecg {
+  /**
+   * @param {string} type 
+   * @param {Lead[]} leads 
+   */
   constructor(type, leads) {
     this.type = type;
     this.leads = leads;
     this.version = null;
     this.originalXml = null;
   }
+
+  /**
+   * Creates an Ecg instance from an XML document.
+   * @param {any} xdoc Philips SierraECG XML document
+   * @returns {Ecg} an Ecg instance from the XML document given in xdoc.
+   */
+  static fromXml(xdoc) {
+    const { xml, version, numberOfLeads, leadLabels, parsedWaveforms } = _parseXml(xdoc);
+
+    const reader = new XliReader(parsedWaveforms);
+    const rawLeads = reader.extractLeads();
+  
+    // We need to calculate a number of leads from the limb leads
+    _recalculateLeads(rawLeads);
+
+    const leads = rawLeads.map((lead, index) => {
+      const enabled = index < numberOfLeads;
+      return new Lead(_nameifyLead(index, leadLabels), lead, enabled);
+    });
+  
+    const obj = new Ecg('12-Lead', leads);
+    obj.version = version;
+    obj.originalXml = xml;
+  
+    return obj;
+  }
+
 }
 
 class Lead {
+  /**
+   * @param {string} name 
+   * @param {number[]} data 
+   * @param {boolean} enabled 
+   */
   constructor(name, data, enabled) {
     this.name = name;
     this.data = data;
@@ -43,7 +79,7 @@ class Lead {
   }
 }
 
-function SierraEcg_ParseXml(xdoc) {
+function _parseXml(xdoc) {
   let version, type;
 
   if (xdoc.restingecgdata.documentinfo[0].documenttype[0]) {
@@ -104,27 +140,16 @@ function SierraEcg_ParseXml(xdoc) {
   }
 }
 
-function SierraEcg_DecodeXli(ecg) {
-  const reader = new XliReader(ecg.parsedWaveforms);
-  const leads = reader.extractLeads();
 
-  ecg.leads = leads;
-
-  // get rid of our old crap
-  delete ecg.parsedWaveforms;
-
-  return ecg;
-}
-
-function SierraEcg_UpdateLeads(ecg) {
+function _recalculateLeads(leads) {
   let ii;
 
-  const leadI = ecg.leads[0];
-  const leadII = ecg.leads[1];
-  const leadIII = ecg.leads[2];
-  const leadAVR = ecg.leads[3];
-  const leadAVL = ecg.leads[4];
-  const leadAVF = ecg.leads[5];
+  const leadI = leads[0];
+  const leadII = leads[1];
+  const leadIII = leads[2];
+  const leadAVR = leads[3];
+  const leadAVL = leads[4];
+  const leadAVF = leads[5];
 
   // lead III
   for (ii = 0; ii < leadIII.length; ++ii) {
@@ -145,42 +170,24 @@ function SierraEcg_UpdateLeads(ecg) {
   for (ii = 0; ii < leadAVF.length; ++ii) {
     leadAVF[ii] = Math.floor((leadII[ii] + leadIII[ii]) / 2) - leadAVF[ii];
   }
-
-  return ecg;
 }
 
 const kStd12Leads = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'];
+
 /**
  * 
  * @param {Number} index 
  * @param {Array<string>} leads 
  * @returns {string}
  */
-function nameifyLead(index, leads) {
+function _nameifyLead(index, leads) {
   leads || (leads = kStd12Leads);
 
   if (index < leads.length) return leads[index];
   return 'Channel ' + (index + 1);
 }
 
-function SierraEcg_CreateObjects(ecg) {
-  const leads = ecg.leads.map(function (lead, index) {
-    const enabled = index < ecg.numberOfLeads;
-    return new Lead(nameifyLead(index, ecg.leadLabels), lead, enabled);
-  });
-
-  const obj = new Ecg('12-Lead', leads);
-  obj.version = ecg.version;
-  obj.originalXml = ecg.xml;
-
-  return obj;
-}
-
 module.exports = {
   Ecg,
   Lead,
-  parseXml: SierraEcg_ParseXml,
-  decodeXli: SierraEcg_DecodeXli,
-  updateLeads: SierraEcg_UpdateLeads,
-  createObjects: SierraEcg_CreateObjects
 };

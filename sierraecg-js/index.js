@@ -32,7 +32,7 @@ const xml2js = require('xml2js');
 const _xparser = new xml2js.Parser();
 const xml2js_parseXml = util.promisify(_xparser.parseString);
 
-const sierraEcg = require('./lib/sierraecg');
+const { Ecg } = require('./lib/sierraecg');
 
 /**
  * Read a Philips SierraECG file from disk.
@@ -55,10 +55,7 @@ function readFile(filename, cb, options) {
 async function readFileAsync(filename, options) {
   const buffer = await fs.readFile(filename, options);
   const xdoc = await xml2js_parseXml(buffer);
-  const ecg = sierraEcg.parseXml(xdoc);
-  const ecg_2 = sierraEcg.decodeXli(ecg);
-  const ecg_4 = sierraEcg.updateLeads(ecg_2);
-  return sierraEcg.createObjects(ecg_4);
+  return Ecg.fromXml(xdoc);
 }
 
 /**
@@ -79,10 +76,7 @@ function readString(value, cb) {
  */
 async function readStringAsync(value) {
   const xdoc = await xml2js_parseXml(value);
-  const ecg = sierraEcg.parseXml(xdoc);
-  const ecg_2 = sierraEcg.decodeXli(ecg);
-  const ecg_4 = sierraEcg.updateLeads(ecg_2);
-  return sierraEcg.createObjects(ecg_4);
+  return Ecg.fromXml(xdoc);
 }
 
 module.exports = {
