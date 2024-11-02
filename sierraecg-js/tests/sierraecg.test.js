@@ -17,7 +17,7 @@ function fixture(filename) {
 test('sierraecg', function (p) {
   p.test('can read SierraECG 1.03 file', function (t) {
     const now = new Date().getTime();
-    sierraEcg.readFile(fixture('129DYPRG.XML'), function (err, ecg) {
+    sierraEcg.readFile(fixture('129DYPRG.xml'), function (err, ecg) {
       t.comment(`parsed in ${new Date().getTime() - now} ms`);
 
       t.error(err, 'Should not throw an error');
@@ -272,7 +272,7 @@ test('sierraecg', function (p) {
   });
 
   p.test('can read SierraECG file from a string', function (t) {
-    const xml = fs.readFileSync(fixture('129DYPRG.XML'));
+    const xml = fs.readFileSync(fixture('129DYPRG.xml'));
     const now = new Date().getTime();
     sierraEcg.readString(xml, function (err, ecg) {
       t.comment(`parsed in ${new Date().getTime() - now} ms`);
