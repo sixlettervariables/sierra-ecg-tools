@@ -1,41 +1,13 @@
 {
-  "name": "sierraecg",
-  "version": "2.0.0",
-  "description": "Philips SierraECG Tools for NodeJS",
-  "license": "MIT",
-  "main": "index.js",
-  "scripts": {
-    "test": "tape tests/*.js",
-    "cover": "nyc npm test",
-    "ci": "nyc --reporter=lcov npm test",
-    "lint": "eslint"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/sixlettervariables/sierra-ecg-tools"
-  },
-  "keywords": [
-    "medical",
-    "ecg",
-    "js",
-    "javascript"
-  ],
-  "author": "Christopher A. Watford <christopher.watford@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/sixlettervariables/sierra-ecg-tools/issues"
-  },
-  "homepage": "https://github.com/sixlettervariables/sierra-ecg-tools",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "dependencies": {
-    "xml2js": "^0.6.2"
-  },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
     "eslint": "^9.14.0",
     "globals": "^15.11.0",
     "nyc": "^17.1.0",
     "tape": "^5.3.0"
-  }
+  },
+  "workspaces": [
+    "packages/sierraecg-core",
+    "packages/sierraecg"
+  ]
 }

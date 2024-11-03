@@ -1,0 +1,31 @@
+{
+  "name": "@sierraecg/core",
+  "version": "1.0.0",
+  "description": "Core utilities for working with the Philips SierraECG XML format.",
+  "main": "index.js",
+  "dependencies": {
+    "xml2js": "^0.6.2"
+  },
+  "scripts": {
+    "test": "tape tests/*.js",
+    "cover": "nyc npm test",
+    "ci": "nyc --reporter=lcov npm test",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sixlettervariables/sierra-ecg-tools.git"
+  },
+  "author": "Christopher A. Watford <christopher.watford@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sixlettervariables/sierra-ecg-tools/issues"
+  },
+  "homepage": "https://github.com/sixlettervariables/sierra-ecg-tools#readme",
+  "keywords": [
+    "medical",
+    "ecg",
+    "js",
+    "javascript"
+  ]
+}

@@ -24,6 +24,8 @@
  */
 'use strict';
 
+const xml2js = require('xml2js');
+
 const XliReader = require('./xli');
 
 class Ecg {
@@ -40,11 +42,36 @@ class Ecg {
 
   /**
    * Creates an Ecg instance from an XML document.
-   * @param {any} xdoc Philips SierraECG XML document
+   * @param {xml2js.convertableToString} text Philips SierraECG XML document (stringy format)
+   * @returns {Promise<Ecg>} an Ecg instance from the XML document given in xdoc.
+   */
+  static async fromXmlAsync(text) {
+    const parser = new xml2js.Parser();
+    const xdoc = await parser.parseStringPromise(text);
+    return _createEcgFromXdoc(xdoc);
+  }
+}
+
+class Lead {
+  /**
+   * @param {string} name 
+   * @param {number[]} data 
+   * @param {boolean} enabled 
+   */
+  constructor(name, data, enabled) {
+    this.name = name;
+    this.data = data;
+    this.enabled = enabled;
+  }
+}
+
+  /**
+   * Creates an Ecg instance from an XML document.
+   * @param {any} xdoc Philips SierraECG XML document (xml2js format)
    * @returns {Ecg} an Ecg instance from the XML document given in xdoc.
    */
-  static fromXml(xdoc) {
-    const { xml, version, numberOfLeads, leadLabels, parsedWaveforms } = _parseXml(xdoc);
+  function _createEcgFromXdoc(xdoc) {
+    const { xml, version, numberOfLeads, leadLabels, parsedWaveforms } = _parseXdoc(xdoc);
 
     const reader = new XliReader(parsedWaveforms);
     const rawLeads = reader.extractLeads();
@@ -64,22 +91,7 @@ class Ecg {
     return obj;
   }
 
-}
-
-class Lead {
-  /**
-   * @param {string} name 
-   * @param {number[]} data 
-   * @param {boolean} enabled 
-   */
-  constructor(name, data, enabled) {
-    this.name = name;
-    this.data = data;
-    this.enabled = enabled;
-  }
-}
-
-function _parseXml(xdoc) {
+function _parseXdoc(xdoc) {
   let version, type;
 
   if (xdoc.restingecgdata.documentinfo[0].documenttype[0]) {
