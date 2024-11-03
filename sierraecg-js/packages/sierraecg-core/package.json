@@ -1,8 +1,9 @@
 {
   "name": "@sierraecg/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Core utilities for working with the Philips SierraECG XML format.",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "dependencies": {
     "xml2js": "^0.6.2"
   },
@@ -10,7 +11,8 @@
     "test": "tape tests/*.js",
     "cover": "nyc npm test",
     "ci": "nyc --reporter=lcov npm test",
-    "lint": "eslint"
+    "lint": "eslint",
+    "types": "npx -p typescript tsc index.js --target es2015 --declaration --allowJs --emitDeclarationOnly --outDir types"
   },
   "repository": {
     "type": "git",

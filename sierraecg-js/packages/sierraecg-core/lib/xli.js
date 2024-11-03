@@ -29,42 +29,44 @@ const LzwReader = require('./lzw');
 const kLzwBitsPerCode = 10;
 
 class XliReader {
+  #input;
+  #offset;
+
   /**
-   * @param {Buffer | String} input 
+   * @param {Uint8Array} input 
    */
   constructor(input) {
-    this.input = Buffer.from(input);
-    this.offset = 0;
+    this.#input = input;
+    this.#offset = 0;
   }
 
   extractLeads() {
     const leads = [];
-    while (this.offset < this.input.length) {
-      const chunk = this._readChunk();
+    while (this.#offset < this.#input.length) {
+      const chunk = this.#readChunk();
       leads.push(chunk.values);
 
-      this.offset += chunk.size;
+      this.#offset += chunk.size;
     }
 
     return leads;
   }
 
-  _readChunk() {
-    const self = this;
-    const header = this.input.subarray(this.offset + 0, this.offset + 8);
+  #readChunk() {
+    const header = this.#input.subarray(this.#offset + 0, this.#offset + 8);
     const size = header.readInt32LE(0);
     // const code = header.readInt16LE(4); // unused, unknown
     const delta = header.readInt16LE(6);
     // console.debug('chunk-header: { size: %d, code: %d, delta: %d }', size, code, delta);
   
-    const compressedBlock = this.input.subarray(this.offset + 8, this.offset + 8 + size);
+    const compressedBlock = this.#input.subarray(this.#offset + 8, this.#offset + 8 + size);
     // console.debug('compressed size %d', compressedBlock.length);
 
     const reader = new LzwReader(compressedBlock, { bits: kLzwBitsPerCode });
   
     const output = reader.decode();
-    const unpacked = self._unpack(output);
-    const values = self._decodeDeltas(unpacked, delta);
+    const unpacked = this.#unpack(output);
+    const values = this.#decodeDeltas(unpacked, delta);
     return ({ size: header.length + compressedBlock.length, values });
   }
 
@@ -72,7 +74,7 @@ class XliReader {
    * @param {Buffer} bytes 
    * @returns {number[]}
    */
-  _unpack(bytes) {
+  #unpack(bytes) {
     const unpacked = new Array(Math.floor(bytes.length / 2));
     for (var ii = 0; ii < unpacked.length; ii++) {
       unpacked[ii] = (((bytes[ii] << 8) | bytes[ii + unpacked.length]) << 16) >> 16;
@@ -83,11 +85,11 @@ class XliReader {
 
   /**
    * 
-   * @param {Array<Number>} deltas 
-   * @param {Number} lastValue 
-   * @returns {Array<Number>}
+   * @param {number[]} deltas 
+   * @param {number} lastValue 
+   * @returns {number[]}
    */
-  _decodeDeltas(deltas, lastValue) {
+  #decodeDeltas(deltas, lastValue) {
     const values = deltas.slice();
     let x = values[0],
         y = values[1];
