@@ -26,8 +26,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
       working-directory: sierraecg-js
-#    - run: npm run-script lint --workspace=@sierraecg/core
-#      working-directory: sierraecg-js
+    - run: npm run-script lint --workspace=@sierraecg/core
+      working-directory: sierraecg-js
     - run: npm run-script ci --workspace=@sierraecg/core
       working-directory: sierraecg-js
     - run: npm run-script lint --workspace=sierraecg
