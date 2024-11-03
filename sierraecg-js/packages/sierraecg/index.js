@@ -25,19 +25,13 @@
 'use strict';
 
 const fs = require('node:fs/promises');
-const util = require('node:util');
 
-const xml2js = require('xml2js');
-
-const _xparser = new xml2js.Parser();
-const xml2js_parseXml = util.promisify(_xparser.parseString);
-
-const { Ecg } = require('./lib/sierraecg');
+const { Ecg } = require('@sierraecg/core');
 
 /**
  * Read a Philips SierraECG file from disk.
  * @param {string} filename 
- * @param {(reason: any, ecg: sierraEcg.Ecg) => void} cb 
+ * @param {(reason: any, ecg: Ecg) => void} cb 
  * @param {*} options 
  */
 function readFile(filename, cb, options) {
@@ -50,18 +44,18 @@ function readFile(filename, cb, options) {
  * Read a Philips SierraECG file from disk.
  * @param {string} filename 
  * @param {*} options 
- * @returns {Promise<sierraEcg.Ecg>}
+ * @returns {Promise<Ecg>}
  */
 async function readFileAsync(filename, options) {
   const buffer = await fs.readFile(filename, options);
-  const xdoc = await xml2js_parseXml(buffer);
-  return Ecg.fromXml(xdoc);
+  const ecg = await Ecg.fromXmlAsync(buffer);
+  return ecg;
 }
 
 /**
  * Read a Philips SierraECG file from an XML string.
  * @param {string} value 
- * @param {(reason: any, ecg: sierraEcg.Ecg) => void} cb 
+ * @param {(reason: any, ecg: Ecg) => void} cb 
  */
 function readString(value, cb) {
   readStringAsync(value)
@@ -72,11 +66,10 @@ function readString(value, cb) {
 /**
  * Read a Philips SierraECG file from an XML string.
  * @param {string} value 
- * @returns {Promise<sierraEcg.Ecg>}
+ * @returns {Promise<Ecg>}
  */
-async function readStringAsync(value) {
-  const xdoc = await xml2js_parseXml(value);
-  return Ecg.fromXml(xdoc);
+function readStringAsync(value) {
+  return Ecg.fromXmlAsync(value);
 }
 
 module.exports = {
