@@ -32,17 +32,19 @@ class Ecg {
   /**
    * @param {string} type 
    * @param {Lead[]} leads 
+   * @param {string} version
+   * @param {any} originalXml
    */
-  constructor(type, leads) {
+  constructor(type, leads, version, originalXml) {
     this.type = type;
     this.leads = leads;
-    this.version = null;
-    this.originalXml = null;
+    this.version = version;
+    this.originalXml = originalXml;
   }
 
   /**
    * Creates an Ecg instance from an XML document.
-   * @param {xml2js.convertableToString} text Philips SierraECG XML document (stringy format)
+   * @param {string} text Philips SierraECG XML document (stringy format)
    * @returns {Promise<Ecg>} an Ecg instance from the XML document given in xdoc.
    */
   static async fromXmlAsync(text) {
@@ -84,13 +86,14 @@ class Lead {
       return new Lead(_nameifyLead(index, leadLabels), lead, enabled);
     });
   
-    const obj = new Ecg('12-Lead', leads);
-    obj.version = version;
-    obj.originalXml = xml;
-  
-    return obj;
+    return new Ecg('12-Lead', leads, version, xml);
   }
 
+  /**
+   * Parses an XML document in the Philips SierraECG format.
+   * @param {any} xdoc SierraECG XML document as a JavaScript object.
+   * @returns {{ xml: any, version?: string, numberOfLeads: number, leadLabels: string[], parsedWaveforms: Uint8Array }}
+   */
 function _parseXdoc(xdoc) {
   let version, type;
 
@@ -144,6 +147,7 @@ function _parseXdoc(xdoc) {
   }
 
   if (isBase64 && isXli) {
+    // TODO: Base64 decode to Uint8Array without `Buffer`
     const b64 = Buffer.from(parsedwaveforms._, 'base64');
     return ({ xml: xdoc, version, numberOfLeads, leadLabels, parsedWaveforms: b64 });
   }
